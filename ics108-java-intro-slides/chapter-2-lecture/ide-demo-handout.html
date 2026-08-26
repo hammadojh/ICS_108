@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ICS 108 Chapter 2 — IDE Demo Instructor Handout</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23ffffff'/%3E%3Cpath d='M14 16h36M14 32h36M14 48h24' stroke='%231769aa' stroke-width='6'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #151515;
+      --muted: #5e6266;
+      --line: #cbd0d5;
+      --blue: #1769aa;
+      --soft: #eef5fb;
+      --paper: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: #e7e9eb; }
+
+    body {
+      max-width: 900px;
+      margin: 24px auto;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .page {
+      min-height: 1120px;
+      padding: 42px 48px;
+      break-after: page;
+    }
+
+    .page:last-child { break-after: auto; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 26px;
+      padding-bottom: 14px;
+      border-bottom: 3px solid var(--blue);
+    }
+
+    h1, h2, h3, p, ol, ul, pre { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 5px;
+      font-size: 27px;
+      line-height: 1.1;
+    }
+
+    h2 {
+      margin: 25px 0 10px;
+      color: var(--blue);
+      font-size: 19px;
+    }
+
+    h3 {
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .subtitle, .meta, .muted { color: var(--muted); }
+
+    .meta {
+      flex: 0 0 auto;
+      text-align: right;
+      font-size: 12px;
+    }
+
+    .principle {
+      padding: 12px 15px;
+      border-left: 4px solid var(--blue);
+      background: var(--soft);
+      font-size: 15px;
+    }
+
+    .orientation {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .orientation div {
+      padding: 10px;
+      border: 1px solid var(--line);
+    }
+
+    .orientation strong { display: block; margin-bottom: 3px; }
+
+    .runbook {
+      padding: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .runbook > li {
+      position: relative;
+      padding: 0 0 18px 43px;
+      counter-increment: step;
+    }
+
+    .runbook > li::before {
+      content: counter(step);
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .runbook p { margin-bottom: 7px; }
+
+    .say, .ask, .expect {
+      margin: 5px 0;
+      font-size: 13px;
+    }
+
+    .say strong, .ask strong, .expect strong { color: var(--blue); }
+
+    pre {
+      overflow: hidden;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: #f7f8f9;
+      font: 12px/1.38 "SFMono-Regular", Consolas, monospace;
+      white-space: pre-wrap;
+    }
+
+    code { font-family: "SFMono-Regular", Consolas, monospace; }
+
+    .two-columns {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .error-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .error-table th,
+    .error-table td {
+      padding: 8px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .error-table th { background: var(--soft); }
+
+    .compact-list { padding-left: 19px; }
+    .compact-list li + li { margin-top: 5px; }
+
+    .input-output {
+      display: grid;
+      grid-template-columns: 0.5fr 1.5fr;
+      gap: 14px;
+    }
+
+    .input-output pre { height: 100%; }
+
+    .checklist {
+      columns: 2;
+      column-gap: 32px;
+      padding-left: 19px;
+    }
+
+    .checklist li {
+      break-inside: avoid;
+      margin-bottom: 7px;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 26px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    a { color: var(--blue); }
+
+    @media print {
+      @page { size: A4; margin: 0; }
+      html, body { background: white; }
+      body {
+        width: 210mm;
+        max-width: none;
+        margin: 0;
+        font-size: 9.8pt;
+        line-height: 1.28;
+      }
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 0;
+        padding: 7mm 10mm;
+        overflow: hidden;
+      }
+      header { margin-bottom: 12px; padding-bottom: 8px; }
+      h1 { margin-bottom: 3px; font-size: 22px; }
+      h2 { margin: 13px 0 6px; font-size: 16px; }
+      h3 { margin-bottom: 2px; font-size: 13px; }
+      .meta { font-size: 9.5px; }
+      .principle { padding: 7px 9px; font-size: 11px; }
+      .orientation { gap: 6px; margin-top: 7px; }
+      .orientation div { padding: 6px; }
+      .runbook > li { padding: 0 0 8px 32px; }
+      .runbook > li::before { width: 22px; height: 22px; }
+      .runbook p { margin-bottom: 3px; }
+      .say, .ask, .expect { margin: 3px 0; font-size: 9.5px; }
+      pre { margin-bottom: 4px; padding: 6px 8px; font-size: 9px; line-height: 1.25; }
+      .error-table th, .error-table td { padding: 5px 6px; }
+      .two-columns { gap: 14px; }
+      .input-output { gap: 8px; }
+      .compact-list li + li { margin-top: 3px; }
+      .checklist { column-gap: 24px; }
+      .checklist li { margin-bottom: 3px; }
+      footer { margin-top: 12px; padding-top: 6px; font-size: 8px; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+    @media (max-width: 700px) {
+      body { margin: 0; }
+      .page { min-height: 0; padding: 28px 22px; }
+      .orientation, .two-columns, .input-output { grid-template-columns: 1fr; }
+      .checklist { columns: 1; }
+    }
+
+  </style>
+</head>
+<body>
+  <section class="page">
+    <header>
+      <div><h1>Chapter 2 IDE Demo — Instructor Cue Sheet</h1><p class="subtitle">Variables, expressions, integer division, modulo, and casts</p></div>
+      <div class="meta">Target time<br><strong>10–12 minutes</strong></div>
+    </header>
+
+    <p class="principle"><strong>Demo rhythm:</strong> type one small change, ask for a prediction, run, and trace the value. Keep the editor and Console visible together.</p>
+
+    <h2>1. Trace assignment state <span class="muted">· 2 minutes</span></h2>
+    <ol class="runbook">
+      <li>
+        <h3>Create <code>Chapter2Demo.java</code></h3>
+        <pre>public class Chapter2Demo {
+  public static void main(String[] args) {
+    int x = 5;
+    int y = x;
+    x = 3;
+
+    System.out.println("x = " + x);
+    System.out.println("y = " + y);
+  }
+}</pre>
+        <p class="ask"><strong>Ask before running:</strong> “After <code>x</code> changes to 3, does <code>y</code> also change?”</p>
+        <p class="expect"><strong>Expected:</strong> <code>x = 3</code> and <code>y = 5</code>. Assignment copied the value that <code>x</code> held at that moment.</p>
+        <p class="say"><strong>Say:</strong> “<code>=</code> is an action: evaluate the right side, then overwrite the left-side variable.”</p>
+      </li>
+      <li>
+        <h3>Update a variable using its current value</h3>
+        <pre>int numPeople = 10;
+numPeople = numPeople + 5;
+numPeople += 5;
+System.out.println(numPeople);</pre>
+        <p class="ask"><strong>Ask:</strong> “What is printed after both updates?” <strong>Answer:</strong> <code>20</code>.</p>
+      </li>
+    </ol>
+
+    <h2>2. Demonstrate integer division and modulo <span class="muted">· 4 minutes</span></h2>
+    <ol class="runbook">
+      <li>
+        <h3>Start with quotient and remainder</h3>
+        <pre>int totalItems = 17;
+System.out.println(totalItems / 5);
+System.out.println(totalItems % 5);</pre>
+        <p class="expect"><strong>Expected:</strong> <code>3</code> complete groups and <code>2</code> remaining items.</p>
+      </li>
+      <li>
+        <h3>Convert total seconds</h3>
+        <pre>int totalSeconds = 3672;
+int hours = totalSeconds / 3600;
+int afterHours = totalSeconds % 3600;
+int minutes = afterHours / 60;
+int seconds = afterHours % 60;
+
+System.out.println(hours + ":" + minutes + ":" + seconds);</pre>
+        <p class="ask"><strong>Ask before running:</strong> “Which lines find complete units, and which lines keep the remainder?”</p>
+        <p class="expect"><strong>Expected output:</strong> <code>1:1:12</code>.</p>
+      </li>
+      <li>
+        <h3>Expose the type trap, then fix it</h3>
+        <pre>double average = 7 / 2;
+System.out.println(average);</pre>
+        <p class="expect"><strong>First output:</strong> <code>3.0</code>. Integer division happens before assignment to <code>double</code>.</p>
+        <pre>double average = (double) 7 / 2;</pre>
+        <p class="expect"><strong>Corrected output:</strong> <code>3.5</code>. Cast an operand before division.</p>
+      </li>
+    </ol>
+
+    <footer><span>ICS 108 · Chapter 2 IDE demo</span><span>Page 1 of 2</span></footer>
+  </section>
+
+  <section class="page">
+    <header>
+      <div><h1>Text Input, Debugging, and HealthData</h1><p class="subtitle">Use focused tests and show intermediate values.</p></div>
+      <div class="meta">Target time<br><strong>8–10 minutes</strong></div>
+    </header>
+
+    <h2>3. Show the Scanner newline pitfall <span class="muted">· 2 minutes</span></h2>
+    <div class="two-columns">
+      <div>
+        <h3>Problem</h3>
+        <pre>int age = scnr.nextInt();
+String fullName = scnr.nextLine();
+
+System.out.println(fullName);</pre>
+        <p class="say"><strong>Say:</strong> <code>nextInt()</code> reads the number but leaves the newline. The next <code>nextLine()</code> may read only that empty remainder.</p>
+      </div>
+      <div>
+        <h3>Fix</h3>
+        <pre>int age = scnr.nextInt();
+scnr.nextLine(); // consume newline
+String fullName = scnr.nextLine();
+
+System.out.println(fullName);</pre>
+        <p class="ask"><strong>Ask:</strong> “Why is the extra call not stored?” <strong>Answer:</strong> Its job is only to remove the leftover newline.</p>
+      </div>
+    </div>
+
+    <h2>4. Debug the circle calculation <span class="muted">· 2–3 minutes</span></h2>
+    <table class="error-table">
+      <thead><tr><th>Stage</th><th>Instructor action</th><th>Expected learning</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Observe</strong></td><td>Run with circumference <code>10</code>. Show radius about <code>15.71</code>.</td><td>The result is possible to run but clearly unreasonable.</td></tr>
+        <tr><td><strong>Predict</strong></td><td>Ask whether input, output, or the radius expression is most likely wrong.</td><td>Debugging starts with one testable prediction.</td></tr>
+        <tr><td><strong>Test</strong></td><td>Print <code>circumference</code> and <code>radius</code> immediately after calculation.</td><td>Intermediate values narrow the location of the bug.</td></tr>
+        <tr><td><strong>Fix</strong></td><td>Change <code>c / 2 * Math.PI</code> to <code>c / (2 * Math.PI)</code>.</td><td>Parentheses express the intended denominator.</td></tr>
+      </tbody>
+    </table>
+    <pre>double radius = circumference / (2 * Math.PI);
+double area = Math.PI * radius * radius;</pre>
+
+    <h2>5. Complete HealthData demo <span class="muted">· 4 minutes</span></h2>
+    <pre>final int DAYS_PER_YEAR = 365;
+final int MINUTES_PER_DAY = 24 * 60;
+final int BEATS_PER_MINUTE = 72;
+
+int ageYears = scnr.nextInt();
+int ageDays = (ageYears * DAYS_PER_YEAR) + (ageYears / 4);
+long ageMinutes = (long) ageDays * MINUTES_PER_DAY;
+long heartbeats = ageMinutes * BEATS_PER_MINUTE;
+
+System.out.println("Days: " + ageDays);
+System.out.println("Minutes: " + ageMinutes);
+System.out.println("Heartbeats: " + heartbeats);</pre>
+
+    <div class="input-output">
+      <div><h3>Input</h3><pre>19</pre></div>
+      <div><h3>Expected output</h3><pre>Days: 6939
+Minutes: 9992160
+Heartbeats: 719435520</pre></div>
+    </div>
+
+    <p class="ask"><strong>Ask:</strong> “Why use constants, integer division, a cast, and <code>long</code>?”</p>
+    <ul class="compact-list">
+      <li>Constants name assumptions and prevent accidental changes.</li>
+      <li><code>ageYears / 4</code> estimates complete leap years.</li>
+      <li>The cast makes the intermediate multiplication use <code>long</code>.</li>
+      <li><code>long</code> prevents large heartbeat estimates from overflowing <code>int</code>.</li>
+    </ul>
+
+    <h2>Final instructor checklist</h2>
+    <ul class="checklist">
+      <li>Increase editor and Console font size.</li>
+      <li>Run after each meaningful change.</li>
+      <li>Ask for a prediction before every run.</li>
+      <li>Keep the exact input visible.</li>
+      <li>Remove temporary debug statements.</li>
+      <li>If short on time, omit the Scanner pitfall.</li>
+    </ul>
+
+    <footer><span><a href="web/index.html#slide-12">Lecture deck: seconds conversion demo</a></span><span>Page 2 of 2</span></footer>
+  </section>
+</body>
+</html>
