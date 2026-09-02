@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ICS 108 Lecture 5 instructor walkthroughs for Java arrays.">
+  <title>ICS 108 Lecture 5 — Instructor Problem-Solving Walkthroughs</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #e5e8eb;
+      --paper: #ffffff;
+      --ink: #15181b;
+      --muted: #596169;
+      --line: #c8d0d7;
+      --blue: #1769aa;
+      --blue-dark: #0d4d7f;
+      --soft-blue: #eef5fb;
+      --warm: #f7f4ed;
+      --danger: #a13b35;
+      --success: #226b42;
+      --code: #f6f8fa;
+      --console: #18222c;
+      --console-text: #edf4f8;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.48;
+    }
+
+    a { color: var(--blue-dark); text-underline-offset: 0.16em; }
+    code { font-family: var(--mono); }
+    button { font: inherit; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      top: 0.5rem;
+      left: 0.5rem;
+      padding: 0.6rem 0.85rem;
+      color: #fff;
+      background: var(--blue-dark);
+      transform: translateY(-180%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .screen-nav {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 3.1rem;
+      padding: 0.65rem max(1rem, calc((100vw - 210mm) / 2));
+      border-bottom: 1px solid #b7c0c8;
+      background: rgba(245, 247, 249, 0.97);
+      box-shadow: 0 2px 10px rgba(21, 24, 27, 0.08);
+    }
+    .screen-nav strong { margin-right: auto; color: var(--blue-dark); }
+    .screen-nav a { font-size: 0.9rem; font-weight: 650; }
+
+    main { padding: 2rem 1rem 4rem; }
+    .page {
+      position: relative;
+      width: min(210mm, 100%);
+      min-height: 297mm;
+      margin: 0 auto 2rem;
+      padding: 14mm 15mm 13mm;
+      background: var(--paper);
+      box-shadow: 0 12px 35px rgba(21, 24, 27, 0.15);
+    }
+
+    .course-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.5rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 3px solid var(--blue);
+    }
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.45rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .breadcrumb span::after { margin-left: 0.35rem; content: "/"; color: #94a0aa; }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+      font-size: clamp(1.8rem, 4vw, 2.55rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+    .subtitle { margin-bottom: 0; color: var(--muted); font-size: 1rem; }
+    .document-meta {
+      min-width: 9.5rem;
+      margin: 0;
+      padding-left: 1.25rem;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      text-align: right;
+    }
+    .document-meta strong { display: block; color: var(--blue-dark); font-size: 1rem; }
+
+    .lecture-goals {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem 1rem;
+      border: 1px solid #c4d8e8;
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+    }
+    .lecture-goals h2 {
+      margin-bottom: 0.7rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .goal {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.55rem;
+      align-items: start;
+      margin: 0;
+      color: #273039;
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+    .goal b {
+      display: grid;
+      width: 1.55rem;
+      height: 1.55rem;
+      place-items: center;
+      border: 1px solid #aac8df;
+      border-radius: 50%;
+      color: var(--blue-dark);
+      background: #fff;
+      font-size: 0.72rem;
+    }
+
+    .problem-module { margin-top: 1.15rem; }
+    .problem-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 0.85rem;
+    }
+    .problem-heading .kicker {
+      margin-bottom: 0.25rem;
+      color: var(--blue);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .problem-heading h2 {
+      margin-bottom: 0.25rem;
+      font-size: 1.45rem;
+      line-height: 1.15;
+      letter-spacing: -0.018em;
+    }
+    .problem-heading .lead { margin-bottom: 0; color: var(--muted); font-size: 0.9rem; }
+    .slide-map {
+      min-width: 10rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #b8d0e2;
+      background: var(--soft-blue);
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      text-align: right;
+    }
+    .slide-map a { display: block; font-weight: 800; }
+    .slide-map span { color: var(--muted); }
+
+    .content-block {
+      margin-top: 0.85rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--line);
+    }
+    .content-block > h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.55rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .content-block > h3::before {
+      width: 1.15rem;
+      height: 3px;
+      background: var(--blue);
+      content: "";
+    }
+    .content-block p:last-child { margin-bottom: 0; }
+
+    .description-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 0.65fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .problem-copy {
+      padding: 0.75rem 0.9rem;
+      border-left: 4px solid var(--blue);
+      background: var(--warm);
+      font-size: 0.9rem;
+    }
+    .problem-copy p { margin-bottom: 0.45rem; }
+    .data-line { color: var(--muted); }
+    .data-line code { color: var(--ink); font-weight: 650; }
+    .console {
+      overflow: hidden;
+      border: 1px solid #0d1720;
+      background: var(--console);
+      color: var(--console-text);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.42rem 0.7rem;
+      border-bottom: 1px solid #cfd7dd;
+      color: #34404a;
+      background: #e8edf1;
+      font-size: 0.72rem;
+      font-weight: 750;
+    }
+    .console .panel-head {
+      border-color: #344451;
+      color: #c9d6df;
+      background: #111921;
+    }
+    .console pre {
+      margin: 0;
+      padding: 0.72rem 0.8rem;
+      color: inherit;
+      font: 0.78rem/1.4 var(--mono);
+      white-space: pre-wrap;
+    }
+    .console .typed { color: #9bd3ad; font-weight: 700; }
+
+    .concept-overview {
+      display: grid;
+      grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+      gap: 0.9rem;
+      align-items: start;
+    }
+    .learning-outcome {
+      margin: 0;
+      padding: 0.75rem 0.85rem;
+      border-left: 4px solid var(--blue);
+      background: var(--soft-blue);
+      font-size: 0.87rem;
+    }
+    .learning-outcome strong {
+      display: block;
+      margin-bottom: 0.15rem;
+      color: var(--blue-dark);
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .concept-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.38rem 0.7rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .concept-links a {
+      display: flex;
+      gap: 0.45rem;
+      align-items: baseline;
+      min-height: 2rem;
+      padding: 0.38rem 0.5rem;
+      border: 1px solid #d0d8df;
+      color: #26323b;
+      background: #fff;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-decoration: none;
+    }
+    .concept-links a:hover,
+    .concept-links a:focus-visible { border-color: var(--blue); background: var(--soft-blue); }
+    .concept-links code { color: var(--blue-dark); font-size: 0.71rem; font-weight: 800; }
+
+    .section-note { margin-bottom: 0.5rem; color: var(--muted); font-size: 0.78rem; }
+    .code-workbench { overflow: hidden; border: 1px solid #adb7c0; background: var(--code); }
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.48rem 0.65rem;
+      border-bottom: 1px solid #c5ced5;
+      background: #eef1f3;
+    }
+    .code-switches { display: flex; gap: 0.3rem; }
+    .code-switch,
+    .copy-code {
+      min-height: 2rem;
+      padding: 0.35rem 0.65rem;
+      border: 1px solid #9eabb5;
+      border-radius: 3px;
+      color: #28343d;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+    .code-switch[aria-selected="true"] {
+      border-color: var(--blue-dark);
+      color: #fff;
+      background: var(--blue-dark);
+    }
+    .copy-code { margin-left: auto; color: var(--blue-dark); border-color: #8eb5d2; }
+    .code-switch:focus-visible,
+    .copy-code:focus-visible { outline: 3px solid rgba(23, 105, 170, 0.3); outline-offset: 2px; }
+    .code-version {
+      overflow-x: auto;
+      margin: 0;
+      padding: 0.9rem 1rem;
+      color: #172029;
+      background: var(--code);
+      font: 0.78rem/1.42 var(--mono);
+      tab-size: 3;
+      white-space: pre;
+    }
+    .code-version[hidden] { display: none; }
+    .copy-status {
+      min-height: 1.35rem;
+      margin: 0;
+      padding: 0.28rem 0.65rem;
+      border-top: 1px solid #d5dce2;
+      color: var(--success);
+      background: #fff;
+      font-size: 0.73rem;
+    }
+
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+    }
+    .concept-note {
+      scroll-margin-top: 4.5rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #d0d7dd;
+      border-top: 3px solid var(--blue);
+      background: #fff;
+    }
+    .concept-note:target { outline: 3px solid rgba(23, 105, 170, 0.25); outline-offset: 2px; }
+    .concept-note h4 { margin-bottom: 0.28rem; font-size: 0.84rem; line-height: 1.25; }
+    .concept-note h4 code { margin-right: 0.28rem; color: var(--blue-dark); font-size: 0.72rem; }
+    .concept-note p { margin-bottom: 0; color: #36414a; font-size: 0.78rem; line-height: 1.38; }
+    .concept-note .teaching-line { margin-top: 0.3rem; color: var(--muted); }
+    .concept-note .teaching-line strong { color: var(--blue-dark); }
+    .wide-note { grid-column: 1 / -1; }
+
+    .trace-wrap { overflow-x: auto; margin-top: 0.55rem; }
+    .trace {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      line-height: 1.3;
+    }
+    .trace th,
+    .trace td { padding: 0.32rem 0.42rem; border: 1px solid #cfd7dd; text-align: left; }
+    .trace th { color: var(--blue-dark); background: var(--soft-blue); }
+    .trace .update { color: var(--success); font-weight: 750; }
+    .mistake {
+      margin-top: 0.55rem;
+      padding: 0.5rem 0.65rem;
+      border-left: 3px solid var(--danger);
+      color: #63312e;
+      background: #fbf1f0;
+      font-size: 0.76rem;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.73rem;
+    }
+
+    @media (max-width: 760px) {
+      .screen-nav { align-items: flex-start; flex-wrap: wrap; gap: 0.5rem 1rem; }
+      .screen-nav strong { width: 100%; }
+      main { padding: 1rem 0.6rem 2rem; }
+      .page { min-height: 0; padding: 1.2rem 1rem; }
+      .course-header,
+      .problem-heading,
+      .description-grid,
+      .concept-overview { grid-template-columns: 1fr; }
+      .document-meta { padding: 0.65rem 0 0; border-top: 1px solid var(--line); border-left: 0; text-align: left; }
+      .problem-heading { align-items: start; }
+      .slide-map { text-align: left; }
+      .goal-grid,
+      .reference-grid { grid-template-columns: 1fr; }
+      .concept-links { grid-template-columns: 1fr; }
+      .wide-note { grid-column: auto; }
+      .code-toolbar { flex-wrap: wrap; }
+      .copy-code { margin-left: 0; }
+      .code-version { font-size: 0.7rem; }
+    }
+
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+      html, body { width: 210mm; margin: 0; background: #fff; }
+      body { font-size: 8pt; line-height: 1.28; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .skip-link,
+      .screen-nav,
+      .code-toolbar,
+      .copy-status { display: none !important; }
+      main { padding: 0; }
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 297mm;
+        max-height: 297mm;
+        margin: 0;
+        padding: 8mm 10mm 7mm;
+        overflow: hidden;
+        break-after: page;
+        page-break-after: always;
+        box-shadow: none;
+      }
+      .page:last-child { break-after: auto; page-break-after: auto; }
+      .course-header { gap: 5mm; padding-bottom: 2.3mm; border-bottom-width: 1mm; }
+      .course-header { grid-template-columns: minmax(0, 1fr) auto; }
+      .breadcrumb { gap: 1mm; margin-bottom: 1.2mm; font-size: 6.5pt; }
+      .breadcrumb span::after { margin-left: 1mm; }
+      h1 { margin-bottom: 0.8mm; font-size: 17pt; }
+      .subtitle { font-size: 7.8pt; }
+      .document-meta { min-width: 32mm; padding: 0 0 0 4mm; border-top: 0; border-left: 1px solid var(--line); font-size: 7pt; line-height: 1.35; text-align: right; }
+      .document-meta strong { font-size: 8pt; }
+      .lecture-goals { margin-top: 2.5mm; padding: 2.3mm 2.8mm; border-left-width: 1.2mm; }
+      .lecture-goals h2 { margin-bottom: 1.8mm; font-size: 8.5pt; }
+      .goal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.2mm; }
+      .goal { gap: 1.3mm; font-size: 6.8pt; line-height: 1.25; }
+      .goal b { width: 5mm; height: 5mm; font-size: 6pt; }
+      .problem-module { margin-top: 3mm; }
+      .page:not(.page-one) .problem-module { margin-top: 4mm; }
+      .problem-heading { grid-template-columns: minmax(0, 1fr) auto; gap: 4mm; align-items: end; margin-bottom: 2mm; }
+      .problem-heading .kicker { margin-bottom: 0.7mm; font-size: 6.3pt; }
+      .problem-heading h2 { margin-bottom: 0.7mm; font-size: 12pt; }
+      .problem-heading .lead { font-size: 7.2pt; }
+      .slide-map { min-width: 34mm; padding: 1.5mm 2mm; font-size: 6.5pt; text-align: right; }
+      .content-block { margin-top: 2mm; padding-top: 1.7mm; }
+      .content-block > h3 { gap: 1.5mm; margin-bottom: 1.4mm; font-size: 8.7pt; }
+      .content-block > h3::before { width: 4mm; height: 0.7mm; }
+      .description-grid { grid-template-columns: minmax(0, 1.3fr) minmax(42mm, 0.7fr); gap: 2.5mm; }
+      .problem-copy { padding: 1.8mm 2.2mm; border-left-width: 1mm; font-size: 7.1pt; }
+      .problem-copy p { margin-bottom: 1mm; }
+      .panel-head { padding: 1mm 1.6mm; font-size: 6.2pt; }
+      .console pre { padding: 1.7mm 2mm; font-size: 6.5pt; line-height: 1.3; }
+      .concept-overview { grid-template-columns: minmax(44mm, 0.8fr) minmax(0, 1.2fr); gap: 2.4mm; }
+      .learning-outcome { padding: 1.8mm 2.1mm; border-left-width: 1mm; font-size: 6.8pt; }
+      .learning-outcome strong { margin-bottom: 0.5mm; font-size: 6.1pt; }
+      .concept-links { gap: 1mm 1.5mm; }
+      .concept-links a { gap: 1.1mm; min-height: 0; padding: 1mm 1.2mm; font-size: 6.4pt; }
+      .concept-links code { font-size: 5.9pt; }
+      .section-note { margin-bottom: 1.2mm; font-size: 6.3pt; }
+      .code-version { padding: 2mm 2.4mm; font-size: 6.45pt; line-height: 1.23; }
+      #problem-2 .content-block { margin-top: 1.7mm; padding-top: 1.4mm; }
+      #problem-2 .code-version { padding: 1.5mm 2.2mm; font-size: 6.15pt; line-height: 1.15; }
+      #problem-2 .concept-note { padding: 1.2mm 1.5mm; }
+      #problem-2 .trace th,
+      #problem-2 .trace td { padding: 0.55mm 0.9mm; }
+      #problem-2 .mistake { margin-top: 0.7mm; padding: 0.8mm 1mm; }
+      .code-version[data-code-version="starter"] { display: none !important; }
+      .code-version[data-code-version="complete"] { display: block !important; }
+      .reference-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4mm; }
+      .concept-note { padding: 1.5mm 1.7mm; border-top-width: 0.7mm; }
+      .concept-note h4 { margin-bottom: 0.7mm; font-size: 6.8pt; }
+      .concept-note h4 code { margin-right: 0.7mm; font-size: 5.9pt; }
+      .concept-note p { font-size: 6.25pt; line-height: 1.28; }
+      .concept-note .teaching-line { margin-top: 0.7mm; }
+      .wide-note { grid-column: 1 / -1; }
+      .trace-wrap { margin-top: 1.2mm; }
+      .trace { font-size: 6pt; }
+      .trace th,
+      .trace td { padding: 0.8mm 1mm; }
+      .mistake { margin-top: 1.2mm; padding: 1.2mm 1.5mm; border-left-width: 0.8mm; font-size: 6.2pt; }
+      .page-footer { position: absolute; right: 10mm; bottom: 5mm; left: 10mm; margin: 0; padding-top: 1.5mm; font-size: 6.2pt; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#problem-1">Skip to the first problem</a>
+  <nav class="screen-nav" aria-label="Instructor resources">
+    <strong>ICS 108 · Lecture 5 instructor set</strong>
+    <a href="../slides/index.html#slide-3">Supporting slides</a>
+    <a href="concept-refresher.html">Concept refresher</a>
+    <a href="../examples/README.md">Runnable examples</a>
+  </nav>
+
+  <main>
+    <article class="page page-one" id="problem-1">
+      <header class="course-header">
+        <div>
+          <nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 5</span><strong>Instructor notes</strong></nav>
+          <h1>Problem-solving walkthroughs</h1>
+          <p class="subtitle">Arrays: store values, visit every element, and compute results.</p>
+        </div>
+        <p class="document-meta"><strong>3 problems</strong>Approx. 28 min<br>Page 1 of 3</p>
+      </header>
+
+      <section class="lecture-goals" aria-labelledby="lecture-goals-title">
+        <h2 id="lecture-goals-title">What will students learn in this lecture?</h2>
+        <div class="goal-grid">
+          <p class="goal"><b>1</b><span>Create an array and use an index to read or update one element.</span></p>
+          <p class="goal"><b>2</b><span>Fill and traverse an array with an indexed <code>for</code> loop.</span></p>
+          <p class="goal"><b>3</b><span>Use stored values to calculate a total and find the highest value.</span></p>
+        </div>
+      </section>
+
+      <section class="problem-module" aria-labelledby="problem-1-title">
+        <header class="problem-heading">
+          <div>
+            <p class="kicker">Problem 1 · Array basics · About 8 minutes</p>
+            <h2 id="problem-1-title">Read, update, and inspect temperatures</h2>
+            <p class="lead">Introduce one array operation at a time, then run the complete program.</p>
+          </div>
+          <div class="slide-map"><a href="../slides/index.html#slide-3">Supporting slides 3–9</a><span>Return to the IDE after slide 9.</span></div>
+        </header>
+
+        <section class="content-block" aria-labelledby="p1-description">
+          <h3 id="p1-description">Problem description</h3>
+          <div class="description-grid">
+            <div class="problem-copy">
+              <p>Store five daily temperatures. Print the first temperature, change the value at index <code>3</code> to <code>27</code>, print the array length, and print the last temperature.</p>
+              <p class="data-line"><strong>Starting data:</strong> <code>{23, 25, 24, 22, 26}</code>. There is no keyboard input.</p>
+            </div>
+            <div class="console" aria-label="Expected console output for problem 1">
+              <div class="panel-head"><span>Console</span><span>Expected output</span></div>
+              <pre>First day: 23
+Corrected fourth day: 27
+Days stored: 5
+Last day: 26</pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p1-concepts">
+          <h3 id="p1-concepts">What new concepts does it have?</h3>
+          <div class="concept-overview">
+            <p class="learning-outcome"><strong>Students will learn</strong>Create an <code>int</code> array, use zero-based indexes to read and update elements, and use <code>length</code> to locate the last element.</p>
+            <ul class="concept-links" aria-label="Problem 1 concept links">
+              <li><a href="#p1-c1"><code>P1-C1</code><span>Array and element</span></a></li>
+              <li><a href="#p1-c2"><code>P1-C2</code><span>Declaration and initializer</span></a></li>
+              <li><a href="#p1-c3"><code>P1-C3</code><span>Zero-based index</span></a></li>
+              <li><a href="#p1-c4"><code>P1-C4</code><span>Read an element</span></a></li>
+              <li><a href="#p1-c5"><code>P1-C5</code><span>Update an element</span></a></li>
+              <li><a href="#p1-c6"><code>P1-C6</code><span>Length and last index</span></a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p1-code">
+          <h3 id="p1-code">Complete code</h3>
+          <p class="section-note">The complete version is selected. Use Starter only if you want to type the update and last-element lines live.</p>
+          <div class="code-workbench" data-code-workbench>
+            <div class="panel-head"><span>TemperatureBasics.java</span><span>Complete shown by default</span></div>
+            <div class="code-toolbar">
+              <div class="code-switches" role="tablist" aria-label="TemperatureBasics code version">
+                <button class="code-switch" type="button" role="tab" id="p1-starter-tab" aria-controls="p1-starter" aria-selected="false" tabindex="-1" data-code-switch="starter">Starter</button>
+                <button class="code-switch" type="button" role="tab" id="p1-complete-tab" aria-controls="p1-complete" aria-selected="true" data-code-switch="complete">Complete</button>
+              </div>
+              <button class="copy-code" type="button" data-copy-code>Copy complete code</button>
+            </div>
+            <pre class="code-version" id="p1-starter" role="tabpanel" aria-labelledby="p1-starter-tab" data-code-version="starter" hidden><code>public class TemperatureBasics {
+   public static void main(String[] args) {
+      int[] temperatures = {23, 25, 24, 22, 26};
+
+      System.out.println("First day: " + temperatures[0]);
+
+      // Add the update, length, and last-element statements here.
+   }
+}</code></pre>
+            <pre class="code-version" id="p1-complete" role="tabpanel" aria-labelledby="p1-complete-tab" data-code-version="complete"><code>public class TemperatureBasics {
+   public static void main(String[] args) {
+      // P1-C1: An array stores several elements of one type.
+      // P1-C2: Declare and initialize five int elements.
+      int[] temperatures = {23, 25, 24, 22, 26};
+
+      // P1-C3: Index 0 is the first position.
+      // P1-C4: Read the value stored at index 0.
+      System.out.println("First day: " + temperatures[0]);
+
+      // P1-C5: Replace the value stored at index 3.
+      temperatures[3] = 27;
+      System.out.println("Corrected fourth day: " + temperatures[3]);
+
+      // P1-C6: length is 5; the last index is length - 1.
+      System.out.println("Days stored: " + temperatures.length);
+      System.out.println("Last day: "
+            + temperatures[temperatures.length - 1]);
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p1-reference">
+          <h3 id="p1-reference">Elaborated concepts for instructor reference</h3>
+          <div class="reference-grid">
+            <article class="concept-note" id="p1-c1"><h4><code>P1-C1</code> Array and element</h4><p>An array is one fixed-size object that stores several values of the same type. Each stored value is an element.</p><p class="teaching-line"><strong>Say:</strong> “One name gives us access to five related values.”</p></article>
+            <article class="concept-note" id="p1-c2"><h4><code>P1-C2</code> Declaration and initializer</h4><p><code>int[]</code> is the type. The braces create the array and supply its five starting values in order.</p></article>
+            <article class="concept-note" id="p1-c3"><h4><code>P1-C3</code> Zero-based index</h4><p>Java numbers positions from <code>0</code>. The first index is <code>0</code>, the fourth is <code>3</code>, and the valid range here is <code>0</code> through <code>4</code>.</p></article>
+            <article class="concept-note" id="p1-c4"><h4><code>P1-C4</code> Read an element</h4><p><code>temperatures[0]</code> evaluates to <code>23</code>. Reading an element does not remove or change it.</p></article>
+            <article class="concept-note" id="p1-c5"><h4><code>P1-C5</code> Update an element</h4><p><code>temperatures[3] = 27;</code> replaces only the old value at index <code>3</code>. The other elements stay unchanged.</p></article>
+            <article class="concept-note" id="p1-c6"><h4><code>P1-C6</code> Length and last index</h4><p><code>length</code> is the number of elements, so the last valid index is <code>length - 1</code>. Index <code>length</code> is outside the array and fails at runtime.</p></article>
+          </div>
+        </section>
+      </section>
+
+      <footer class="page-footer"><span>ICS 108 · Lecture 5 · Arrays</span><span>Problem 1 · Supporting slides 3–9</span></footer>
+    </article>
+
+    <article class="page" id="problem-2">
+      <header class="course-header">
+        <div>
+          <nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 5</span><strong>Instructor notes</strong></nav>
+          <h1>Problem-solving walkthroughs</h1>
+          <p class="subtitle">Arrays: store values, visit every element, and compute results.</p>
+        </div>
+        <p class="document-meta"><strong>3 problems</strong>Approx. 28 min<br>Page 2 of 3</p>
+      </header>
+
+      <section class="problem-module" aria-labelledby="problem-2-title">
+        <header class="problem-heading">
+          <div>
+            <p class="kicker">Problem 2 · Fill and traverse · About 9 minutes</p>
+            <h2 id="problem-2-title">Read five temperatures and find their total</h2>
+            <p class="lead">Fill the array first. Then traverse the stored values in a second loop.</p>
+          </div>
+          <div class="slide-map"><a href="../slides/index.html#slide-10">Supporting slides 10–17</a><span>Return to the IDE after slide 17.</span></div>
+        </header>
+
+        <section class="content-block" aria-labelledby="p2-description">
+          <h3 id="p2-description">Problem description</h3>
+          <div class="description-grid">
+            <div class="problem-copy">
+              <p>Create space for five temperatures. Read exactly five integers into the array. After input is complete, use a second traversal to calculate and print the total.</p>
+              <p class="data-line"><strong>Example input:</strong> <code>20 22 24 26 28</code></p>
+            </div>
+            <div class="console" aria-label="Example input and output for problem 2">
+              <div class="panel-head"><span>Console</span><span>Input in green</span></div>
+              <pre>Enter 5 temperatures:
+<span class="typed">20 22 24 26 28</span>
+Total: 120</pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p2-concepts">
+          <h3 id="p2-concepts">What new concepts does it have?</h3>
+          <div class="concept-overview">
+            <p class="learning-outcome"><strong>Students will learn</strong>Allocate an array, fill it with an indexed loop, traverse it again, and use an accumulator to total the stored values.</p>
+            <ul class="concept-links" aria-label="Problem 2 concept links">
+              <li><a href="#p2-c1"><code>P2-C1</code><span>Allocation and defaults</span></a></li>
+              <li><a href="#p2-c2"><code>P2-C2</code><span>Indexed loop</span></a></li>
+              <li><a href="#p2-c3"><code>P2-C3</code><span>Fill the array</span></a></li>
+              <li><a href="#p2-c4"><code>P2-C4</code><span>Second traversal</span></a></li>
+              <li><a href="#p2-c5"><code>P2-C5</code><span>Accumulator</span></a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p2-code">
+          <h3 id="p2-code">Complete code</h3>
+          <p class="section-note">The complete version is selected. Starter stops after filling the array so you can add the second traversal live.</p>
+          <div class="code-workbench" data-code-workbench>
+            <div class="panel-head"><span>TemperatureTotal.java</span><span>Complete shown by default</span></div>
+            <div class="code-toolbar">
+              <div class="code-switches" role="tablist" aria-label="TemperatureTotal code version">
+                <button class="code-switch" type="button" role="tab" id="p2-starter-tab" aria-controls="p2-starter" aria-selected="false" tabindex="-1" data-code-switch="starter">Starter</button>
+                <button class="code-switch" type="button" role="tab" id="p2-complete-tab" aria-controls="p2-complete" aria-selected="true" data-code-switch="complete">Complete</button>
+              </div>
+              <button class="copy-code" type="button" data-copy-code>Copy complete code</button>
+            </div>
+            <pre class="code-version" id="p2-starter" role="tabpanel" aria-labelledby="p2-starter-tab" data-code-version="starter" hidden><code>import java.util.Scanner;
+
+public class TemperatureTotal {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      int[] temperatures = new int[5];
+
+      System.out.println("Enter 5 temperatures:");
+      for (int i = 0; i &lt; temperatures.length; i++) {
+         temperatures[i] = input.nextInt();
+      }
+
+      int total = 0;
+      // Add a second traversal that updates total.
+      System.out.println("Total: " + total);
+   }
+}</code></pre>
+            <pre class="code-version" id="p2-complete" role="tabpanel" aria-labelledby="p2-complete-tab" data-code-version="complete"><code>import java.util.Scanner;
+
+public class TemperatureTotal {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+
+      // P2-C1: Allocate five int elements; each starts at 0.
+      int[] temperatures = new int[5];
+
+      System.out.println("Enter 5 temperatures:");
+      // P2-C2: Visit indexes 0 through length - 1.
+      for (int i = 0; i &lt; temperatures.length; i++) {
+         // P2-C3: Store one input value in the current element.
+         temperatures[i] = input.nextInt();
+      }
+
+      // P2-C5: Start the running total at 0.
+      int total = 0;
+      // P2-C4: Traverse the stored values a second time.
+      for (int i = 0; i &lt; temperatures.length; i++) {
+         total += temperatures[i];
+      }
+
+      System.out.println("Total: " + total);
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p2-reference">
+          <h3 id="p2-reference">Elaborated concepts for instructor reference</h3>
+          <div class="reference-grid">
+            <article class="concept-note" id="p2-c1"><h4><code>P2-C1</code> Allocation and defaults</h4><p><code>new int[5]</code> creates five integer elements. Java initializes every new <code>int</code> element to <code>0</code>; the length cannot change later.</p></article>
+            <article class="concept-note" id="p2-c2"><h4><code>P2-C2</code> Indexed loop</h4><p>The loop starts at index <code>0</code>, continues while <code>i &lt; length</code>, and increases <code>i</code> by one. That visits every valid index exactly once.</p></article>
+            <article class="concept-note" id="p2-c3"><h4><code>P2-C3</code> Fill the array</h4><p>Each input value is stored in <code>temperatures[i]</code>. After five iterations, the array keeps all five values for later work.</p></article>
+            <article class="concept-note" id="p2-c4"><h4><code>P2-C4</code> Second traversal</h4><p>The second loop reads values already stored by the first loop. Keeping input and calculation separate makes both jobs easy to trace.</p></article>
+            <article class="concept-note wide-note" id="p2-c5">
+              <h4><code>P2-C5</code> Accumulator</h4>
+              <p><code>total</code> starts at <code>0</code>. After each iteration, it equals the sum of every element visited so far.</p>
+              <div class="trace-wrap">
+                <table class="trace"><thead><tr><th>Index</th><th>Value added</th><th>Total after addition</th></tr></thead><tbody><tr><td>0</td><td>20</td><td>20</td></tr><tr><td>1</td><td>22</td><td>42</td></tr><tr><td>2</td><td>24</td><td>66</td></tr><tr><td>3</td><td>26</td><td>92</td></tr><tr><td>4</td><td>28</td><td class="update">120</td></tr></tbody></table>
+              </div>
+              <p class="mistake"><strong>Common mistake:</strong> use <code>i &lt;= temperatures.length</code>. Index <code>5</code> is outside a five-element array. Recover by restoring <code>&lt;</code> and rerunning the same input.</p>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <footer class="page-footer"><span>ICS 108 · Lecture 5 · Arrays</span><span>Problem 2 · Supporting slides 10–17</span></footer>
+    </article>
+
+    <article class="page" id="problem-3">
+      <header class="course-header">
+        <div>
+          <nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 5</span><strong>Instructor notes</strong></nav>
+          <h1>Problem-solving walkthroughs</h1>
+          <p class="subtitle">Arrays: store values, visit every element, and compute results.</p>
+        </div>
+        <p class="document-meta"><strong>3 problems</strong>Approx. 28 min<br>Page 3 of 3</p>
+      </header>
+
+      <section class="problem-module" aria-labelledby="problem-3-title">
+        <header class="problem-heading">
+          <div>
+            <p class="kicker">Problem 3 · Search · About 11 minutes</p>
+            <h2 id="problem-3-title">Find the highest temperature and its day</h2>
+            <p class="lead">Keep the best value and the index where that value was found.</p>
+          </div>
+          <div class="slide-map"><a href="../slides/index.html#slide-18">Supporting slides 18–23</a><span>Final check: slide 24.</span></div>
+        </header>
+
+        <section class="content-block" aria-labelledby="p3-description">
+          <h3 id="p3-description">Problem description</h3>
+          <div class="description-grid">
+            <div class="problem-copy">
+              <p>Given five negative temperatures, find the highest value and the day where it occurs. Day numbers shown to the user start at <code>1</code>, while array indexes start at <code>0</code>.</p>
+              <p class="data-line"><strong>Starting data:</strong> <code>{-3, -7, -1, -5, -4}</code>. There is no keyboard input.</p>
+            </div>
+            <div class="console" aria-label="Expected console output for problem 3">
+              <div class="panel-head"><span>Console</span><span>Expected output</span></div>
+              <pre>Highest temperature: -1
+Day: 3</pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p3-concepts">
+          <h3 id="p3-concepts">What new concepts does it have?</h3>
+          <div class="concept-overview">
+            <p class="learning-outcome"><strong>Students will learn</strong>Search an array by keeping the best value and its matching index, including when every value is negative.</p>
+            <ul class="concept-links" aria-label="Problem 3 concept links">
+              <li><a href="#p3-c1"><code>P3-C1</code><span>First candidate</span></a></li>
+              <li><a href="#p3-c2"><code>P3-C2</code><span>Start at index 1</span></a></li>
+              <li><a href="#p3-c3"><code>P3-C3</code><span>Compare and update</span></a></li>
+              <li><a href="#p3-c4"><code>P3-C4</code><span>Keep the paired index</span></a></li>
+              <li><a href="#p3-c5"><code>P3-C5</code><span>Why all-negative works</span></a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p3-code">
+          <h3 id="p3-code">Complete code</h3>
+          <p class="section-note">The complete version is selected. Starter gives you the array and output so you can build the search loop live.</p>
+          <div class="code-workbench" data-code-workbench>
+            <div class="panel-head"><span>HighestTemperature.java</span><span>Complete shown by default</span></div>
+            <div class="code-toolbar">
+              <div class="code-switches" role="tablist" aria-label="HighestTemperature code version">
+                <button class="code-switch" type="button" role="tab" id="p3-starter-tab" aria-controls="p3-starter" aria-selected="false" tabindex="-1" data-code-switch="starter">Starter</button>
+                <button class="code-switch" type="button" role="tab" id="p3-complete-tab" aria-controls="p3-complete" aria-selected="true" data-code-switch="complete">Complete</button>
+              </div>
+              <button class="copy-code" type="button" data-copy-code>Copy complete code</button>
+            </div>
+            <pre class="code-version" id="p3-starter" role="tabpanel" aria-labelledby="p3-starter-tab" data-code-version="starter" hidden><code>public class HighestTemperature {
+   public static void main(String[] args) {
+      int[] temperatures = {-3, -7, -1, -5, -4};
+
+      int highest = temperatures[0];
+      int highestIndex = 0;
+
+      // Add the search loop here.
+
+      System.out.println("Highest temperature: " + highest);
+      System.out.println("Day: " + (highestIndex + 1));
+   }
+}</code></pre>
+            <pre class="code-version" id="p3-complete" role="tabpanel" aria-labelledby="p3-complete-tab" data-code-version="complete"><code>public class HighestTemperature {
+   public static void main(String[] args) {
+      int[] temperatures = {-3, -7, -1, -5, -4};
+
+      // P3-C1: Use the first element as the first candidate.
+      // P3-C5: A real element works even when all values are negative.
+      int highest = temperatures[0];
+
+      // P3-C4: Keep the index paired with the highest value.
+      int highestIndex = 0;
+
+      // P3-C2: Index 0 is handled, so start at index 1.
+      for (int i = 1; i &lt; temperatures.length; i++) {
+         // P3-C3: Replace the candidate only with a higher value.
+         if (temperatures[i] &gt; highest) {
+            highest = temperatures[i];
+            highestIndex = i;
+         }
+      }
+
+      System.out.println("Highest temperature: " + highest);
+      System.out.println("Day: " + (highestIndex + 1));
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="content-block" aria-labelledby="p3-reference">
+          <h3 id="p3-reference">Elaborated concepts for instructor reference</h3>
+          <div class="reference-grid">
+            <article class="concept-note" id="p3-c1"><h4><code>P3-C1</code> First candidate</h4><p>Initialize <code>highest</code> with the first array element. The candidate is therefore always a value that actually appears in the data.</p></article>
+            <article class="concept-note" id="p3-c2"><h4><code>P3-C2</code> Start at index 1</h4><p>Index <code>0</code> is already the candidate, so comparing it with itself adds no information. Begin the loop at <code>1</code>.</p></article>
+            <article class="concept-note" id="p3-c3"><h4><code>P3-C3</code> Compare and update</h4><p>Compare the current element with <code>highest</code>. Update only when the current value is larger; otherwise keep the existing candidate.</p></article>
+            <article class="concept-note" id="p3-c4"><h4><code>P3-C4</code> Keep the paired index</h4><p>Whenever <code>highest</code> changes, update <code>highestIndex</code> in the same branch. Display <code>highestIndex + 1</code> because people call index <code>2</code> “Day 3.”</p></article>
+            <article class="concept-note" id="p3-c5"><h4><code>P3-C5</code> Why all-negative works</h4><p>Starting at <code>0</code> would invent a value larger than every temperature here. Starting with <code>-3</code> lets the algorithm correctly replace it with <code>-1</code>.</p><p class="mistake"><strong>Common mistake:</strong> set <code>highest = 0</code>. Rerun the same negative data and show why the printed result is not in the array.</p></article>
+            <article class="concept-note wide-note">
+              <h4>Trace the candidate and its index together</h4>
+              <div class="trace-wrap">
+                <table class="trace"><thead><tr><th>Step</th><th>Current value</th><th>Higher?</th><th>Highest</th><th>Highest index</th></tr></thead><tbody><tr><td>Start at index 0</td><td>-3</td><td>candidate</td><td>-3</td><td>0</td></tr><tr><td>Index 1</td><td>-7</td><td>No</td><td>-3</td><td>0</td></tr><tr><td>Index 2</td><td>-1</td><td class="update">Yes</td><td class="update">-1</td><td class="update">2</td></tr><tr><td>Index 3</td><td>-5</td><td>No</td><td>-1</td><td>2</td></tr><tr><td>Index 4</td><td>-4</td><td>No</td><td>-1</td><td>2</td></tr></tbody></table>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <footer class="page-footer"><span>ICS 108 · Lecture 5 · Arrays</span><span>Problem 3 · Slides 18–23 · Final check 24</span></footer>
+    </article>
+  </main>
+
+  <script>
+    (() => {
+      const workbenches = document.querySelectorAll('[data-code-workbench]');
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        textArea.setSelectionRange(0, textArea.value.length);
+        const copied = document.execCommand('copy');
+        textArea.remove();
+        if (!copied) throw new Error('Copy command was not available.');
+      }
+
+      workbenches.forEach((workbench) => {
+        const tabs = [...workbench.querySelectorAll('[data-code-switch]')];
+        const versions = [...workbench.querySelectorAll('[data-code-version]')];
+        const copyButton = workbench.querySelector('[data-copy-code]');
+        const status = workbench.querySelector('[data-copy-status]');
+
+        function selectVersion(versionName, focusTab = false) {
+          tabs.forEach((tab) => {
+            const selected = tab.dataset.codeSwitch === versionName;
+            tab.setAttribute('aria-selected', String(selected));
+            tab.tabIndex = selected ? 0 : -1;
+            if (selected && focusTab) tab.focus();
+          });
+          versions.forEach((version) => {
+            version.hidden = version.dataset.codeVersion !== versionName;
+          });
+          copyButton.textContent = `Copy ${versionName} code`;
+          status.textContent = '';
+        }
+
+        tabs.forEach((tab, index) => {
+          tab.addEventListener('click', () => selectVersion(tab.dataset.codeSwitch));
+          tab.addEventListener('keydown', (event) => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            const direction = event.key === 'ArrowRight' ? 1 : -1;
+            const nextIndex = (index + direction + tabs.length) % tabs.length;
+            selectVersion(tabs[nextIndex].dataset.codeSwitch, true);
+          });
+        });
+
+        copyButton.addEventListener('click', async () => {
+          const activeVersion = versions.find((version) => !version.hidden);
+          const versionName = activeVersion.dataset.codeVersion;
+          try {
+            await copyText(activeVersion.textContent.trim());
+            status.textContent = `${versionName[0].toUpperCase() + versionName.slice(1)} code copied.`;
+          }
+          catch (error) {
+            status.textContent = 'Copy failed. Select the code and copy it manually.';
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

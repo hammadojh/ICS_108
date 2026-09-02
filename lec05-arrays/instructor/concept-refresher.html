@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Expandable instructor refresher for ICS 108 Lecture 5: Java arrays, indexes, traversal, totals, maximum values, and safe debugging.">
+  <meta name="theme-color" content="#111820">
+  <title>ICS 108 Lecture 5 — Instructor Concept Refresher</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111820'/%3E%3Cg fill='none' stroke='%238ec5ff' stroke-width='4'%3E%3Crect x='8' y='20' width='12' height='24'/%3E%3Crect x='26' y='20' width='12' height='24'/%3E%3Crect x='44' y='20' width='12' height='24'/%3E%3C/g%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: oklch(24% 0.018 250);
+      --ink-soft: oklch(43% 0.022 250);
+      --paper: oklch(98% 0.008 85);
+      --canvas: oklch(93% 0.012 245);
+      --line: oklch(82% 0.018 245);
+      --line-strong: oklch(66% 0.045 245);
+      --blue: oklch(51% 0.145 250);
+      --blue-dark: oklch(38% 0.11 250);
+      --blue-pale: oklch(95% 0.026 245);
+      --warm: oklch(95% 0.025 78);
+      --stage: oklch(18% 0.025 250);
+      --stage-soft: oklch(72% 0.035 245);
+      --code-bg: oklch(22% 0.025 250);
+      --code-ink: oklch(94% 0.012 245);
+      --focus: oklch(70% 0.15 245);
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      max-width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scroll-padding-top: 1rem;
+      background: var(--canvas);
+    }
+    body {
+      max-width: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3, p, ul, ol, table, pre { margin-top: 0; }
+    p, ul, ol { max-width: var(--measure); }
+    h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+    h1 {
+      max-width: 14ch;
+      margin-bottom: 1.5rem;
+      font-size: clamp(2.7rem, 8vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+    h2 {
+      margin-bottom: 0.75rem;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    h3 { margin-bottom: 0.5rem; font-size: 1.2rem; line-height: 1.25; }
+    a { color: var(--blue-dark); text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+    a:hover { text-decoration-thickness: 0.13em; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-variant-ligatures: none;
+    }
+    code {
+      padding: 0.08em 0.28em;
+      background: var(--blue-pale);
+      color: var(--blue-dark);
+      font-size: 0.92em;
+      overflow-wrap: anywhere;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    pre code { padding: 0; background: transparent; color: inherit; overflow-wrap: normal; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 30;
+      top: 0.5rem;
+      left: 0.5rem;
+      transform: translateY(-180%);
+      padding: 0.65rem 0.9rem;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .skip-link:focus { transform: none; }
+    .masthead {
+      padding: clamp(2rem, 7vw, 6rem) max(1.25rem, env(safe-area-inset-left)) clamp(3rem, 8vw, 6.5rem);
+      background: var(--stage);
+      color: var(--paper);
+    }
+    .masthead-inner { width: min(1180px, 100%); margin: 0 auto; }
+    .breadcrumb,
+    .eyebrow,
+    .concept-number,
+    .source-ref,
+    .reading-label,
+    .problem-tag {
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; color: var(--stage-soft); }
+    .breadcrumb a { color: inherit; }
+    .breadcrumb span + span::before { content: "/"; margin-right: 0.5rem; }
+    .eyebrow { margin-bottom: 0.75rem; color: oklch(80% 0.1 245); }
+    .chapter-abstract {
+      display: grid;
+      gap: 1rem;
+      max-width: 900px;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid oklch(39% 0.035 250);
+    }
+    .chapter-abstract .reading-label { color: oklch(80% 0.1 245); }
+    .chapter-abstract p {
+      margin-bottom: 0;
+      color: oklch(91% 0.012 245);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: clamp(1.18rem, 2.5vw, 1.55rem);
+      line-height: 1.5;
+    }
+    .reading-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+    .reading-controls button {
+      min-height: 44px;
+      padding: 0.65rem 1rem;
+      border: 1px solid oklch(52% 0.04 245);
+      border-radius: 0;
+      background: transparent;
+      color: var(--paper);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .reading-controls button:hover { background: oklch(26% 0.035 250); }
+    #readingStatus { color: var(--stage-soft); font-size: 0.86rem; }
+
+    .reading-layout {
+      display: grid;
+      grid-template-columns: minmax(14rem, 0.28fr) minmax(0, 0.72fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3rem 0 5rem;
+    }
+    .reading-map { position: sticky; top: 1rem; align-self: start; min-width: 0; }
+    .reading-map h2 {
+      margin-bottom: 1rem;
+      font: 800 0.72rem/1.2 "Avenir Next", Avenir, sans-serif;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .reading-map ol { display: grid; margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+    .reading-map a {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr);
+      min-height: 44px;
+      align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+    .reading-map a:hover { color: var(--blue-dark); }
+    .map-number { color: var(--blue); font: 700 0.76rem "SFMono-Regular", monospace; }
+    .map-links { display: grid; gap: 0.45rem; margin-top: 1.2rem; font-size: 0.86rem; }
+    .map-links a { display: block; min-height: 0; padding: 0.25rem 0; border-bottom: 0; }
+
+    .reading-main { min-width: 0; }
+    .reading-note { margin-bottom: 3rem; padding: 1.2rem 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .reading-note p:last-child { margin-bottom: 0; }
+    .mental-model { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0 4rem; }
+    .model-term { min-width: 0; padding-top: 0.8rem; border-top: 4px solid var(--blue); }
+    .model-term strong { display: block; margin-bottom: 0.3rem; }
+    .model-term span { display: block; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.45; }
+
+    .concept { margin-bottom: 0; padding: 3rem 0; border-top: 1px solid var(--line-strong); scroll-margin-top: 1rem; }
+    .concept:first-of-type { border-top-width: 3px; }
+    .concept-header { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr); gap: 1rem; margin-bottom: 1.2rem; }
+    .concept-number { padding-top: 0.6rem; color: var(--blue); font-family: "SFMono-Regular", monospace; }
+    .source-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; margin-bottom: 0.4rem; color: var(--ink-soft); }
+    .source-ref a { color: inherit; }
+    .problem-tag { display: inline-flex; align-items: center; min-height: 1.7rem; padding: 0.2rem 0.55rem; background: var(--blue); color: white; }
+    .concept-abstract {
+      margin-bottom: 1rem;
+      color: var(--ink-soft);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 1.18rem;
+      line-height: 1.55;
+    }
+    .key-rule { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; margin: 1rem 0; padding: 1rem 1.5rem; background: var(--blue-pale); }
+    .key-rule strong { color: var(--blue-dark); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .key-rule p { margin-bottom: 0; font-weight: 650; }
+
+    details { max-width: 100%; margin-top: 0.75rem; border-top: 1px solid var(--line); background: var(--paper); }
+    summary {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      min-height: 56px;
+      align-items: center;
+      padding: 0.75rem 3.2rem 0.75rem 1rem;
+      color: var(--blue-dark);
+      font-weight: 750;
+      cursor: pointer;
+      list-style: none;
+      overflow-wrap: anywhere;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue);
+      font: 400 1.5rem "Avenir Next", Avenir, sans-serif;
+    }
+    details[open] summary::after { content: "−"; }
+    .details-body { min-width: 0; max-width: 100%; padding: 0.2rem 1rem 1.2rem; }
+    .details-body > *:last-child { margin-bottom: 0; }
+    .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .details-grid > div { min-width: 0; }
+    .details-grid h3 { margin-top: 0.5rem; }
+    .teaching-line { margin: 1rem 0 0; padding: 0.85rem 1rem; background: var(--warm); }
+    .teaching-line strong { color: var(--blue-dark); }
+    .teaching-line p { margin-bottom: 0; }
+    .compare-wrap { max-width: 100%; overflow-x: auto; }
+    .compare-table { width: 100%; min-width: 31rem; border-collapse: collapse; font-size: 0.88rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--blue-pale); color: var(--blue-dark); }
+    .trace-list { margin: 0; padding-left: 1.25rem; }
+    .trace-list li + li { margin-top: 0.45rem; }
+    .warning { padding: 0.85rem 1rem; background: var(--warm); color: var(--blue-dark); }
+    .concept-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 1rem; font-size: 0.86rem; }
+
+    .readiness, .source-notes { padding: 3rem 0; border-top: 3px solid var(--ink); }
+    .readiness ol { padding-left: 1.4rem; }
+    .readiness li + li { margin-top: 0.55rem; }
+    .readiness code { white-space: normal; }
+    .source-notes { border-top-width: 1px; }
+    .source-notes ul { padding-left: 1.2rem; }
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+      padding: 1.5rem max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom));
+      background: var(--stage);
+      color: var(--stage-soft);
+      font-size: 0.86rem;
+    }
+    .page-footer a { color: var(--paper); }
+
+    @media (max-width: 900px) {
+      .reading-layout { grid-template-columns: minmax(0, 1fr); }
+      .reading-map { position: static; }
+      .reading-map ol { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+      .mental-model { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .masthead { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+      .reading-layout { width: min(calc(100% - 1.5rem), 1180px); padding-top: 2rem; }
+      .reading-map ol, .mental-model, .details-grid { grid-template-columns: minmax(0, 1fr); }
+      .concept-header { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .key-rule { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; padding: 1rem; }
+      .reading-controls { align-items: stretch; }
+      .reading-controls button { flex: 1 1 9rem; }
+      pre { padding: 1rem; font-size: 0.76rem; }
+      .compare-wrap { overflow: visible; }
+      .compare-table,
+      .compare-table tbody,
+      .compare-table tr,
+      .compare-table td { display: block; width: 100%; min-width: 0; }
+      .compare-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .compare-table tr { margin-bottom: 0.8rem; border: 1px solid var(--line); background: var(--paper); }
+      .compare-table td {
+        display: grid;
+        grid-template-columns: minmax(7.5rem, 0.42fr) minmax(0, 0.58fr);
+        gap: 0.75rem;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .compare-table td:last-child { border-bottom: 0; }
+      .compare-table td::before {
+        content: attr(data-label);
+        color: var(--blue-dark);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .page-footer { display: block; }
+      .page-footer span { display: block; }
+      .page-footer span + span { margin-top: 0.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      html, body { overflow: visible; background: white; font-size: 10pt; }
+      .masthead { padding: 0 0 10mm; background: white; color: var(--ink); }
+      .masthead h1 { max-width: none; font-size: 34pt; }
+      .breadcrumb, .reading-controls, .reading-map, .concept-links, .page-footer { display: none !important; }
+      .chapter-abstract p { color: var(--ink); }
+      .reading-layout { display: block; width: auto; padding: 8mm 0 0; }
+      .mental-model { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5mm; }
+      .concept { margin-bottom: 10mm; break-before: page; }
+      details { break-inside: avoid; }
+      details:not([open]) > .details-body { display: block; }
+      summary::after { display: none; }
+      .compare-wrap { overflow: visible; }
+      .compare-table { min-width: 0; }
+      pre { overflow: visible; white-space: pre-wrap; word-break: break-word; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to concepts</a>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <nav class="breadcrumb" aria-label="Resource location">
+        <span>ICS 108</span><span>Lecture 5</span><span>Instructor concept refresher</span>
+      </nav>
+      <p class="eyebrow">Quick review · expandable teaching notes</p>
+      <h1>Arrays: storage, indexes, and safe loops.</h1>
+      <section class="chapter-abstract" aria-labelledby="chapter-abstract-label">
+        <span class="reading-label" id="chapter-abstract-label">Lecture abstract</span>
+        <p>An array stores a fixed number of values of one type. The array variable names the array, an index selects one value, and a loop visits the indexes. This lecture uses three small programs: Problem 1 introduces storage and direct access, Problem 2 fills an array and totals its values, and Problem 3 finds a maximum value and its index. The main safety rule is that an array of length N has valid indexes 0 through N − 1.</p>
+      </section>
+      <div class="reading-controls" aria-label="Expandable detail controls">
+        <button id="openAll" type="button">Open all details</button>
+        <button id="closeAll" type="button">Close all details</button>
+        <span id="readingStatus" role="status" aria-live="polite">Seven concept summaries are visible.</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="reading-layout">
+    <aside class="reading-map" aria-label="Concept map">
+      <h2>Concept map</h2>
+      <ol>
+        <li><a href="#concept-1"><span class="map-number">01</span><span>Reference and allocation</span></a></li>
+        <li><a href="#concept-2"><span class="map-number">02</span><span>Elements and indexes</span></a></li>
+        <li><a href="#concept-3"><span class="map-number">03</span><span>Starting values and access</span></a></li>
+        <li><a href="#concept-4"><span class="map-number">04</span><span>Indexed traversal</span></a></li>
+        <li><a href="#concept-5"><span class="map-number">05</span><span>Fill and total</span></a></li>
+        <li><a href="#concept-6"><span class="map-number">06</span><span>Maximum and index</span></a></li>
+        <li><a href="#concept-7"><span class="map-number">07</span><span>Bounds and debugging</span></a></li>
+      </ol>
+      <div class="map-links">
+        <a href="../slides/index.html">Open supporting slides</a>
+        <a href="walkthroughs.html">Open IDE walkthroughs</a>
+        <a href="../examples/README.md">Open runnable examples</a>
+        <a href="#readiness">Jump to readiness check</a>
+      </div>
+    </aside>
+
+    <main class="reading-main" id="main-content" tabindex="-1">
+      <section class="reading-note">
+        <h2>How to use this refresher</h2>
+        <p>Read the visible summary and key rule for each concept. Open a detail section when you need code, a trace, a common error, or a short sentence to use in class. The problem label shows where the concept is introduced.</p>
+      </section>
+
+      <section aria-labelledby="unifying-model">
+        <h2 id="unifying-model">The four-part mental model</h2>
+        <div class="mental-model">
+          <div class="model-term"><strong>Reference</strong><span>The variable that names the array object.</span></div>
+          <div class="model-term"><strong>Storage</strong><span>The fixed set of elements created during allocation.</span></div>
+          <div class="model-term"><strong>Index</strong><span>The integer position used to select one element.</span></div>
+          <div class="model-term"><strong>Traversal</strong><span>A loop that visits valid indexes in a defined order.</span></div>
+        </div>
+      </section>
+
+      <section class="concept" id="concept-1">
+        <header class="concept-header">
+          <span class="concept-number">01</span>
+          <div>
+            <p class="source-ref"><span class="problem-tag">All problems</span><a href="../zyBooks.pdf#page=7">§5.2 · PDF pp. 7–10</a></p>
+            <h2>An array variable holds a reference to an allocated array</h2>
+            <p class="concept-abstract"><code>int[] temperatures</code> declares an array reference variable. In Problem 1, braces create the array and supply its values. In Problem 2, <code>new int[5]</code> allocates five <code>int</code> elements before input fills them.</p>
+          </div>
+        </header>
+        <div class="key-rule"><strong>Key rule</strong><p>The reference and the allocated array are related, but they are not the same thing.</p></div>
+        <details id="reference-allocation">
+          <summary>Expand declaration, allocation, and memory meaning</summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>Separate statements</h3>
+                <pre><code>int[] temperatures;
+temperatures = new int[5];</code></pre>
+                <p>The first line creates the reference variable. The second line creates the five-element array and assigns its reference to <code>temperatures</code>.</p>
+              </div>
+              <div>
+                <h3>Combined statement</h3>
+                <pre><code>int[] temperatures = new int[5];</code></pre>
+                <p>Problem 2 uses this form because it knows the required size before reading input. The allocated array keeps length 5. The variable may later receive a reference to another array.</p>
+              </div>
+            </div>
+            <div class="teaching-line"><strong>Useful teaching sentence</strong><p>“The variable gives us the array; <code>new</code> creates the element storage.”</p></div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="walkthroughs.html#problem-1">Open Problem 1 walkthrough</a><a href="walkthroughs.html#problem-2">Open Problem 2 walkthrough</a><a href="../slides/index.html#slide-3">Start the array slides</a><a href="../examples/README.md">Open runnable examples</a></div>
+      </section>
+
+      <section class="concept" id="concept-2">
+        <header class="concept-header">
+          <span class="concept-number">02</span>
+          <div>
+            <p class="source-ref"><span class="problem-tag">Problem 1</span><a href="../zyBooks.pdf#page=1">§§5.1–5.2 · PDF pp. 1–14</a></p>
+            <h2>An index selects one element</h2>
+            <p class="concept-abstract">An element is one stored value. Its index is the integer position inside brackets. Java starts array indexes at 0, so the five temperatures in Problem 1 use indexes 0, 1, 2, 3, and 4.</p>
+          </div>
+        </header>
+        <div class="key-rule"><strong>Key rule</strong><p>For an array of length N, the valid index range is <code>0</code> through <code>N - 1</code>.</p></div>
+        <details id="element-index-range">
+          <summary>Expand zero-based positions and valid ranges</summary>
+          <div class="details-body">
+            <pre><code>int[] temperatures = {23, 25, 24, 22, 26};
+
+temperatures[0] = 23;  // first element
+temperatures[1] = 25;  // second element
+temperatures[3] = 22;  // fourth element
+temperatures[4] = 26;  // fifth and last element</code></pre>
+            <div class="compare-wrap">
+              <table class="compare-table">
+                <thead><tr><th>Human position</th><th>Array index</th><th>Access</th></tr></thead>
+                <tbody>
+                  <tr><td data-label="Human position">first</td><td data-label="Array index">0</td><td data-label="Access"><code>temperatures[0]</code></td></tr>
+                  <tr><td data-label="Human position">second</td><td data-label="Array index">1</td><td data-label="Access"><code>temperatures[1]</code></td></tr>
+                  <tr><td data-label="Human position">fifth and last</td><td data-label="Array index">4</td><td data-label="Access"><code>temperatures[4]</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Keep the two numbers separate: length 5 is a count, while index 4 is a position. If a user chooses “Day 1,” the matching index is <code>1 - 1</code>, which is 0.</p>
+            <div class="teaching-line"><strong>Useful teaching sentence</strong><p>“Length tells us how many; index tells us which one.”</p></div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="walkthroughs.html#problem-1">Open Problem 1 walkthrough</a><a href="../slides/index.html#slide-5">Review zero-based indexes</a><a href="../examples/TemperatureBasics.java">Open TemperatureBasics.java</a></div>
+      </section>
+
+      <section class="concept" id="concept-3">
+        <header class="concept-header">
+          <span class="concept-number">03</span>
+          <div>
+            <p class="source-ref"><span class="problem-tag">All problems</span><a href="../zyBooks.pdf#page=8">§5.2 · PDF pp. 8–16</a></p>
+            <h2>Arrays have starting values, direct access, and a length</h2>
+            <p class="concept-abstract"><code>new int[4]</code> starts four integer elements at the default value 0. A brace initializer supplies explicit starting values and infers the length. Bracket access reads or updates one element. The property <code>.length</code> reports the element count.</p>
+          </div>
+        </header>
+        <div class="key-rule"><strong>Key rule</strong><p>Use brackets for an element and <code>.length</code> for the count. Java arrays use <code>length</code>, not <code>length()</code>.</p></div>
+        <details id="initial-values-access-length">
+          <summary>Expand default values, initializer syntax, reads, and updates</summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>Default values</h3>
+                <pre><code>int[] counts = new int[3];
+// values: 0, 0, 0
+
+double[] rates = new double[2];
+// values: 0.0, 0.0
+
+boolean[] flags = new boolean[2];
+// values: false, false</code></pre>
+              </div>
+              <div>
+                <h3>Explicit starting values</h3>
+                <pre><code>int[] temperatures = {23, 25, 24, 22, 26};
+
+int first = temperatures[0]; // read 23
+temperatures[3] = 27;         // update 22 to 27
+
+int count = temperatures.length; // 5
+int last = temperatures[temperatures.length - 1]; // 26</code></pre>
+              </div>
+            </div>
+            <p>Brackets <code>[]</code> appear in the type and in element access. Braces <code>{}</code> hold an initializer list. Do not use the two symbols as if they had the same job.</p>
+            <div class="teaching-line"><strong>Useful teaching sentence</strong><p>“Read the right side first, then store the result in the indexed element on the left.”</p></div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="walkthroughs.html#problem-1">Open Problem 1 walkthrough</a><a href="../slides/index.html#slide-4">Review initialization and access</a><a href="../examples/TemperatureBasics.java">Open TemperatureBasics.java</a></div>
+      </section>
+
+      <section class="concept" id="concept-4">
+        <header class="concept-header">
+          <span class="concept-number">04</span>
+          <div>
+            <p class="source-ref"><span class="problem-tag">All problems</span><a href="../zyBooks.pdf#page=21">§5.4 · PDF pp. 21–29</a></p>
+            <h2>The standard indexed loop visits every valid element once</h2>
+            <p class="concept-abstract">The loop index begins at 0 and increases by 1. The condition <code>i &lt; values.length</code> allows the last valid index, <code>length - 1</code>, and stops before the invalid index <code>length</code>.</p>
+          </div>
+        </header>
+        <div class="key-rule"><strong>Key rule</strong><p>Use <code>for (int i = 0; i &lt; array.length; ++i)</code> as the standard forward traversal.</p></div>
+        <details id="standard-traversal">
+          <summary>Expand the loop pattern and a complete trace</summary>
+          <div class="details-body">
+            <pre><code>for (int i = 0; i &lt; values.length; ++i) {
+    System.out.println(values[i]);
+}</code></pre>
+            <div class="compare-wrap">
+              <table class="compare-table">
+                <thead><tr><th>Length</th><th>Indexes used by the body</th><th>First exit value</th></tr></thead>
+                <tbody>
+                  <tr><td data-label="Length">4</td><td data-label="Indexes used">0, 1, 2, 3</td><td data-label="First exit value"><code>i == 4</code></td></tr>
+                  <tr><td data-label="Length">1</td><td data-label="Indexes used">0</td><td data-label="First exit value"><code>i == 1</code></td></tr>
+                  <tr><td data-label="Length">0</td><td data-label="Indexes used">none</td><td data-label="First exit value"><code>i == 0</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>The loop variable <code>i</code> has two jobs: it counts iterations and selects the current element. The body must use the same valid range as the array.</p>
+            <div class="warning"><strong>Do not use:</strong> <code>i &lt;= values.length</code>. Its final body execution tries <code>values[values.length]</code>.</div>
+            <div class="teaching-line"><strong>Useful teaching sentence</strong><p>“Start at the first valid index and stop at the first invalid index.”</p></div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="walkthroughs.html">Open all walkthroughs</a><a href="../slides/index.html">Review traversal slides</a><a href="../examples/README.md">Open runnable examples</a></div>
+      </section>
+
+      <section class="concept" id="concept-5">
+        <header class="concept-header">
+          <span class="concept-number">05</span>
+          <div>
+            <p class="source-ref"><span class="problem-tag">Problem 2</span><a href="../zyBooks.pdf#page=14">§§5.2, 5.4 · PDF pp. 14–25</a></p>
+            <h2>Fill the array, then total its elements</h2>
+            <p class="concept-abstract">A fill loop stores one input value in each element. A later processing loop reads those elements. The total accumulator starts at 0 before the processing loop and adds the current element during every iteration.</p>
+          </div>
+        </header>
+        <div class="key-rule"><strong>Key rule</strong><p>Initialize the accumulator once before the loop. Inside the loop, update it with <code>total += temperatures[i]</code>.</p></div>
+        <details id="fill-and-total">
+          <summary>Expand the Problem 2 sequence and accumulator trace</summary>
+          <div class="details-body">
+            <pre><code>int[] temperatures = new int[5];
+
+// Fill one element per iteration.
+for (int i = 0; i &lt; temperatures.length; i++) {
+    temperatures[i] = input.nextInt();
+}
+
+// Add every stored element.
+int total = 0;
+for (int i = 0; i &lt; temperatures.length; i++) {
+    total += temperatures[i];
+}
+
+System.out.println("Total: " + total);</code></pre>
+            <div class="compare-wrap">
+              <table class="compare-table">
+                <thead><tr><th>Current element</th><th>Total before</th><th>Total after</th></tr></thead>
+                <tbody>
+                  <tr><td data-label="Current element">4</td><td data-label="Total before">0</td><td data-label="Total after">4</td></tr>
+                  <tr><td data-label="Current element">7</td><td data-label="Total before">4</td><td data-label="Total after">11</td></tr>
+                  <tr><td data-label="Current element">2</td><td data-label="Total before">11</td><td data-label="Total after">13</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>The accumulator belongs outside the loop because its previous result must remain available for the next iteration. Setting <code>total = 0</code> inside the loop would erase the earlier work.</p>
+            <div class="teaching-line"><strong>Useful teaching sentence</strong><p>“The index chooses the current value; the accumulator remembers the values already processed.”</p></div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="walkthroughs.html#problem-2">Open Problem 2 walkthrough</a><a href="../slides/index.html#slide-10">Review Problem 2 slides</a><a href="../examples/TemperatureTotal.java">Open TemperatureTotal.java</a></div>
+      </section>
+
+      <section class="concept" id="concept-6">
+        <header class="concept-header">
+          <span class="concept-number">06</span>
+          <div>
+            <p class="source-ref"><span class="problem-tag">Problem 3</span><a href="../zyBooks.pdf#page=23">§§5.3–5.4 · PDF pp. 20–24</a></p>
+            <h2>The maximum value and its index must stay paired</h2>
+            <p class="concept-abstract">Start <code>highest</code> from the first element, not from 0. When a larger temperature is found, update both <code>highest</code> and <code>highestIndex</code> in the same branch. This code needs at least one element because it reads element 0 before the loop.</p>
+          </div>
+        </header>
+        <div class="key-rule"><strong>Key rule</strong><p>Keep this true: <code>highest</code> is stored at <code>highestIndex</code> among the elements processed so far.</p></div>
+        <details id="maximum-with-index">
+          <summary>Expand the Problem 3 code, empty-array requirement, and equal maximum values</summary>
+          <div class="details-body">
+            <pre><code>int[] temperatures = {-3, -7, -1, -5, -4};
+
+// This code needs at least one element.
+int highest = temperatures[0];
+int highestIndex = 0;
+
+for (int i = 1; i &lt; temperatures.length; i++) {
+    if (temperatures[i] &gt; highest) {
+        highest = temperatures[i];
+        highestIndex = i;
+    }
+}
+
+System.out.println("Highest temperature: " + highest);
+System.out.println("Day: " + (highestIndex + 1));</code></pre>
+            <ol class="trace-list">
+              <li>Initialization makes value and index refer to the same real element.</li>
+              <li>The loop starts at index 1 because index 0 is already the current maximum.</li>
+              <li>A larger value replaces both pieces of stored information.</li>
+              <li>The strict operator <code>&gt;</code> keeps the first index when the maximum appears more than once.</li>
+            </ol>
+            <p>Starting with 0 fails for an all-negative array. For example, the maximum of −8, −2, and −5 is −2, not 0.</p>
+            <div class="warning"><strong>Empty-array check:</strong> If an empty array is possible, test <code>temperatures.length == 0</code> before reading <code>temperatures[0]</code>.</div>
+            <div class="teaching-line"><strong>Useful teaching sentence</strong><p>“When the best value changes, update the location at the same time.”</p></div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="walkthroughs.html#problem-3">Open Problem 3 walkthrough</a><a href="../slides/index.html#slide-18">Review Problem 3 slides</a><a href="../examples/HighestTemperature.java">Open HighestTemperature.java</a></div>
+      </section>
+
+      <section class="concept" id="concept-7">
+        <header class="concept-header">
+          <span class="concept-number">07</span>
+          <div>
+            <p class="source-ref"><span class="problem-tag">All problems</span><a href="../zyBooks.pdf#page=27">§5.4 · PDF pp. 27–29; §§5.5–5.12 · PDF pp. 34–73</a></p>
+            <h2>Debug the first invalid index and keep deferred topics separate</h2>
+            <p class="concept-abstract">An index below 0 or at least equal to the array length is out of range. Java reports the access as a runtime exception. Use the array length, the current index, and a short trace to find the first invalid access. More advanced array structures are not part of the three problems in this lecture.</p>
+          </div>
+        </header>
+        <div class="key-rule"><strong>Key rule</strong><p>For every array access, verify <code>0 &lt;= index &amp;&amp; index &lt; array.length</code>.</p></div>
+        <details id="bounds-debugging-deferred">
+          <summary>Expand the debugging procedure and deferred-topic list</summary>
+          <div class="details-body">
+            <h3>Debugging procedure</h3>
+            <ol class="trace-list">
+              <li>Read the array length from the declaration or <code>.length</code>.</li>
+              <li>Write the valid range: 0 through <code>length - 1</code>.</li>
+              <li>Find the expression inside each pair of access brackets.</li>
+              <li>Trace the first and last loop iterations.</li>
+              <li>Correct the index expression or loop boundary, then rerun the same input.</li>
+            </ol>
+            <pre><code>int[] values = new int[4];
+
+values[3] = 10;  // valid: last index
+values[4] = 20;  // invalid: index equals length</code></pre>
+            <div class="compare-wrap">
+              <table class="compare-table">
+                <thead><tr><th>Error</th><th>Evidence</th><th>Correction</th></tr></thead>
+                <tbody>
+                  <tr><td data-label="Error"><code>i &lt;= values.length</code></td><td data-label="Evidence">Final body access uses index 4 for length 4.</td><td data-label="Correction">Use <code>i &lt; values.length</code>.</td></tr>
+                  <tr><td data-label="Error"><code>values[choice]</code> with human choices 1–4</td><td data-label="Evidence">Choice 4 attempts index 4.</td><td data-label="Correction">Validate the choice, then use <code>choice - 1</code>.</td></tr>
+                  <tr><td data-label="Error"><code>maxValue = values[0]</code> on an empty array</td><td data-label="Evidence">Index 0 does not exist.</td><td data-label="Correction">Reject or handle the empty case first.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>Deferred topics</h3>
+            <ul class="trace-list">
+              <li>Multiple or parallel arrays</li>
+              <li>Swapping and reversing arrays</li>
+              <li>Copying and modifying arrays</li>
+              <li>Two-dimensional arrays</li>
+              <li>Enhanced <code>for</code> loops</li>
+              <li>The salary-table and domain-validation examples</li>
+            </ul>
+            <p>These topics are present later in Chapter 5. They should not be added to Problems 1–3 during this lecture.</p>
+            <div class="teaching-line"><strong>Useful teaching sentence</strong><p>“Length is the first invalid forward index.”</p></div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="walkthroughs.html">Open debugging walkthroughs</a><a href="../slides/index.html">Review bounds slides</a><a href="../examples/README.md">Open runnable examples</a></div>
+      </section>
+
+      <section class="readiness" id="readiness" aria-labelledby="readiness-title">
+        <p class="eyebrow">Before entering the room</p>
+        <h2 id="readiness-title">Lecture-ready self-check</h2>
+        <ol>
+          <li>Can you distinguish the reference variable from the allocated array?</li>
+          <li>Can you give the valid indexes for an array of length 5?</li>
+          <li>Can you explain the difference between <code>new int[4]</code> and <code>{4, 7, 2, 9}</code>?</li>
+          <li>Can you explain why <code>i &lt; values.length</code> reaches the last element without going out of range?</li>
+          <li>Can you trace the total for the values 4, 7, and 2?</li>
+          <li>Can you find the maximum value and its first index in −8, −2, −5, −2?</li>
+          <li>Can you diagnose the first invalid access in a loop that uses <code>i &lt;= values.length</code>?</li>
+        </ol>
+        <p><strong>Short answers:</strong> reference points to storage; indexes 0–4; default allocation versus explicit values; length is excluded; total 13; maximum −2 at index 1; the final body access uses index <code>length</code>.</p>
+      </section>
+
+      <section class="source-notes" id="source-notes" aria-labelledby="source-title">
+        <p class="eyebrow">Source and scope</p>
+        <h2 id="source-title">Chapter references</h2>
+        <ul>
+          <li><a href="../zyBooks.pdf#page=1">Chapter 5 source PDF</a>: array concept, declaration, access, traversal, totals, maximum values, and bounds.</li>
+          <li><a href="walkthroughs.html">IDE walkthroughs</a>: the three complete instructor-led problems.</li>
+          <li><a href="../slides/index.html">Supporting slides</a>: one concept per slide with a visible problem label.</li>
+          <li><a href="../examples/README.md">Runnable examples</a>: Java files and run commands.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <footer class="page-footer">
+    <span>ICS 108 · Chapter 5 · Instructor concept refresher</span>
+    <span><a href="../slides/index.html">Supporting slides</a> · <a href="walkthroughs.html">IDE walkthroughs</a> · <a href="../examples/README.md">Runnable examples</a></span>
+  </footer>
+
+  <script>
+    const details = Array.from(document.querySelectorAll("details"));
+    const status = document.getElementById("readingStatus");
+
+    function updateStatus() {
+      const openCount = details.filter((item) => item.open).length;
+      if (openCount === 0) {
+        status.textContent = "Seven concept summaries are visible; details are closed.";
+      } else if (openCount === details.length) {
+        status.textContent = `All ${details.length} detail sections are open.`;
+      } else {
+        status.textContent = `${openCount} of ${details.length} detail sections are open.`;
+      }
+    }
+
+    function setAll(open) {
+      details.forEach((item) => { item.open = open; });
+      updateStatus();
+    }
+
+    document.getElementById("openAll").addEventListener("click", () => setAll(true));
+    document.getElementById("closeAll").addEventListener("click", () => setAll(false));
+    details.forEach((item) => item.addEventListener("toggle", updateStatus));
+
+    function openHashTarget() {
+      if (!window.location.hash) return;
+      let target;
+      try {
+        target = document.querySelector(window.location.hash);
+      } catch {
+        return;
+      }
+      if (!target) return;
+      if (target.matches("details")) target.open = true;
+      const containingDetail = target.closest("details");
+      if (containingDetail) containingDetail.open = true;
+      if (target.matches(".concept")) {
+        const firstDetail = target.querySelector("details");
+        if (firstDetail) firstDetail.open = true;
+      }
+      updateStatus();
+      requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+    }
+
+    window.addEventListener("hashchange", openHashTarget);
+    openHashTarget();
+
+    let printState = [];
+    window.addEventListener("beforeprint", () => {
+      printState = details.map((item) => item.open);
+      details.forEach((item) => { item.open = true; });
+    });
+    window.addEventListener("afterprint", () => {
+      details.forEach((item, index) => { item.open = printState[index] ?? false; });
+      updateStatus();
+    });
+
+    updateStatus();
+  </script>
+</body>
+</html>

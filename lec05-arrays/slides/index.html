@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="ICS 108 Lecture 5 supporting slides for three instructor-led Java array problems.">
+  <meta name="theme-color" content="#090909">
+  <title>ICS 108 Lecture 5 - Arrays Supporting Slides</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#slide-1">Skip to slides</a>
+  <main class="app" aria-label="ICS 108 Lecture 5 supporting slides">
+    <div class="deck-shell">
+      <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+      <div class="stage" id="stage">
+
+        <section class="slide is-active" id="slide-1" data-title="Arrays - three IDE problems" aria-label="Slide 1: Arrays - three IDE problems" aria-hidden="false">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problems 1-3</span><strong>Supporting slides</strong></div>
+          <div class="cover-layout">
+            <header>
+              <p class="eyebrow">Java arrays</p>
+              <h1>Three IDE problems</h1>
+              <p class="subtitle">Use these slides only when a new array concept appears. Then return to the IDE and continue the program.</p>
+            </header>
+            <div class="problem-route" aria-label="Problem route">
+              <a href="#slide-3"><b>01</b><span><strong>Temperature basics</strong><small>Create, read, update, and count elements.</small></span></a>
+              <a href="#slide-10"><b>02</b><span><strong>Temperature total</strong><small>Fill and traverse an array with loops.</small></span></a>
+              <a href="#slide-18"><b>03</b><span><strong>Highest temperature</strong><small>Keep the best value and its index.</small></span></a>
+            </div>
+          </div>
+          <footer class="slide-footer"><span>Lecture map</span><span>Slides 1-24</span></footer>
+        </section>
+
+        <section class="slide" id="slide-2" data-title="What students will learn" aria-label="Slide 2: What students will learn" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problems 1-3</span><strong>Learning outcomes</strong></div>
+          <div class="content-stack">
+            <header><p class="eyebrow">Before Problem 1</p><h2>What students will learn</h2></header>
+            <ol class="goal-list">
+              <li><span>01</span><p>Create a one-dimensional <code>int</code> array.</p></li>
+              <li><span>02</span><p>Read and update an element with a zero-based index.</p></li>
+              <li><span>03</span><p>Use <code>array.length</code> to stay inside the valid range.</p></li>
+              <li><span>04</span><p>Fill and traverse an array with an indexed <code>for</code> loop.</p></li>
+              <li><span>05</span><p>Calculate a total and find the highest value and its position.</p></li>
+            </ol>
+            <p class="rule-strip"><strong>Teaching route:</strong> explain one slide, show its concept ID, return to the matching comment in the IDE.</p>
+          </div>
+          <footer class="slide-footer"><span>Problems 1-3</span><span>Handout overview</span></footer>
+        </section>
+
+        <section class="slide part-start" id="slide-3" data-title="Problem 1 - An array stores elements" aria-label="Slide 3: Problem 1 - An array stores elements" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 1 - TemperatureBasics.java</span><strong>P1-C1</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 1 - Concept 1 of 6</p><h2>An array stores several elements</h2><p class="lead">One array name refers to an ordered list. Every item in the list is an element of the same data type.</p></header>
+            <div class="array-rail" aria-label="Five temperature elements">
+              <span><small>index 0</small><b>23</b></span><span><small>index 1</small><b>25</b></span><span><small>index 2</small><b>24</b></span><span><small>index 3</small><b>22</b></span><span><small>index 4</small><b>26</b></span>
+            </div>
+            <p class="rule-strip"><strong>Say:</strong> "The array is the whole list. One value inside it is an element."</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 1 - Temperature basics</span><span>Return to comment P1-C1</span></footer>
+        </section>
+
+        <section class="slide" id="slide-4" data-title="Problem 1 - Declare and initialize" aria-label="Slide 4: Problem 1 - Declare and initialize" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 1 - TemperatureBasics.java</span><strong>P1-C2</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 1 - Concept 2 of 6</p><h2>Declare and initialize the array</h2></header>
+            <div class="syntax-stage">
+              <pre><code><span class="kw">int</span>[] temperatures = {23, 25, 24, 22, 26};</code></pre>
+              <dl class="syntax-notes">
+                <div><dt><code>int[]</code></dt><dd>The variable refers to an array of integers.</dd></div>
+                <div><dt>Name</dt><dd><code>temperatures</code> refers to the whole array.</dd></div>
+                <div><dt>Braces</dt><dd>The values inside <code>{ }</code> become the first elements.</dd></div>
+              </dl>
+            </div>
+            <p class="rule-strip"><strong>One data type:</strong> every element here must be an <code>int</code>.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 1 - Temperature basics</span><span>Return to comment P1-C2</span></footer>
+        </section>
+
+        <section class="slide" id="slide-5" data-title="Problem 1 - Index starts at zero" aria-label="Slide 5: Problem 1 - Index starts at zero" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 1 - TemperatureBasics.java</span><strong>P1-C3</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 1 - Concept 3 of 6</p><h2>The first index is 0</h2><p class="lead">Select an index to see the element at that position.</p></header>
+            <div class="index-demo" data-index-demo>
+              <div class="array-rail compact" aria-label="Interactive temperature array">
+                <button type="button" data-index="0"><small>index 0</small><b>23</b></button>
+                <button type="button" data-index="1"><small>index 1</small><b>25</b></button>
+                <button type="button" data-index="2"><small>index 2</small><b>24</b></button>
+                <button type="button" data-index="3"><small>index 3</small><b>22</b></button>
+                <button type="button" data-index="4"><small>index 4</small><b>26</b></button>
+              </div>
+              <output id="indexResult" aria-live="polite"><code>temperatures[0]</code> is <strong>23</strong>.</output>
+            </div>
+            <p class="rule-strip"><strong>Valid indexes:</strong> 0, 1, 2, 3, and 4. The fifth element is at index 4.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 1 - Temperature basics</span><span>Return to comment P1-C3</span></footer>
+        </section>
+
+        <section class="slide" id="slide-6" data-title="Problem 1 - Read one element" aria-label="Slide 6: Problem 1 - Read one element" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 1 - TemperatureBasics.java</span><strong>P1-C4</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 1 - Concept 4 of 6</p><h2>Use an index to read one element</h2></header>
+            <div class="code-focus">
+              <pre><code>System.out.println(<span class="str">"First day: "</span> + temperatures[0]);</code></pre>
+              <div><span>Expression</span><strong><code>temperatures[0]</code></strong><p>Java reads the value stored at index 0.</p></div>
+              <div><span>Result</span><strong><code>23</code></strong><p>The array does not change.</p></div>
+            </div>
+            <p class="rule-strip"><strong>Read:</strong> an array access can be used anywhere Java expects one value.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 1 - Temperature basics</span><span>Return to comment P1-C4</span></footer>
+        </section>
+
+        <section class="slide" id="slide-7" data-title="Problem 1 - Update one element" aria-label="Slide 7: Problem 1 - Update one element" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 1 - TemperatureBasics.java</span><strong>P1-C5</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 1 - Concept 5 of 6</p><h2>Assign to an index to update one element</h2></header>
+            <div class="before-after">
+              <div><span>Before</span><div class="array-rail compact"><i>23</i><i>25</i><i>24</i><i class="target">22</i><i>26</i></div></div>
+              <pre><code>temperatures[3] = 27;</code></pre>
+              <div><span>After</span><div class="array-rail compact"><i>23</i><i>25</i><i>24</i><i class="target">27</i><i>26</i></div></div>
+            </div>
+            <p class="rule-strip"><strong>Update:</strong> only the element at index 3 changes. The other elements keep their values.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 1 - Temperature basics</span><span>Return to comment P1-C5</span></footer>
+        </section>
+
+        <section class="slide" id="slide-8" data-title="Problem 1 - Length and last index" aria-label="Slide 8: Problem 1 - Length and last index" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 1 - TemperatureBasics.java</span><strong>P1-C6</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 1 - Concept 6 of 6</p><h2>Length counts elements</h2></header>
+            <div class="equation-row">
+              <div><span>Number of elements</span><strong><code>temperatures.length</code></strong><b>5</b></div>
+              <div><span>Last valid index</span><strong><code>temperatures.length - 1</code></strong><b>4</b></div>
+              <div><span>Last value</span><strong><code>temperatures[4]</code></strong><b>26</b></div>
+            </div>
+            <p class="rule-strip"><strong>Syntax:</strong> array <code>length</code> is a field, so it has no parentheses.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 1 - Temperature basics</span><span>Return to comment P1-C6</span></footer>
+        </section>
+
+        <section class="slide" id="slide-9" data-title="Problem 1 - IDE checkpoint" aria-label="Slide 9: Problem 1 - IDE checkpoint" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 1 - TemperatureBasics.java</span><strong>IDE checkpoint</strong></div>
+          <div class="content-stack checkpoint-layout">
+            <header><p class="part-label">Problem 1 - Switch to the IDE</p><h2>Complete and run the first program</h2></header>
+            <ol class="checkpoint-list">
+              <li><b>1</b><span>Type the initialized array at <code>P1-C2</code>.</span></li>
+              <li><b>2</b><span>Read index 0 at <code>P1-C4</code>.</span></li>
+              <li><b>3</b><span>Update index 3 at <code>P1-C5</code>.</span></li>
+              <li><b>4</b><span>Print the length and last element at <code>P1-C6</code>.</span></li>
+            </ol>
+            <div class="expected-box"><span>Expected key results</span><code>First day: 23<br>Corrected fourth day: 27<br>Days stored: 5<br>Last day: 26</code></div>
+            <a class="text-link" href="../instructor/walkthroughs.html#problem-1">Open Problem 1 in the handout</a>
+          </div>
+          <footer class="slide-footer"><span>Problem 1 complete</span><span>Next: Problem 2</span></footer>
+        </section>
+
+        <section class="slide part-start" id="slide-10" data-title="Problem 2 - Allocate an array" aria-label="Slide 10: Problem 2 - Allocate an array" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 2 - TemperatureTotal.java</span><strong>P2-C1</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 2 - Concept 1 of 5</p><h2>Allocate space before reading input</h2></header>
+            <div class="allocation-layout">
+              <pre><code><span class="kw">int</span>[] temperatures = <span class="kw">new</span> <span class="kw">int</span>[5];</code></pre>
+              <div class="array-rail compact" aria-label="Five default zero values"><span><small>0</small><b>0</b></span><span><small>1</small><b>0</b></span><span><small>2</small><b>0</b></span><span><small>3</small><b>0</b></span><span><small>4</small><b>0</b></span></div>
+            </div>
+            <p class="rule-strip"><strong><code>new int[5]</code></strong> creates five integer elements. Every new <code>int</code> element starts at 0.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 2 - Temperature total</span><span>Return to comment P2-C1</span></footer>
+        </section>
+
+        <section class="slide" id="slide-11" data-title="Problem 2 - Indexed loop" aria-label="Slide 11: Problem 2 - Indexed loop" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 2 - TemperatureTotal.java</span><strong>P2-C2</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 2 - Concept 2 of 5</p><h2>Let the loop index select each element</h2></header>
+            <div class="for-anatomy">
+              <span><b>Start</b><code>int i = 0</code></span><i>then</i><span><b>Continue</b><code>i &lt; temperatures.length</code></span><i>then</i><span><b>Move</b><code>i++</code></span>
+            </div>
+            <div class="index-sequence"><span>Body sees</span><code>i = 0</code><code>i = 1</code><code>i = 2</code><code>i = 3</code><code>i = 4</code><code class="stop">i = 5 - stop</code></div>
+            <p class="rule-strip"><strong>Valid range:</strong> the body runs only while <code>i</code> is a valid array index.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 2 - Temperature total</span><span>Return to comment P2-C2</span></footer>
+        </section>
+
+        <section class="slide" id="slide-12" data-title="Problem 2 - Fill the array" aria-label="Slide 12: Problem 2 - Fill the array" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 2 - TemperatureTotal.java</span><strong>P2-C3</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 2 - Concept 3 of 5</p><h2>Store one input at the current index</h2></header>
+            <div class="fill-demo" data-fill-demo>
+              <pre><code><span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; temperatures.length; i++) {
+  temperatures[i] = input.nextInt();
+}</code></pre>
+              <div>
+                <div class="array-rail compact" id="fillCells" aria-label="Array filling trace"><span><small>0</small><b>0</b></span><span><small>1</small><b>0</b></span><span><small>2</small><b>0</b></span><span><small>3</small><b>0</b></span><span><small>4</small><b>0</b></span></div>
+                <output id="fillResult" aria-live="polite">Ready: <code>i = 0</code>.</output>
+                <div class="demo-actions"><button type="button" id="nextFill">Next input</button><button type="button" id="resetFill">Reset</button></div>
+              </div>
+            </div>
+            <p class="rule-strip"><strong>Each iteration:</strong> read one value, then store it in <code>temperatures[i]</code>.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 2 - Temperature total</span><span>Return to comment P2-C3</span></footer>
+        </section>
+
+        <section class="slide" id="slide-13" data-title="Problem 2 - Traverse again" aria-label="Slide 13: Problem 2 - Traverse again" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 2 - TemperatureTotal.java</span><strong>P2-C4</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 2 - Concept 4 of 5</p><h2>A second loop can read the stored values</h2></header>
+            <div class="two-pass-layout">
+              <div><span>Pass 1</span><strong>Fill</strong><pre><code>temperatures[i] = input.nextInt();</code></pre><p>Writes every element.</p></div>
+              <div><span>Pass 2</span><strong>Traverse</strong><pre><code>total += temperatures[i];</code></pre><p>Reads every element.</p></div>
+            </div>
+            <p class="rule-strip"><strong>Traverse:</strong> visit the array from index 0 through index <code>length - 1</code>.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 2 - Temperature total</span><span>Return to comment P2-C4</span></footer>
+        </section>
+
+        <section class="slide" id="slide-14" data-title="Problem 2 - Accumulator" aria-label="Slide 14: Problem 2 - Accumulator" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 2 - TemperatureTotal.java</span><strong>P2-C5</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 2 - Concept 5 of 5</p><h2>An accumulator keeps the running total</h2></header>
+            <div class="accumulator-layout">
+              <pre><code><span class="kw">int</span> total = 0;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; temperatures.length; i++) {
+  total += temperatures[i];
+}</code></pre>
+              <div class="running-rule"><span>Old total</span><b>+</b><span>Current element</span><b>=</b><span>New total</span></div>
+            </div>
+            <p class="rule-strip"><strong>Start at 0:</strong> before the loop, no values have been added.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 2 - Temperature total</span><span>Return to comment P2-C5</span></footer>
+        </section>
+
+        <section class="slide" id="slide-15" data-title="Problem 2 - Safe loop boundary" aria-label="Slide 15: Problem 2 - Safe loop boundary" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 2 - TemperatureTotal.java</span><strong>P2-C2 - boundary</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 2 - Boundary rule</p><h2>Use <code>&lt;</code>, not <code>&lt;=</code></h2></header>
+            <div class="boundary-compare">
+              <div class="good"><span>Valid</span><pre><code>i &lt; temperatures.length</code></pre><p>The last body index is 4.</p></div>
+              <div class="bad"><span>Out of range</span><pre><code>i &lt;= temperatures.length</code></pre><p>The body also tries index 5.</p></div>
+            </div>
+            <p class="rule-strip"><strong>For an array of length 5:</strong> index 5 does not exist. It causes a runtime error.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 2 - Temperature total</span><span>Reinforces P2-C2</span></footer>
+        </section>
+
+        <section class="slide" id="slide-16" data-title="Problem 2 - Total trace" aria-label="Slide 16: Problem 2 - Total trace" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 2 - TemperatureTotal.java</span><strong>P2-C5 - trace</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 2 - Trace</p><h2>Trace one addition at a time</h2></header>
+            <div class="total-demo" data-total-demo>
+              <div class="array-rail compact"><span><small>0</small><b>20</b></span><span><small>1</small><b>22</b></span><span><small>2</small><b>24</b></span><span><small>3</small><b>26</b></span><span><small>4</small><b>28</b></span></div>
+              <div class="total-readout"><span id="totalStep">Before the loop</span><strong id="totalValue">total = 0</strong><button type="button" id="nextTotal">Next addition</button><button type="button" id="resetTotal">Reset</button></div>
+            </div>
+            <p class="rule-strip"><strong>Final result:</strong> <code>20 + 22 + 24 + 26 + 28 = 120</code>.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 2 - Temperature total</span><span>Reinforces P2-C5</span></footer>
+        </section>
+
+        <section class="slide" id="slide-17" data-title="Problem 2 - IDE checkpoint" aria-label="Slide 17: Problem 2 - IDE checkpoint" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 2 - TemperatureTotal.java</span><strong>IDE checkpoint</strong></div>
+          <div class="content-stack checkpoint-layout">
+            <header><p class="part-label">Problem 2 - Switch to the IDE</p><h2>Complete and run the total program</h2></header>
+            <ol class="checkpoint-list">
+              <li><b>1</b><span>Allocate five elements at <code>P2-C1</code>.</span></li>
+              <li><b>2</b><span>Fill them with the first loop at <code>P2-C3</code>.</span></li>
+              <li><b>3</b><span>Set <code>total</code> to 0 at <code>P2-C5</code>.</span></li>
+              <li><b>4</b><span>Traverse again and add each element.</span></li>
+            </ol>
+            <div class="expected-box"><span>Demonstration input</span><code>20 22 24 26 28</code><span>Expected result</span><code>Total: 120</code></div>
+            <a class="text-link" href="../instructor/walkthroughs.html#problem-2">Open Problem 2 in the handout</a>
+          </div>
+          <footer class="slide-footer"><span>Problem 2 complete</span><span>Next: Problem 3</span></footer>
+        </section>
+
+        <section class="slide part-start" id="slide-18" data-title="Problem 3 - First maximum candidate" aria-label="Slide 18: Problem 3 - First maximum candidate" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 3 - HighestTemperature.java</span><strong>P3-C1</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 3 - Concept 1 of 5</p><h2>Use the first element as the first candidate</h2></header>
+            <div class="candidate-layout">
+              <div class="array-rail compact"><span class="selected"><small>index 0</small><b>-3</b></span><span><small>1</small><b>-7</b></span><span><small>2</small><b>-1</b></span><span><small>3</small><b>-5</b></span><span><small>4</small><b>-4</b></span></div>
+              <pre><code><span class="kw">int</span> highest = temperatures[0];
+<span class="kw">int</span> highestIndex = 0;</code></pre>
+            </div>
+            <p class="rule-strip"><strong>Meaning:</strong> before scanning the rest, index 0 is the highest value seen so far.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 3 - Highest temperature</span><span>Return to comment P3-C1</span></footer>
+        </section>
+
+        <section class="slide" id="slide-19" data-title="Problem 3 - Start at index one" aria-label="Slide 19: Problem 3 - Start at index one" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 3 - HighestTemperature.java</span><strong>P3-C2</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 3 - Concept 2 of 5</p><h2>Start the scan at index 1</h2></header>
+            <div class="scan-start">
+              <div><span>Already used</span><strong><code>temperatures[0]</code></strong><p>It created the first candidate.</p></div>
+              <div><span>First comparison</span><strong><code>temperatures[1]</code></strong><p>Begin the loop with <code>i = 1</code>.</p></div>
+            </div>
+            <pre class="wide-code"><code><span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; temperatures.length; i++) { ... }</code></pre>
+            <p class="rule-strip"><strong>Precondition:</strong> this pattern assumes the array has at least one element.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 3 - Highest temperature</span><span>Return to comment P3-C2</span></footer>
+        </section>
+
+        <section class="slide" id="slide-20" data-title="Problem 3 - Compare and update" aria-label="Slide 20: Problem 3 - Compare and update" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 3 - HighestTemperature.java</span><strong>P3-C3</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 3 - Concept 3 of 5</p><h2>Replace the candidate only when a value is higher</h2></header>
+            <div class="max-demo" data-max-demo>
+              <pre><code><span class="kw">if</span> (temperatures[i] &gt; highest) {
+  highest = temperatures[i];
+}</code></pre>
+              <div class="max-readout"><span id="maxStep">Start: index 0 gives highest = -3</span><strong id="maxValue">highest = -3</strong><button type="button" id="nextMax">Next comparison</button><button type="button" id="resetMax">Reset</button></div>
+            </div>
+            <p class="rule-strip"><strong>After each step:</strong> <code>highest</code> is the largest value seen so far.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 3 - Highest temperature</span><span>Return to comment P3-C3</span></footer>
+        </section>
+
+        <section class="slide" id="slide-21" data-title="Problem 3 - Keep value and index together" aria-label="Slide 21: Problem 3 - Keep value and index together" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 3 - HighestTemperature.java</span><strong>P3-C4</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 3 - Concept 4 of 5</p><h2>Update the value and its index together</h2></header>
+            <div class="paired-state">
+              <pre><code><span class="kw">if</span> (temperatures[i] &gt; highest) {
+  highest = temperatures[i];
+  highestIndex = i;
+}</code></pre>
+              <div><span>Best value</span><strong><code>highest = -1</code></strong></div>
+              <div><span>Its position</span><strong><code>highestIndex = 2</code></strong></div>
+              <div><span>Human day number</span><strong><code>2 + 1 = 3</code></strong></div>
+            </div>
+            <p class="rule-strip"><strong>Keep related state synchronized:</strong> when the candidate changes, its index must change in the same block.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 3 - Highest temperature</span><span>Return to comment P3-C4</span></footer>
+        </section>
+
+        <section class="slide" id="slide-22" data-title="Problem 3 - All-negative values" aria-label="Slide 22: Problem 3 - All-negative values" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 3 - HighestTemperature.java</span><strong>P3-C5</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">Problem 3 - Concept 5 of 5</p><h2>Do not invent a starting maximum</h2></header>
+            <div class="choice-lab" data-negative-check>
+              <p>For <code>{-3, -7, -1, -5, -4}</code>, which start is correct?</p>
+              <div><button type="button" data-value="zero"><code>highest = 0</code></button><button type="button" data-value="first"><code>highest = temperatures[0]</code></button></div>
+              <output id="negativeResult" aria-live="polite">Choose one.</output>
+            </div>
+            <p class="rule-strip"><strong>Reason:</strong> 0 is not in this data. Starting at 0 would report a value that never appeared.</p>
+          </div>
+          <footer class="slide-footer"><span>Problem 3 - Highest temperature</span><span>Return to comment P3-C5</span></footer>
+        </section>
+
+        <section class="slide" id="slide-23" data-title="Problem 3 - IDE checkpoint" aria-label="Slide 23: Problem 3 - IDE checkpoint" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problem 3 - HighestTemperature.java</span><strong>IDE checkpoint</strong></div>
+          <div class="content-stack checkpoint-layout">
+            <header><p class="part-label">Problem 3 - Switch to the IDE</p><h2>Complete and run the maximum program</h2></header>
+            <ol class="checkpoint-list">
+              <li><b>1</b><span>Use index 0 as the first candidate at <code>P3-C1</code>.</span></li>
+              <li><b>2</b><span>Start the scan at index 1 at <code>P3-C2</code>.</span></li>
+              <li><b>3</b><span>Update the best value and index in one <code>if</code> block.</span></li>
+              <li><b>4</b><span>Print the value and convert index 2 to Day 3.</span></li>
+            </ol>
+            <div class="expected-box"><span>Expected result</span><code>Highest temperature: -1<br>Day: 3</code></div>
+            <a class="text-link" href="../instructor/walkthroughs.html#problem-3">Open Problem 3 in the handout</a>
+          </div>
+          <footer class="slide-footer"><span>Problem 3 complete</span><span>Final check</span></footer>
+        </section>
+
+        <section class="slide" id="slide-24" data-title="Problems 1-3 - Final check" aria-label="Slide 24: Problems 1-3 - Final check" aria-hidden="true">
+          <div class="breadcrumb"><span>ICS 108</span><span>Lecture 5</span><span>Problems 1-3</span><strong>Final check</strong></div>
+          <div class="content-stack">
+            <header><p class="part-label">All three problems</p><h2>Check the three array rules</h2></header>
+            <ol class="choice-quiz">
+              <li data-correct="4"><p><strong>Problem 1:</strong> last index when length is 5?</p><div><button type="button" data-value="4">4</button><button type="button" data-value="5">5</button><output aria-label="Not answered"></output></div></li>
+              <li data-correct="less"><p><strong>Problem 2:</strong> safe loop condition?</p><div><button type="button" data-value="less"><code>i &lt; length</code></button><button type="button" data-value="less-equal"><code>i &lt;= length</code></button><output aria-label="Not answered"></output></div></li>
+              <li data-correct="first"><p><strong>Problem 3:</strong> safe first maximum?</p><div><button type="button" data-value="first">first element</button><button type="button" data-value="zero">0</button><output aria-label="Not answered"></output></div></li>
+            </ol>
+            <div class="closing-links"><a href="../instructor/walkthroughs.html">Instructor handout</a><a href="../instructor/concept-refresher.html">Concept refresher</a><a href="../examples/README.md">Runnable examples</a></div>
+          </div>
+          <footer class="slide-footer"><span>Lecture 5 - Arrays</span><span>Return to the IDE for practice</span></footer>
+        </section>
+
+      </div>
+      <nav class="deck-controls" aria-label="Slide controls">
+        <button type="button" id="prevButton" aria-label="Previous slide">&#8592;</button>
+        <span id="slideTitle" aria-live="polite">Arrays - three IDE problems</span>
+        <span id="slideCounter" aria-live="polite">01 / 24</span>
+        <button type="button" id="nextButton" aria-label="Next slide">&#8594;</button>
+      </nav>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
