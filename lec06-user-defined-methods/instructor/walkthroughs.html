@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Three instructor-led Java method problems with complete code and teaching references.">
+  <title>ICS 108 Lecture 6 — Instructor Problem-Solving Walkthroughs</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #e5e8eb;
+      --paper: #ffffff;
+      --ink: #15181b;
+      --muted: #596169;
+      --line: #c8d0d7;
+      --blue: #1769aa;
+      --blue-dark: #0d4d7f;
+      --soft-blue: #eef5fb;
+      --warm: #f7f4ed;
+      --danger: #a13b35;
+      --success: #226b42;
+      --code: #f6f8fa;
+      --console: #18222c;
+      --console-text: #edf4f8;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.48;
+    }
+
+    a { color: var(--blue-dark); text-underline-offset: 0.16em; }
+    code { font-family: var(--mono); }
+    button { font: inherit; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      top: 0.5rem;
+      left: 0.5rem;
+      padding: 0.6rem 0.85rem;
+      color: #fff;
+      background: var(--blue-dark);
+      transform: translateY(-180%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .screen-nav {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 3.1rem;
+      padding: 0.65rem max(1rem, calc((100vw - 210mm) / 2));
+      border-bottom: 1px solid #b7c0c8;
+      background: rgba(245, 247, 249, 0.97);
+      box-shadow: 0 2px 10px rgba(21, 24, 27, 0.08);
+    }
+    .screen-nav strong { margin-right: auto; color: var(--blue-dark); }
+    .screen-nav a { font-size: 0.9rem; font-weight: 650; }
+
+    main { padding: 2rem 1rem 4rem; }
+    .page {
+      position: relative;
+      width: min(210mm, 100%);
+      min-height: 297mm;
+      margin: 0 auto 2rem;
+      padding: 14mm 15mm 13mm;
+      background: var(--paper);
+      box-shadow: 0 12px 35px rgba(21, 24, 27, 0.15);
+    }
+
+    .course-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.5rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 3px solid var(--blue);
+    }
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.45rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .breadcrumb span::after { margin-left: 0.35rem; content: "/"; color: #94a0aa; }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+      font-size: clamp(1.8rem, 4vw, 2.55rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+    .subtitle { margin-bottom: 0; color: var(--muted); font-size: 1rem; }
+    .document-meta {
+      min-width: 9.5rem;
+      margin: 0;
+      padding-left: 1.25rem;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      text-align: right;
+    }
+    .document-meta strong { display: block; color: var(--blue-dark); font-size: 1rem; }
+
+    .lecture-goals {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem 1rem;
+      border: 1px solid #c4d8e8;
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+    }
+    .lecture-goals h2 {
+      margin-bottom: 0.7rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .goal {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.55rem;
+      align-items: start;
+      margin: 0;
+      color: #273039;
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+    .goal b {
+      display: grid;
+      width: 1.55rem;
+      height: 1.55rem;
+      place-items: center;
+      border: 1px solid #aac8df;
+      border-radius: 50%;
+      color: var(--blue-dark);
+      background: #fff;
+      font-size: 0.72rem;
+    }
+
+    .problem-module { margin-top: 1.15rem; }
+    .problem-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 0.85rem;
+    }
+    .problem-heading .kicker {
+      margin-bottom: 0.25rem;
+      color: var(--blue);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .problem-heading h2 {
+      margin-bottom: 0.25rem;
+      font-size: 1.45rem;
+      line-height: 1.15;
+      letter-spacing: -0.018em;
+    }
+    .problem-heading .lead { margin-bottom: 0; color: var(--muted); font-size: 0.9rem; }
+    .slide-map {
+      min-width: 10rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #b8d0e2;
+      background: var(--soft-blue);
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      text-align: right;
+    }
+    .slide-map a { display: block; font-weight: 800; }
+    .slide-map span { color: var(--muted); }
+
+    .content-block {
+      margin-top: 0.85rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--line);
+    }
+    .content-block > h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.55rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .content-block > h3::before {
+      width: 1.15rem;
+      height: 3px;
+      background: var(--blue);
+      content: "";
+    }
+    .content-block p:last-child { margin-bottom: 0; }
+
+    .description-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 0.65fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .problem-copy {
+      padding: 0.75rem 0.9rem;
+      border-left: 4px solid var(--blue);
+      background: var(--warm);
+      font-size: 0.9rem;
+    }
+    .problem-copy p { margin-bottom: 0.45rem; }
+    .data-line { color: var(--muted); }
+    .data-line code { color: var(--ink); font-weight: 650; }
+    .console {
+      overflow: hidden;
+      border: 1px solid #0d1720;
+      background: var(--console);
+      color: var(--console-text);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.42rem 0.7rem;
+      border-bottom: 1px solid #cfd7dd;
+      color: #34404a;
+      background: #e8edf1;
+      font-size: 0.72rem;
+      font-weight: 750;
+    }
+    .console .panel-head {
+      border-color: #344451;
+      color: #c9d6df;
+      background: #111921;
+    }
+    .console pre {
+      margin: 0;
+      padding: 0.72rem 0.8rem;
+      color: inherit;
+      font: 0.78rem/1.4 var(--mono);
+      white-space: pre-wrap;
+    }
+    .console .typed { color: #9bd3ad; font-weight: 700; }
+
+    .concept-overview {
+      display: grid;
+      grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+      gap: 0.9rem;
+      align-items: start;
+    }
+    .learning-outcome {
+      margin: 0;
+      padding: 0.75rem 0.85rem;
+      border-left: 4px solid var(--blue);
+      background: var(--soft-blue);
+      font-size: 0.87rem;
+    }
+    .learning-outcome strong {
+      display: block;
+      margin-bottom: 0.15rem;
+      color: var(--blue-dark);
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .concept-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.38rem 0.7rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .concept-links a {
+      display: flex;
+      gap: 0.45rem;
+      align-items: baseline;
+      min-height: 2rem;
+      padding: 0.38rem 0.5rem;
+      border: 1px solid #d0d8df;
+      color: #26323b;
+      background: #fff;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-decoration: none;
+    }
+    .concept-links a:hover,
+    .concept-links a:focus-visible { border-color: var(--blue); background: var(--soft-blue); }
+    .concept-links code { color: var(--blue-dark); font-size: 0.71rem; font-weight: 800; }
+
+    .section-note { margin-bottom: 0.5rem; color: var(--muted); font-size: 0.78rem; }
+    .code-workbench { overflow: hidden; border: 1px solid #adb7c0; background: var(--code); }
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.48rem 0.65rem;
+      border-bottom: 1px solid #c5ced5;
+      background: #eef1f3;
+    }
+    .code-switches { display: flex; gap: 0.3rem; }
+    .code-switch,
+    .copy-code {
+      min-height: 2rem;
+      padding: 0.35rem 0.65rem;
+      border: 1px solid #9eabb5;
+      border-radius: 3px;
+      color: #28343d;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+    .code-switch[aria-selected="true"] {
+      border-color: var(--blue-dark);
+      color: #fff;
+      background: var(--blue-dark);
+    }
+    .copy-code { margin-left: auto; color: var(--blue-dark); border-color: #8eb5d2; }
+    .code-switch:focus-visible,
+    .copy-code:focus-visible { outline: 3px solid rgba(23, 105, 170, 0.3); outline-offset: 2px; }
+    .code-version {
+      overflow-x: auto;
+      margin: 0;
+      padding: 0.9rem 1rem;
+      color: #172029;
+      background: var(--code);
+      font: 0.78rem/1.42 var(--mono);
+      tab-size: 3;
+      white-space: pre;
+    }
+    .code-version[hidden] { display: none; }
+    .copy-status {
+      min-height: 1.35rem;
+      margin: 0;
+      padding: 0.28rem 0.65rem;
+      border-top: 1px solid #d5dce2;
+      color: var(--success);
+      background: #fff;
+      font-size: 0.73rem;
+    }
+
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+    }
+    .concept-note {
+      scroll-margin-top: 4.5rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #d0d7dd;
+      border-top: 3px solid var(--blue);
+      background: #fff;
+    }
+    .concept-note:target { outline: 3px solid rgba(23, 105, 170, 0.25); outline-offset: 2px; }
+    .concept-note h4 { margin-bottom: 0.28rem; font-size: 0.84rem; line-height: 1.25; }
+    .concept-note h4 code { margin-right: 0.28rem; color: var(--blue-dark); font-size: 0.72rem; }
+    .concept-note p { margin-bottom: 0; color: #36414a; font-size: 0.78rem; line-height: 1.38; }
+    .concept-note .teaching-line { margin-top: 0.3rem; color: var(--muted); }
+    .concept-note .teaching-line strong { color: var(--blue-dark); }
+    .wide-note { grid-column: 1 / -1; }
+
+    .trace-wrap { overflow-x: auto; margin-top: 0.55rem; }
+    .trace {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      line-height: 1.3;
+    }
+    .trace th,
+    .trace td { padding: 0.32rem 0.42rem; border: 1px solid #cfd7dd; text-align: left; }
+    .trace th { color: var(--blue-dark); background: var(--soft-blue); }
+    .trace .update { color: var(--success); font-weight: 750; }
+    .mistake {
+      margin-top: 0.55rem;
+      padding: 0.5rem 0.65rem;
+      border-left: 3px solid var(--danger);
+      color: #63312e;
+      background: #fbf1f0;
+      font-size: 0.76rem;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.73rem;
+    }
+
+    @media (max-width: 760px) {
+      .screen-nav { align-items: flex-start; flex-wrap: wrap; gap: 0.5rem 1rem; }
+      .screen-nav strong { width: 100%; }
+      main { padding: 1rem 0.6rem 2rem; }
+      .page { min-height: 0; padding: 1.2rem 1rem; }
+      .course-header,
+      .problem-heading,
+      .description-grid,
+      .concept-overview { grid-template-columns: 1fr; }
+      .document-meta { padding: 0.65rem 0 0; border-top: 1px solid var(--line); border-left: 0; text-align: left; }
+      .problem-heading { align-items: start; }
+      .slide-map { text-align: left; }
+      .goal-grid,
+      .reference-grid { grid-template-columns: 1fr; }
+      .concept-links { grid-template-columns: 1fr; }
+      .wide-note { grid-column: auto; }
+      .code-toolbar { flex-wrap: wrap; }
+      .copy-code { margin-left: 0; }
+      .code-version { font-size: 0.7rem; }
+    }
+
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+      html, body { width: 210mm; margin: 0; background: #fff; }
+      body { font-size: 8pt; line-height: 1.28; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .skip-link,
+      .screen-nav,
+      .code-toolbar,
+      .copy-status { display: none !important; }
+      main { padding: 0; }
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 297mm;
+        max-height: 297mm;
+        margin: 0;
+        padding: 8mm 10mm 7mm;
+        overflow: hidden;
+        break-after: page;
+        page-break-after: always;
+        box-shadow: none;
+      }
+      .page:last-child { break-after: auto; page-break-after: auto; }
+      .course-header { gap: 5mm; padding-bottom: 2.3mm; border-bottom-width: 1mm; }
+      .course-header { grid-template-columns: minmax(0, 1fr) auto; }
+      .breadcrumb { gap: 1mm; margin-bottom: 1.2mm; font-size: 6.5pt; }
+      .breadcrumb span::after { margin-left: 1mm; }
+      h1 { margin-bottom: 0.8mm; font-size: 17pt; }
+      .subtitle { font-size: 7.8pt; }
+      .document-meta { min-width: 32mm; padding: 0 0 0 4mm; border-top: 0; border-left: 1px solid var(--line); font-size: 7pt; line-height: 1.35; text-align: right; }
+      .document-meta strong { font-size: 8pt; }
+      .lecture-goals { margin-top: 2.5mm; padding: 2.3mm 2.8mm; border-left-width: 1.2mm; }
+      .lecture-goals h2 { margin-bottom: 1.8mm; font-size: 8.5pt; }
+      .goal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.2mm; }
+      .goal { gap: 1.3mm; font-size: 6.8pt; line-height: 1.25; }
+      .goal b { width: 5mm; height: 5mm; font-size: 6pt; }
+      .problem-module { margin-top: 3mm; }
+      .page:not(.page-one) .problem-module { margin-top: 4mm; }
+      .problem-heading { grid-template-columns: minmax(0, 1fr) auto; gap: 4mm; align-items: end; margin-bottom: 2mm; }
+      .problem-heading .kicker { margin-bottom: 0.7mm; font-size: 6.3pt; }
+      .problem-heading h2 { margin-bottom: 0.7mm; font-size: 12pt; }
+      .problem-heading .lead { font-size: 7.2pt; }
+      .slide-map { min-width: 34mm; padding: 1.5mm 2mm; font-size: 6.5pt; text-align: right; }
+      .content-block { margin-top: 2mm; padding-top: 1.7mm; }
+      .content-block > h3 { gap: 1.5mm; margin-bottom: 1.4mm; font-size: 8.7pt; }
+      .content-block > h3::before { width: 4mm; height: 0.7mm; }
+      .description-grid { grid-template-columns: minmax(0, 1.3fr) minmax(42mm, 0.7fr); gap: 2.5mm; }
+      .problem-copy { padding: 1.8mm 2.2mm; border-left-width: 1mm; font-size: 7.1pt; }
+      .problem-copy p { margin-bottom: 1mm; }
+      .panel-head { padding: 1mm 1.6mm; font-size: 6.2pt; }
+      .console pre { padding: 1.7mm 2mm; font-size: 6.5pt; line-height: 1.3; }
+      .concept-overview { grid-template-columns: minmax(44mm, 0.8fr) minmax(0, 1.2fr); gap: 2.4mm; }
+      .learning-outcome { padding: 1.8mm 2.1mm; border-left-width: 1mm; font-size: 6.8pt; }
+      .learning-outcome strong { margin-bottom: 0.5mm; font-size: 6.1pt; }
+      .concept-links { gap: 1mm 1.5mm; }
+      .concept-links a { gap: 1.1mm; min-height: 0; padding: 1mm 1.2mm; font-size: 6.4pt; }
+      .concept-links code { font-size: 5.9pt; }
+      .section-note { margin-bottom: 1.2mm; font-size: 6.3pt; }
+      .code-version { padding: 2mm 2.4mm; font-size: 6.45pt; line-height: 1.23; }
+      #problem-2 .content-block { margin-top: 1.7mm; padding-top: 1.4mm; }
+      #problem-2 .code-version { padding: 1.5mm 2.2mm; font-size: 6.15pt; line-height: 1.15; }
+      #problem-2 .concept-note { padding: 1.2mm 1.5mm; }
+      #problem-2 .trace th,
+      #problem-2 .trace td { padding: 0.55mm 0.9mm; }
+      #problem-2 .mistake { margin-top: 0.7mm; padding: 0.8mm 1mm; }
+      .code-version[data-code-version="starter"] { display: none !important; }
+      .code-version[data-code-version="complete"] { display: block !important; }
+      .reference-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4mm; }
+      .concept-note { padding: 1.5mm 1.7mm; border-top-width: 0.7mm; }
+      .concept-note h4 { margin-bottom: 0.7mm; font-size: 6.8pt; }
+      .concept-note h4 code { margin-right: 0.7mm; font-size: 5.9pt; }
+      .concept-note p { font-size: 6.25pt; line-height: 1.28; }
+      .concept-note .teaching-line { margin-top: 0.7mm; }
+      .wide-note { grid-column: 1 / -1; }
+      .trace-wrap { margin-top: 1.2mm; }
+      .trace { font-size: 6pt; }
+      .trace th,
+      .trace td { padding: 0.8mm 1mm; }
+      .mistake { margin-top: 1.2mm; padding: 1.2mm 1.5mm; border-left-width: 0.8mm; font-size: 6.2pt; }
+      .page-footer { position: absolute; right: 10mm; bottom: 5mm; left: 10mm; margin: 0; padding-top: 1.5mm; font-size: 6.2pt; }
+    }
+  @media print {
+ .code-version, #problem-2 .code-version {font-size:8pt;line-height:1.25;padding:2mm 2.4mm}
+ .concept-note p {font-size:7.3pt;line-height:1.3}
+ .concept-note h4 {font-size:7.8pt}
+ .reference-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .problem-copy {font-size:8pt}.learning-outcome{font-size:7.5pt}.concept-links a{font-size:7pt}
+ .section-note{font-size:7pt}.wide-note{grid-column:1/-1}
+ }
+.problem-actions {display:flex;align-items:center;gap:1rem;margin-bottom:.7rem;}
+.copy-problem {padding:.45rem .8rem;border:1px solid var(--blue);color:var(--blue-dark);background:var(--soft-blue);font-weight:650;cursor:pointer;}
+.copy-problem:focus-visible {outline:3px solid var(--blue);outline-offset:3px;}
+.problem-copy-status {font-size:.8rem;color:var(--blue-dark);}
+.problem-copy ol {margin:.65rem 0 0;padding-left:1.25rem;}
+.problem-copy li {margin:0 0 .45rem;}
+@media print {
+ .problem-actions {display:none!important;}
+ .description-grid {grid-template-columns:minmax(0,1.8fr) minmax(38mm,.7fr);}
+ .problem-copy ol {margin:1mm 0 0;padding-left:3.8mm;}
+ .problem-copy li {margin-bottom:.8mm;}
+}
+@media print { #problem-3 .code-version {line-height:1.15;padding-top:1.5mm;padding-bottom:1.5mm;} }
+</style>
+</head>
+<body><a class="skip-link" href="#problem-1">Skip to the first problem</a><nav class="screen-nav" aria-label="Instructor resources"><strong>ICS 108 · Lecture 6 instructor set</strong><a href="../slides/index.html#slide-3">Supporting slides</a><a href="concept-refresher.html">Concept refresher</a><a href="../examples/README.md">Runnable examples</a></nav><main><article class="page page-one" id="problem-1"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 6</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">User-defined methods: call, pass inputs, and use results.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 30 min<br>Page 1 of 3</p></header><section class="lecture-goals"><h2>What will students learn in this lecture?</h2><div class="goal-grid"><p class="goal"><b>1</b><span>Define and call a void helper.</span></p><p class="goal"><b>2</b><span>Pass inputs and use an int return value.</span></p><p class="goal"><b>3</b><span>Trace local scope and parameter copies.</span></p></div></section><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 1 · About 7 minutes</p><h2>Print a heading twice</h2><p class="lead">PrintHeading.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-3">Supporting slides 3–8</a><span>IDE checkpoint: slide 8.</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="1" aria-label="Copy Problem 1 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="1" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>A course practice program needs to display the same heading at two points. Write a Java program named PrintHeading.java that defines the heading once and reuses it.</p><ol><li>Define public static void printHeading(). It must print ICS 108 on one line and Methods practice on the next line. It takes no arguments and returns no value.</li><li>In main, call printHeading(), print Start on its own line, then call printHeading() again.</li><li>Keep the two heading-print statements inside printHeading only; do not repeat them in main. No keyboard input is required.</li></ol></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>ICS 108
+Methods practice
+Start
+ICS 108
+Methods practice</pre></div></div></section><section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Define and call a void method, then trace how execution returns to main.</p><ul class="concept-links"><li><a href="#p1-c1"><code>P1-C1</code><span>Define a method</span></a></li><li><a href="#p1-c2"><code>P1-C2</code><span>Use void for an action</span></a></li><li><a href="#p1-c3"><code>P1-C3</code><span>Call the method</span></a></li><li><a href="#p1-c4"><code>P1-C4</code><span>Return to the caller and reuse</span></a></li></ul></div></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Pause at each teaching comment. Explain its matching slide, then continue. Run: javac PrintHeading.java; java PrintHeading.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>PrintHeading.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button></div><pre class="code-version" data-code-version="complete"><code>public class PrintHeading {
+   // P1-C1: Define the helper inside the class, outside main.
+   // P1-C2: void means no value is returned.
+   public static void printHeading() {
+      System.out.println(&quot;ICS 108&quot;);
+      System.out.println(&quot;Methods practice&quot;);
+   }
+
+   public static void main(String[] args) {
+      // P1-C3: Call the method using its name and parentheses.
+      printHeading();
+      System.out.println(&quot;Start&quot;);
+      // P1-C4: Reuse the body; execution returns after this call.
+      printHeading();
+   }
+}</code></pre><p class="copy-status" data-copy-status aria-live="polite"></p></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p1-c1"><h4><code>P1-C1</code> Define a method</h4><p>A method is a named group of statements. A definition supplies the name and body. Defining a method does not run it.</p><p class="teaching-line"><strong>Rule:</strong> Put each method inside the class, at the same level as main.</p></article><article class="concept-note" id="p1-c2"><h4><code>P1-C2</code> Use void for an action</h4><p>A void method returns no value. It can still perform an action such as writing text to the console.</p><p class="teaching-line"><strong>Rule:</strong> Printing text is different from returning a value.</p></article><article class="concept-note" id="p1-c3"><h4><code>P1-C3</code> Call the method</h4><p>A method call runs the method body. Use the method name followed by parentheses. No input means empty parentheses.</p><p class="teaching-line"><strong>Rule:</strong> Use printHeading(); to execute the helper.</p></article><article class="concept-note" id="p1-c4"><h4><code>P1-C4</code> Return to the caller and reuse</h4><p>After a method finishes, execution continues after the call. Calling it again runs the same definition again.</p><p class="teaching-line"><strong>Rule:</strong> One definition can be called more than once.</p></article><article class="concept-note wide-note"><h4>Trace, predict, and check</h4><p><strong>Trace:</strong> main → helper (two lines) → main prints Start → helper (two lines) → main ends. <strong>Check:</strong> move the definition below main: same output. Delete the second call: only the first three lines remain. <strong>Teaching note:</strong> public allows access from other classes; static lets main call without constructing an object.</p><p class="mistake"><strong>Recovery:</strong> Nested helper definition or missing (): restore a class-level definition and printHeading();. int x = printHeading(); fails because void returns no value. Rebuild and rerun the same data after each fix.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 6 · Problem 1</span><span>Supporting slides 3–8 · Page 1 of 3</span></footer></article><article class="page" id="problem-2"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 6</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">User-defined methods: call, pass inputs, and use results.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 30 min<br>Page 2 of 3</p></header><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 2 · About 9 minutes</p><h2>Convert hours and minutes</h2><p class="lead">MinutesConverter.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-9">Supporting slides 9–15</a><span>IDE checkpoint: slide 15.</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="2" aria-label="Copy Problem 2 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="2" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>A study planner records each study session as hours and extra minutes. It needs the total duration in minutes. Write a Java program named MinutesConverter.java. Remember that one hour equals 60 minutes.</p><ol><li>Define public static int toMinutes(int hours, int minutes). It must return the total number of minutes without printing anything.</li><li>In main, call the method for 1 hour and 30 minutes. Store the result in first and print it with the label First: followed by a space.</li><li>Call it again using 1 + 1 as the hours argument and 5 as the minutes argument. Store the result in second and print it with the label Second: followed by a space.</li><li>No keyboard input is required. Assume nonnegative whole hours, extra minutes from 0 to 59, and totals that fit int.</li></ol></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>First: 90
+Second: 125</pre></div></div></section><section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Match arguments to parameters by position, return one int, and store the result.</p><ul class="concept-links"><li><a href="#p2-c1"><code>P2-C1</code><span>Match arguments to parameters</span></a></li><li><a href="#p2-c2"><code>P2-C2</code><span>Return one result</span></a></li><li><a href="#p2-c3"><code>P2-C3</code><span>Store the returned value</span></a></li><li><a href="#p2-c4"><code>P2-C4</code><span>Evaluate argument expressions</span></a></li></ul></div></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Pause at each teaching comment. Explain its matching slide, then continue. Run: javac MinutesConverter.java; java MinutesConverter.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>MinutesConverter.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button></div><pre class="code-version" data-code-version="complete"><code>public class MinutesConverter {
+   // P2-C1: Arguments fill typed parameters in the same order.
+   public static int toMinutes(int hours, int minutes) {
+      // P2-C2: Return one int result to the caller.
+      return hours * 60 + minutes;
+   }
+
+   public static void main(String[] args) {
+      // P2-C3: Store the returned value, then print it.
+      int first = toMinutes(1, 30);
+      System.out.println(&quot;First: &quot; + first);
+      // P2-C4: Evaluate 1 + 1 before passing the argument.
+      int second = toMinutes(1 + 1, 5);
+      System.out.println(&quot;Second: &quot; + second);
+   }
+}</code></pre><p class="copy-status" data-copy-status aria-live="polite"></p></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p2-c1"><h4><code>P2-C1</code> Match arguments to parameters</h4><p>A parameter is a named input in the definition. An argument is a value supplied in a call. Each argument is assigned to its matching parameter by position.</p><p class="teaching-line"><strong>Rule:</strong> First argument → hours. Second argument → minutes.</p></article><article class="concept-note" id="p2-c2"><h4><code>P2-C2</code> Return one result</h4><p>An int method returns one int value. return evaluates its expression and immediately ends the current method call.</p><p class="teaching-line"><strong>Rule:</strong> return hours * 60 + minutes; gives a value to the caller.</p></article><article class="concept-note" id="p2-c3"><h4><code>P2-C3</code> Store the returned value</h4><p>A value-returning call is an expression. The caller can store its result in a variable and use that variable later.</p><p class="teaching-line"><strong>Rule:</strong> int first = toMinutes(1, 30); stores 90 in first.</p></article><article class="concept-note" id="p2-c4"><h4><code>P2-C4</code> Evaluate argument expressions</h4><p>An argument can be a literal, a variable, or an expression. Java evaluates the expression before assigning its value to the parameter.</p><p class="teaching-line"><strong>Rule:</strong> toMinutes(1 + 1, 5) passes 2 and 5.</p></article><article class="concept-note wide-note"><h4>Trace, predict, and check</h4><p><strong>Trace:</strong> (1,30) → 1*60+30 → 90 → first; (1+1,5) → (2,5) → 125 → second. <strong>Checks:</strong> (0,0)→0; (0,59)→59; (2,0)→120; (3,15)→195. <strong>Prediction:</strong> swapping (1,30) to (30,1) compiles but returns 1801. The helper has no validation.</p><p class="mistake"><strong>Recovery:</strong> Replacing return with println leaves an int method without a return. toMinutes(1) has too few arguments. Restore the full two-argument call and the return expression. Rebuild and rerun the same data after each fix.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 6 · Problem 2</span><span>Supporting slides 9–15 · Page 2 of 3</span></footer></article><article class="page" id="problem-3"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 6</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">User-defined methods: call, pass inputs, and use results.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 30 min<br>Page 3 of 3</p></header><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 3 · About 10 minutes</p><h2>Update a score using a return value</h2><p class="lead">ScoreUpdate.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-16">Supporting slides 16–22</a><span>IDE checkpoint: slide 22.</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="3" aria-label="Copy Problem 3 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="3" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>A practice app awards one extra point to a score. Write ScoreUpdate.java to compare calculating a new score with saving that score in the calling method.</p><ol><li>Define public static int addPoint(int score). Inside it, declare a local int named bonus with value 1, add bonus to the parameter score, and return score. Do not print inside this method.</li><li>In main, create int score with value 7. Call addPoint(score), store the result in a separate variable named updated, and print score and updated with the labels Original: and Updated:.</li><li>Call addPoint(score) again and print its returned value with the label Again:. Do not assign this result to score.</li><li>Finally, call addPoint(score), assign its returned value back to score, and print score with the label Stored:. No keyboard input is required.</li></ol></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>Original: 7
+Updated: 8
+Again: 8
+Stored: 8</pre></div></div></section><section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Explain primitive parameter copies, local scope, fresh call state, and explicit assignment.</p><ul class="concept-links"><li><a href="#p3-c1"><code>P3-C1</code><span>Copy a primitive value</span></a></li><li><a href="#p3-c2"><code>P3-C2</code><span>Keep local variables in scope</span></a></li><li><a href="#p3-c3"><code>P3-C3</code><span>Start each call with fresh state</span></a></li><li><a href="#p3-c4"><code>P3-C4</code><span>Assign the result back</span></a></li></ul></div></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Pause at each teaching comment. Explain its matching slide, then continue. Run: javac ScoreUpdate.java; java ScoreUpdate.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>ScoreUpdate.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button></div><pre class="code-version" data-code-version="complete"><code>public class ScoreUpdate {
+   // P3-C1: score receives a copy of the caller&#x27;s int value.
+   public static int addPoint(int score) {
+      // P3-C2: bonus is local to this method body.
+      int bonus = 1;
+      score = score + bonus;
+      return score;
+   }
+
+   public static void main(String[] args) {
+      int score = 7;
+      int updated = addPoint(score);
+      System.out.println(&quot;Original: &quot; + score);
+      System.out.println(&quot;Updated: &quot; + updated);
+      // P3-C3: A new call gets fresh parameters and locals.
+      System.out.println(&quot;Again: &quot; + addPoint(score));
+      // P3-C4: Assign the result to change the caller&#x27;s score.
+      score = addPoint(score);
+      System.out.println(&quot;Stored: &quot; + score);
+   }
+}</code></pre><p class="copy-status" data-copy-status aria-live="polite"></p></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p3-c1"><h4><code>P3-C1</code> Copy a primitive value</h4><p>An int argument is passed by value: the parameter receives a copy. Assigning to that parameter changes only the copy.</p><p class="teaching-line"><strong>Rule:</strong> Changing the helper’s score does not change main’s score.</p></article><article class="concept-note" id="p3-c2"><h4><code>P3-C2</code> Keep local variables in scope</h4><p>A local variable is declared inside a method body or a smaller block. Its name is usable from its declaration to the end of that enclosing block.</p><p class="teaching-line"><strong>Rule:</strong> bonus belongs to addPoint; main cannot use that name.</p></article><article class="concept-note" id="p3-c3"><h4><code>P3-C3</code> Start each call with fresh state</h4><p>Each call creates its own parameters and local variables. After return, those variables are no longer available to the caller.</p><p class="teaching-line"><strong>Rule:</strong> Two calls with argument 7 both return 8.</p></article><article class="concept-note" id="p3-c4"><h4><code>P3-C4</code> Assign the result back</h4><p>A method can return a changed value without changing the caller’s variable. An assignment in the caller performs that update explicitly.</p><p class="teaching-line"><strong>Rule:</strong> score = addPoint(score); replaces main’s score with the result.</p></article><article class="concept-note wide-note"><h4>Trace, predict, and check</h4><p><strong>Trace:</strong> caller 7 → copied parameter 7 → helper 8 → updated 8, caller still 7. Another call returns 8 again. Assignment back changes caller to 8. <strong>Checks:</strong> addPoint(0)→1; addPoint(-1)→0. <strong>Transfer:</strong> a second assignment-back would store 9; a second discarded call would not.</p><p class="mistake"><strong>Recovery:</strong> Using bonus in main is a scope error. Ignoring the returned int leaves main score unchanged. Restore the proper local use and assignment-back line. Rebuild and rerun the same data after each fix.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 6 · Problem 3</span><span>Supporting slides 16–22 · Page 3 of 3</span></footer></article></main><script>
+async function copyText(text) {
+ if(navigator.clipboard && window.isSecureContext) {try {await navigator.clipboard.writeText(text); return;} catch(error) { /* Fall back when local-file clipboard access is denied. */ }}
+ const active=document.activeElement;
+ const area=document.createElement('textarea'); area.value=text; area.setAttribute('readonly',''); area.style.cssText='position:fixed;opacity:0;left:0;top:0'; document.body.appendChild(area); area.select(); area.setSelectionRange(0,area.value.length);
+ const ok=document.execCommand('copy'); area.remove(); active?.focus(); if(!ok) throw new Error('Copy unavailable');
+}
+document.querySelectorAll('[data-code-workbench]').forEach(workbench=>workbench.querySelector('[data-copy-code]').addEventListener('click',async()=>{
+ const status=workbench.querySelector('[data-copy-status]'); try {await copyText(workbench.querySelector('code').textContent);status.textContent='Complete code copied.';}catch(error){status.textContent='Copy failed. Select the code and copy it manually.';}
+}));
+</script><script type="application/json" id="student-problems">{"1": "Problem 1 — Print a course heading twice\n\nA course practice program needs to display the same heading at two points. Write a Java program named PrintHeading.java that defines the heading once and reuses it.\n\nRequirements:\n1. Define public static void printHeading(). It must print ICS 108 on one line and Methods practice on the next line. It takes no arguments and returns no value.\n2. In main, call printHeading(), print Start on its own line, then call printHeading() again.\n3. Keep the two heading-print statements inside printHeading only; do not repeat them in main. No keyboard input is required.\n\nExpected output:\nICS 108\nMethods practice\nStart\nICS 108\nMethods practice", "2": "Problem 2 — Convert a duration to minutes\n\nA study planner records each study session as hours and extra minutes. It needs the total duration in minutes. Write a Java program named MinutesConverter.java. Remember that one hour equals 60 minutes.\n\nRequirements:\n1. Define public static int toMinutes(int hours, int minutes). It must return the total number of minutes without printing anything.\n2. In main, call the method for 1 hour and 30 minutes. Store the result in first and print it with the label First: followed by a space.\n3. Call it again using 1 + 1 as the hours argument and 5 as the minutes argument. Store the result in second and print it with the label Second: followed by a space.\n4. No keyboard input is required. Assume nonnegative whole hours, extra minutes from 0 to 59, and totals that fit int.\n\nExpected output:\nFirst: 90\nSecond: 125", "3": "Problem 3 — Add a practice point to a score\n\nA practice app awards one extra point to a score. Write ScoreUpdate.java to compare calculating a new score with saving that score in the calling method.\n\nRequirements:\n1. Define public static int addPoint(int score). Inside it, declare a local int named bonus with value 1, add bonus to the parameter score, and return score. Do not print inside this method.\n2. In main, create int score with value 7. Call addPoint(score), store the result in a separate variable named updated, and print score and updated with the labels Original: and Updated:.\n3. Call addPoint(score) again and print its returned value with the label Again:. Do not assign this result to score.\n4. Finally, call addPoint(score), assign its returned value back to score, and print score with the label Stored:. No keyboard input is required.\n\nExpected output:\nOriginal: 7\nUpdated: 8\nAgain: 8\nStored: 8"}</script><script>
+const studentProblems=JSON.parse(document.getElementById("student-problems").textContent);
+document.querySelectorAll("[data-copy-problem]").forEach(button=>button.addEventListener("click",async()=>{const id=button.dataset.copyProblem;const status=document.querySelector(`[data-problem-status="${id}"]`);try{await copyText(studentProblems[id]);status.textContent="Problem and expected output copied.";}catch(error){status.textContent="Copy failed. Select the problem and expected output manually.";}}));
+</script></body></html>
