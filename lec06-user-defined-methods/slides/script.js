@@ -114,10 +114,6 @@ document.querySelectorAll('[data-quiz]').forEach(quiz => quiz.querySelectorAll('
  quiz.querySelector('output').textContent = button.dataset.feedback;
  });
 }));
-document.querySelectorAll('#orderDemo button').forEach(button => button.addEventListener('click', () => {
- const h = Number(button.dataset.hours), m = Number(button.dataset.minutes);
- document.querySelector('#orderDemo output').textContent = `hours = ${h}; minutes = ${m}; return ${h} * 60 + ${m} = ${h*60+m}.`;
-}));
 const initialHashIndex = indexFromHash();
 if (initialHashIndex !== null) currentIndex = initialHashIndex;
 updateDeck();

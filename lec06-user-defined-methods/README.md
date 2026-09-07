@@ -6,7 +6,7 @@ A roughly 30-minute tutorial in the accepted three-problem format. Every concept
 
 - [Student problem statements](student-problems.md): self-contained prompts with requirements and expected output; each handout problem also has a Copy problem button.
 
-- [Supporting slides](slides/index.html): 23 slides; one new concept per concept slide.
+- [Supporting slides](slides/index.html): 21 slides; one new concept per concept slide.
 - [Instructor IDE handout](instructor/walkthroughs.html): three complete problem pages, ready for A4 printing.
 - [Concept refresher](instructor/concept-refresher.html): 12 always-visible abstracts with expandable explanations.
 - [Runnable Java examples](examples/README.md): exact programs and outputs.
@@ -17,8 +17,8 @@ Open the HTML files directly in a browser. No network connection or external ass
 | Problem | Program | Supporting slides |
 |---|---|---|
 | Print a heading twice | PrintHeading.java | 3–8 |
-| Convert hours and minutes | MinutesConverter.java | 9–15 |
-| Update a score using a return value | ScoreUpdate.java | 16–22 |
+| Convert hours and minutes | MinutesConverter.java | 9–13 |
+| Update a score using a return value | ScoreUpdate.java | 14–20 |
 
 The opening/goals take 2 minutes; problems take 7, 9, and 10; the final check takes 2. Use the matching slide at each inline teaching comment, then continue in the IDE. The handout is self-contained and starts with complete code. Copy works over HTTP and local files, with a fallback when clipboard access is unavailable.
 

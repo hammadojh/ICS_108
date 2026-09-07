@@ -28,7 +28,7 @@ Methods practice
 
 ## Problem 2: MinutesConverter.java
 
-[Source](MinutesConverter.java) · [Handout](../instructor/walkthroughs.html#problem-2) · [Supporting slides 9–15](../slides/index.html#slide-9)
+[Source](MinutesConverter.java) · [Handout](../instructor/walkthroughs.html#problem-2) · [Supporting slides 9–13](../slides/index.html#slide-9)
 
 Exact output:
 
@@ -39,7 +39,7 @@ Second: 125
 
 ## Problem 3: ScoreUpdate.java
 
-[Source](ScoreUpdate.java) · [Handout](../instructor/walkthroughs.html#problem-3) · [Supporting slides 16–22](../slides/index.html#slide-16)
+[Source](ScoreUpdate.java) · [Handout](../instructor/walkthroughs.html#problem-3) · [Supporting slides 14–20](../slides/index.html#slide-14)
 
 Exact output:
 

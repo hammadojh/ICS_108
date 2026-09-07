@@ -2,9 +2,9 @@
 
 Verified September 6, 2026.
 
-- Package contract: 23 slides, three ordered problem parts and IDE checkpoints, three handout modules, three complete Java programs, and 12 mapped concept IDs. No missing files, duplicate IDs, or mismatched complete code.
+- Package contract: 21 slides, three ordered problem parts and IDE checkpoints, three handout modules, three complete Java programs, and 12 mapped concept IDs. No missing files, duplicate IDs, or mismatched complete code.
 - Java: all programs compile together; every documented full-program output matches exactly. Twelve additional conversion, boundary, repeated-call, and assignment checks passed.
-- Slides: all 23 slides inspected in a contact sheet and measured after full reveals at 1440×900 and 1280×720; no content crosses the footer/stage boundary. Keyboard, click, controls, forward/reverse reveals, all quizzes, argument-order cases, and both trace/reset sequences work.
+- Slides: all 21 slides inspected in a contact sheet and measured after full reveals at 1440×900 and 1280×720; no content crosses the footer/stage boundary. Keyboard, click, controls, forward/reverse reveals, all quizzes, both trace/reset sequences work.
 - Handout: complete code matches the Java files. All three copy controls work under HTTP and file URLs, including clipboard fallback. No horizontal overflow at 390px or 720px. A4 rendering is exactly three pages, with positive footer clearance on every page; visual print review confirms no clipping.
 - Refresher: open-all, close-all, keyboard disclosure, hash opening, print expansion/restoration, and mobile reflow pass. All 13 detail sections open at 390px without horizontal document overflow.
 - Links: 53 local links/anchors checked; no failures. Browser page-error list is empty.
@@ -16,3 +16,11 @@ Source extraction, page renders, screenshots, test harnesses, and print QA outpu
 ## Student prompt revision
 
 All three descriptions now include student-facing context, filenames, method requirements, exact tasks, input assumptions, and expected output. Each Copy problem control was checked under file URLs and copies the full prompt plus output. The standalone student-problems.md provides the same prompts without instructor notes or solutions. The revised handout remains three A4 pages with positive footer clearance, and has no horizontal overflow at 390px.
+
+## Repeated slide removal
+
+Removed the former slides 13 and 14, which repeated P2-C1 and P2-C2. These concepts remain on slides 9 and 10. Problem 2 now ends at slide 13; Problem 3 spans slides 14–20; the final check is slide 21. Updated handout, refresher, example-guide links, slide counters, styles, and the content map.
+
+## Concept wording revision
+
+All 12 concept labels now use descriptive statements or topic phrases across the handout and refresher. Related slide headings and teaching comments follow the same wording style. Student task requirements retain instructional wording. Rechecked all 21 slides at both target sizes, all HTML links, concept label rendering, handout mobile reflow, and print footer clearance; all passed. Concept IDs remain on one line.

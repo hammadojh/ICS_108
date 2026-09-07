@@ -14,7 +14,7 @@ public class ScoreUpdate {
       System.out.println("Updated: " + updated);
       // P3-C3: A new call gets fresh parameters and locals.
       System.out.println("Again: " + addPoint(score));
-      // P3-C4: Assign the result to change the caller's score.
+      // P3-C4: Assignment updates the caller's score.
       score = addPoint(score);
       System.out.println("Stored: " + score);
    }

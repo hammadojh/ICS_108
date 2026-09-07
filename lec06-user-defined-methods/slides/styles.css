@@ -270,6 +270,6 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 @media(max-width:900px){.method-columns{grid-template-columns:1fr;gap:1rem}.method-flow{flex-wrap:wrap}.method-flow>div{flex-basis:40%}.method-code{padding:1rem}}
 @media print{.method-demo output{min-height:0}.method-code code{font-size:14pt}}
 
-#slide-23 .content-stack {gap:.7rem} #slide-23 .method-demo {padding:.6rem 1rem;gap:.35rem} #slide-23 .method-demo output{min-height:1.5rem;font-size:.95rem} #slide-23 .method-demo button{padding:.35rem .8rem;min-height:38px}
+#slide-21 .content-stack {gap:.7rem} #slide-21 .method-demo {padding:.6rem 1rem;gap:.35rem} #slide-21 .method-demo output{min-height:1.5rem;font-size:.95rem} #slide-21 .method-demo button{padding:.35rem .8rem;min-height:38px}
 
 .method-links a, .slide-footer a {color:var(--accent);text-underline-offset:.18em}

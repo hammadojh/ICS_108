@@ -51,19 +51,17 @@ Page boundaries overlap where a section starts mid-page.
 | 10 | 2 / MinutesConverter.java | P2-C2: return one int; method ends and call receives value | 6.1 pp. 6–9; 6.4 |
 | 11 | 2 / MinutesConverter.java | P2-C3: store a returned value before printing | 6.1, 6.8 |
 | 12 | 2 / MinutesConverter.java | P2-C4: evaluate an argument expression before the call | 6.1 pp. 9–13 |
-| 13 | 2 / MinutesConverter.java | P2-C1: interactive parameter-order trace | Instructor exercise |
-| 14 | 2 / MinutesConverter.java | P2-C2: print/return error-repair quiz | 6.8 |
-| 15 | 2 / MinutesConverter.java | IDE checkpoint, calls (1,30) and (1+1,5), exact output | Instructor example |
-| 16 | 3 / ScoreUpdate.java | P3-C1: primitive int argument copied; modifying parameter leaves caller unchanged | 6.9 p. 66 |
-| 17 | 3 / ScoreUpdate.java | P3-C2: local scope; bonus visible only inside addPoint | 6.10 pp. 72–73 |
-| 18 | 3 / ScoreUpdate.java | P3-C3: each call receives fresh state; repeated call still returns 8 | 6.7 pp. 58–59 |
-| 19 | 3 / ScoreUpdate.java | P3-C4: assignment explicitly stores the returned value | 6.1, 6.9 |
-| 20 | 3 / ScoreUpdate.java | P3-C1: interactive caller/parameter trace | Instructor exercise |
-| 21 | 3 / ScoreUpdate.java | P3-C2: scope diagnosis quiz | Instructor exercise |
-| 22 | 3 / ScoreUpdate.java | IDE checkpoint; original 7, updated 8, again 8, stored 8 | Instructor example |
-| 23 | Problems 1–3 | Final check: call, positional arguments, copied values | Synthesis |
+| 13 | 2 / MinutesConverter.java | IDE checkpoint, calls (1,30) and (1+1,5), exact output | Instructor example |
+| 14 | 3 / ScoreUpdate.java | P3-C1: primitive int argument copied; modifying parameter leaves caller unchanged | 6.9 p. 66 |
+| 15 | 3 / ScoreUpdate.java | P3-C2: local scope; bonus visible only inside addPoint | 6.10 pp. 72–73 |
+| 16 | 3 / ScoreUpdate.java | P3-C3: each call receives fresh state; repeated call still returns 8 | 6.7 pp. 58–59 |
+| 17 | 3 / ScoreUpdate.java | P3-C4: assignment explicitly stores the returned value | 6.1, 6.9 |
+| 18 | 3 / ScoreUpdate.java | P3-C1: interactive caller/parameter trace | Instructor exercise |
+| 19 | 3 / ScoreUpdate.java | P3-C2: scope diagnosis quiz | Instructor exercise |
+| 20 | 3 / ScoreUpdate.java | IDE checkpoint; original 7, updated 8, again 8, stored 8 | Instructor example |
+| 21 | Problems 1–3 | Final check: call, positional arguments, copied values | Synthesis |
 
-Every concept has one introduction, a code comment at the relevant line, a handout reference, and a refresher abstract, rule, trace/example, and misconception. Handout ranges are 3–8, 9–15, and 16–22. Seven slides have meaningful interaction: 7, 13, 14, 18, 20, 21, 23. Slides 5 and 10 also have progressive prediction reveals.
+Every concept has one introduction, a code comment at the relevant line, a handout reference, and a refresher abstract, rule, trace/example, and misconception. Handout ranges are 3–8, 9–13, and 14–20. Five slides have meaningful interaction: 7, 16, 18, 19, 21. Slides 5 and 10 also have progressive prediction reveals.
 
 ## Teaching additions, domains, and checks
 
@@ -72,3 +70,22 @@ Every concept has one introduction, a code comment at the relevant line, a hando
 3. ScoreUpdate starts at 7, adds one to a parameter copy, stores the return separately, repeats, and finally assigns back. Exact output: `Original: 7`, `Updated: 8`, `Again: 8`, `Stored: 8`. Checks: addPoint(0)→1, addPoint(-1)→0, addPoint(7)→8 twice; 7→8→9 only when the caller assigns back after each call. Restrict inputs so adding 1 fits int; score grading limits are not modeled.
 
 Error recovery: restore the correct line, rebuild, and rerun the identical data. Deliberate compile errors are shown as fragments only, not additional Java files. No exact compiler wording is promised. Do not teach arrays as pass-by-reference: reference values are also copied, but array objects can be shared; that distinction is deferred.
+
+## Concept wording
+
+Concept labels use descriptive statements or topic phrases. Student problem requirements and IDE checkpoint actions remain instructions.
+
+| ID | Concept label |
+|---|---|
+| P1-C1 | Defining methods |
+| P1-C2 | Void is used for actions |
+| P1-C3 | Calling methods |
+| P1-C4 | Methods return to the caller |
+| P2-C1 | Arguments match parameters |
+| P2-C2 | Methods return one value |
+| P2-C3 | Returned values can be stored |
+| P2-C4 | Argument expressions are evaluated first |
+| P3-C1 | Primitive arguments are copied |
+| P3-C2 | Local variables have limited scope |
+| P3-C3 | Each call has fresh local variables |
+| P3-C4 | Assignment updates the caller’s variable |
