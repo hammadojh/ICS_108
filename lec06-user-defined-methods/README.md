@@ -16,11 +16,15 @@ Open the HTML files directly in a browser. No network connection or external ass
 
 | Problem | Program | Supporting slides |
 |---|---|---|
-| Print a heading twice | PrintHeading.java | 3–8 |
-| Convert hours and minutes | MinutesConverter.java | 9–13 |
-| Update a score using a return value | ScoreUpdate.java | 14–20 |
+| Display the campus café menu | CampusMenu.java | 3–8 |
+| Calculate lunch costs | LunchBill.java | 9–13 |
+| Preview a wallet top-up | WalletTopUp.java | 14–20 |
 
 The opening/goals take 2 minutes; problems take 7, 9, and 10; the final check takes 2. Use the matching slide at each inline teaching comment, then continue in the IDE. The handout is self-contained and starts with complete code. Copy works over HTTP and local files, with a fallback when clipboard access is unavailable.
+
+## Student contexts
+
+The three separate programs display a campus café menu, calculate sample lunch costs, and preview a wallet top-up before confirmation. The same 12 method concepts and 21-slide sequence are preserved.
 
 ## Source handling
 

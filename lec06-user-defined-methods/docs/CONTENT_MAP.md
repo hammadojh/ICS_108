@@ -21,7 +21,7 @@ Page boundaries overlap where a section starts mid-page.
 | 6.1 User-defined method basics | 1–18 | Selected: definition/call, class placement, public static teaching convention, void/int return types, parameters, argument positions and expressions. Nested helper calls and long geometry examples deferred. |
 | 6.2 Print methods | 18–26 | Selected: a void method prints two lines and is called twice. Interactive menu case deferred. |
 | 6.3 Reasons for defining methods | 26–39 | Selected: reuse and one place to change; compile/run small complete increments. Stubs and large modular programs deferred. |
-| 6.4 Writing mathematical methods | 39–46 | Selected: two-parameter whole-minute conversion. Floating-point conversion depth deferred. |
+| 6.4 Writing mathematical methods | 39–46 | Selected: two-parameter lunch-cost calculation. Floating-point conversion depth deferred. |
 | 6.5 Methods with branches | 46–53 | Deferred: multi-path returns and branch boundary testing. |
 | 6.6 Methods with loops | 53–58 | Deferred: loops within helpers and repeated input. |
 | 6.7 How methods work | 58–62 | Selected: call/return and fresh local state; bytecode and numeric memory addresses deferred. |
@@ -42,34 +42,38 @@ Page boundaries overlap where a section starts mid-page.
 | Slides | Problem / file | Concept / teaching treatment | Source |
 |---|---|---|---|
 | 1–2 | Problems 1–3 | Title, measured learning goals, IDE switching | Lecture synthesis |
-| 3 | 1 / PrintHeading.java | P1-C1: method definition; statements inside a named body, definition at class level, public/static explained | 6.1 pp. 4–5 |
-| 4 | 1 / PrintHeading.java | P1-C2: void means no returned value; printing is an action | 6.1 pp. 6–9; 6.2 |
-| 5 | 1 / PrintHeading.java | P1-C3: call executes body; empty parentheses still required | 6.1 pp. 4–5, 11 |
-| 6–7 | 1 / PrintHeading.java | P1-C4: return to caller and reuse same definition; step trace reinforces call order | 6.2–6.3, 6.7 |
-| 8 | 1 / PrintHeading.java | IDE checkpoint, no input, exact five-line output | Instructor example |
-| 9 | 2 / MinutesConverter.java | P2-C1: arguments bind to typed parameters by position | 6.1 pp. 9–13 |
-| 10 | 2 / MinutesConverter.java | P2-C2: return one int; method ends and call receives value | 6.1 pp. 6–9; 6.4 |
-| 11 | 2 / MinutesConverter.java | P2-C3: store a returned value before printing | 6.1, 6.8 |
-| 12 | 2 / MinutesConverter.java | P2-C4: evaluate an argument expression before the call | 6.1 pp. 9–13 |
-| 13 | 2 / MinutesConverter.java | IDE checkpoint, calls (1,30) and (1+1,5), exact output | Instructor example |
-| 14 | 3 / ScoreUpdate.java | P3-C1: primitive int argument copied; modifying parameter leaves caller unchanged | 6.9 p. 66 |
-| 15 | 3 / ScoreUpdate.java | P3-C2: local scope; bonus visible only inside addPoint | 6.10 pp. 72–73 |
-| 16 | 3 / ScoreUpdate.java | P3-C3: each call receives fresh state; repeated call still returns 8 | 6.7 pp. 58–59 |
-| 17 | 3 / ScoreUpdate.java | P3-C4: assignment explicitly stores the returned value | 6.1, 6.9 |
-| 18 | 3 / ScoreUpdate.java | P3-C1: interactive caller/parameter trace | Instructor exercise |
-| 19 | 3 / ScoreUpdate.java | P3-C2: scope diagnosis quiz | Instructor exercise |
-| 20 | 3 / ScoreUpdate.java | IDE checkpoint; original 7, updated 8, again 8, stored 8 | Instructor example |
+| 3 | 1 / CampusMenu.java | P1-C1: method definition; statements inside a named body, definition at class level, public/static explained | 6.1 pp. 4–5 |
+| 4 | 1 / CampusMenu.java | P1-C2: void means no returned value; printing is an action | 6.1 pp. 6–9; 6.2 |
+| 5 | 1 / CampusMenu.java | P1-C3: call executes body; empty parentheses still required | 6.1 pp. 4–5, 11 |
+| 6–7 | 1 / CampusMenu.java | P1-C4: return to caller and reuse same definition; step trace reinforces call order | 6.2–6.3, 6.7 |
+| 8 | 1 / CampusMenu.java | IDE checkpoint, no input, exact five-line output | Instructor example |
+| 9 | 2 / LunchBill.java | P2-C1: arguments bind to typed parameters by position | 6.1 pp. 9–13 |
+| 10 | 2 / LunchBill.java | P2-C2: return one int; method ends and call receives value | 6.1 pp. 6–9; 6.4 |
+| 11 | 2 / LunchBill.java | P2-C3: store a returned value before printing | 6.1, 6.8 |
+| 12 | 2 / LunchBill.java | P2-C4: evaluate an argument expression before the call | 6.1 pp. 9–13 |
+| 13 | 2 / LunchBill.java | IDE checkpoint, orders (1,1) and (1+1,2), exact output | Instructor example |
+| 14 | 3 / WalletTopUp.java | P3-C1: primitive int balance copied; preview leaves the current balance unchanged | 6.9 p. 66 |
+| 15 | 3 / WalletTopUp.java | P3-C2: local scope; topUp visible only inside previewTopUp | 6.10 pp. 72–73 |
+| 16 | 3 / WalletTopUp.java | P3-C3: each call receives fresh state; repeated preview still returns 30 | 6.7 pp. 58–59 |
+| 17 | 3 / WalletTopUp.java | P3-C4: assignment explicitly stores the returned value | 6.1, 6.9 |
+| 18 | 3 / WalletTopUp.java | P3-C1: interactive caller/parameter trace | Instructor exercise |
+| 19 | 3 / WalletTopUp.java | P3-C2: scope diagnosis quiz | Instructor exercise |
+| 20 | 3 / WalletTopUp.java | IDE checkpoint; current 20, preview 30, preview again 30, confirmed 30 | Instructor example |
 | 21 | Problems 1–3 | Final check: call, positional arguments, copied values | Synthesis |
 
 Every concept has one introduction, a code comment at the relevant line, a handout reference, and a refresher abstract, rule, trace/example, and misconception. Handout ranges are 3–8, 9–13, and 14–20. Five slides have meaningful interaction: 7, 16, 18, 19, 21. Slides 5 and 10 also have progressive prediction reveals.
 
-## Teaching additions, domains, and checks
+## Student contexts, domains, and checks
 
-1. PrintHeading prints `ICS 108`, `Methods practice`, `Start`, `ICS 108`, `Methods practice`, one per line. No input. Moving the helper below main changes no output; deleting the second call removes the final two lines.
-2. MinutesConverter computes whole minutes as `hours * 60 + minutes`. Main calls (1,30) and (1+1,5), printing `First: 90` and `Second: 125`. Normal domain: whole nonnegative hours and minutes 0–59, with result fitting int. Checks: (0,0)→0; (0,59)→59; (2,0)→120; (3,15)→195. Swapping (1,30) to (30,1) still compiles but returns 1801; it violates the intended argument meaning. No validation is implemented.
-3. ScoreUpdate starts at 7, adds one to a parameter copy, stores the return separately, repeats, and finally assigns back. Exact output: `Original: 7`, `Updated: 8`, `Again: 8`, `Stored: 8`. Checks: addPoint(0)→1, addPoint(-1)→0, addPoint(7)→8 twice; 7→8→9 only when the caller assigns back after each call. Restrict inputs so adding 1 fits int; score grading limits are not modeled.
+The three separate console programs use a campus café setting. Prices are sample exercise prices. There is no keyboard input, branching, purchase processing, or permanent storage; the lesson remains about the same 12 method concepts.
 
-Error recovery: restore the correct line, rebuild, and rerun the identical data. Deliberate compile errors are shown as fragments only, not additional Java files. No exact compiler wording is promised. Do not teach arrays as pass-by-reference: reference values are also copied, but array objects can be shared; that distinction is deferred.
+1. **CampusMenu.java — Display the café menu.** The menu is displayed before an order and again for the next order. printMenu() prints `Sandwich - 12 SAR` and `Juice - 5 SAR`. main prints `Order placed: Sandwich` between its two calls. One void/no-argument definition, two calls, five output lines. Moving the definition below main changes nothing. Deleting the second call leaves three lines.
+2. **LunchBill.java — Calculate lunch costs.** calculateTotal(int sandwiches, int juices) returns `sandwiches * 12 + juices * 5`. One student orders (1,1), giving 17 SAR. Two friends each order a sandwich and a juice, so (1+1,2) gives 34 SAR. main stores the results in myLunch and lunchForTwo. Exact output: `My lunch: 17 SAR` and `Lunch for two: 34 SAR`. Nonnegative whole quantities and a total fitting int are assumed. Checks: (0,0)→0; (0,2)→10; (3,0)→36; (2,1)→29; swapping to (1,2)→22. calculateTotal(1) is a compile-time argument-count error. No parameter validation is added.
+3. **WalletTopUp.java — Preview a wallet top-up.** A student has 20 SAR and previews adding 10 SAR before confirming. previewTopUp(int balance) receives a primitive copy and declares local topUp=10. main keeps its original balance while previewBalance is 30. A second preview is still 30. Assignment back simulates confirmation, setting the current balance to 30. Exact output: `Current balance: 20 SAR`, `Preview balance: 30 SAR`, `Preview again: 30 SAR`, `Confirmed balance: 30 SAR`. Check previewTopUp(0)→10; previewTopUp(20)→30 twice; assigning back twice changes 20→30→40. Nonnegative balances must allow +10 to fit int. This is a console illustration of preview/confirmation, not an implementation of a payment system.
+
+The contexts change; all concept IDs, learning goals, descriptive concept labels, source scope, slide numbers, and three problem ranges remain unchanged. The repeated previews now have a purpose: viewing a possible balance must not apply a top-up. The expression argument 1+1 represents one sandwich for each of two friends.
+
+Error recovery: restore the correct line, rebuild, and rerun identical data. Missing calls, nested definitions, missing returns, reversed arguments, out-of-scope local names, and ignored results retain their existing teaching roles. Arrays/reference sharing remain deferred.
 
 ## Concept wording
 

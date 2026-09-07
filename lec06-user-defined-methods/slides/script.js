@@ -98,8 +98,23 @@ window.addEventListener("hashchange", () => {
 
 
 const traceSteps = {
- heading: ['Before the first call: no output yet.', 'Call 1 → printHeading. Output: ICS 108', 'Still inside call 1. Output: Methods practice', 'Return to main. Output: Start', 'Call 2 → printHeading. Output: ICS 108', 'Still inside call 2. Output: Methods practice', 'Return to main after call 2. Program ends; five output lines.'],
- score: ['Before the call: main score = 7; updated is not assigned yet.', 'Copy argument: main score = 7; parameter score = 7.', 'Local bonus = 1. Parameter score becomes 8; main score is still 7.', 'Return 8. Helper locals end. main stores updated = 8; main score = 7.', 'A new call with main score = 7 returns 8 again. No value is remembered.', 'score = addPoint(score) calls with 7, then assigns 8 to main score.']
+  "menu": [
+    "Before the first call: the menu has not been displayed.",
+    "Call 1 → printMenu. Output: Sandwich - 12 SAR",
+    "Still in call 1. Output: Juice - 5 SAR",
+    "Return to main. Output: Order placed: Sandwich",
+    "Call 2 → printMenu. Output: Sandwich - 12 SAR",
+    "Still in call 2. Output: Juice - 5 SAR",
+    "Return to main. The menu is ready for the next order; five output lines."
+  ],
+  "wallet": [
+    "Before preview: main balance = 20; previewBalance is not assigned yet.",
+    "Copy the argument: main balance = 20; parameter balance = 20.",
+    "Local topUp = 10. The parameter becomes 30; main balance remains 20.",
+    "Return 30. main stores previewBalance = 30; its balance is still 20.",
+    "Preview again: a fresh call receives 20 and returns 30. No top-up has been confirmed.",
+    "Confirmation: balance = previewTopUp(balance) calls with 20, then stores 30 in main balance."
+  ]
 };
 document.querySelectorAll('[data-trace]').forEach(demo => {
  let index = 0; const steps = traceSteps[demo.dataset.trace];

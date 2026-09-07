@@ -46,9 +46,9 @@ Install a Java Development Kit (JDK), then run these commands from the repositor
 ```sh
 mkdir -p lec06-user-defined-methods/output/classes
 javac -d lec06-user-defined-methods/output/classes lec06-user-defined-methods/examples/*.java
-java -cp lec06-user-defined-methods/output/classes PrintHeading
-java -cp lec06-user-defined-methods/output/classes MinutesConverter
-java -cp lec06-user-defined-methods/output/classes ScoreUpdate
+java -cp lec06-user-defined-methods/output/classes CampusMenu
+java -cp lec06-user-defined-methods/output/classes LunchBill
+java -cp lec06-user-defined-methods/output/classes WalletTopUp
 ```
 
 See each lecture's examples README for its inputs, expected outputs, and boundary checks.
