@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Three extensions of one campus wallet program, with complete Java solutions and teaching references.">
+  <title>ICS 108 Lecture 7 — Instructor Problem-Solving Walkthroughs</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #e5e8eb;
+      --paper: #ffffff;
+      --ink: #15181b;
+      --muted: #596169;
+      --line: #c8d0d7;
+      --blue: #1769aa;
+      --blue-dark: #0d4d7f;
+      --soft-blue: #eef5fb;
+      --warm: #f7f4ed;
+      --danger: #a13b35;
+      --success: #226b42;
+      --code: #f6f8fa;
+      --console: #18222c;
+      --console-text: #edf4f8;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.48;
+    }
+
+    a { color: var(--blue-dark); text-underline-offset: 0.16em; }
+    code { font-family: var(--mono); }
+    button { font: inherit; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      top: 0.5rem;
+      left: 0.5rem;
+      padding: 0.6rem 0.85rem;
+      color: #fff;
+      background: var(--blue-dark);
+      transform: translateY(-180%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .screen-nav {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 3.1rem;
+      padding: 0.65rem max(1rem, calc((100vw - 210mm) / 2));
+      border-bottom: 1px solid #b7c0c8;
+      background: rgba(245, 247, 249, 0.97);
+      box-shadow: 0 2px 10px rgba(21, 24, 27, 0.08);
+    }
+    .screen-nav strong { margin-right: auto; color: var(--blue-dark); }
+    .screen-nav a { font-size: 0.9rem; font-weight: 650; }
+
+    main { padding: 2rem 1rem 4rem; }
+    .page {
+      position: relative;
+      width: min(210mm, 100%);
+      min-height: 297mm;
+      margin: 0 auto 2rem;
+      padding: 14mm 15mm 13mm;
+      background: var(--paper);
+      box-shadow: 0 12px 35px rgba(21, 24, 27, 0.15);
+    }
+
+    .course-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.5rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 3px solid var(--blue);
+    }
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.45rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .breadcrumb span::after { margin-left: 0.35rem; content: "/"; color: #94a0aa; }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+      font-size: clamp(1.8rem, 4vw, 2.55rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+    .subtitle { margin-bottom: 0; color: var(--muted); font-size: 1rem; }
+    .document-meta {
+      min-width: 9.5rem;
+      margin: 0;
+      padding-left: 1.25rem;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      text-align: right;
+    }
+    .document-meta strong { display: block; color: var(--blue-dark); font-size: 1rem; }
+
+    .lecture-goals {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem 1rem;
+      border: 1px solid #c4d8e8;
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+    }
+    .lecture-goals h2 {
+      margin-bottom: 0.7rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .goal {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.55rem;
+      align-items: start;
+      margin: 0;
+      color: #273039;
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+    .goal b {
+      display: grid;
+      width: 1.55rem;
+      height: 1.55rem;
+      place-items: center;
+      border: 1px solid #aac8df;
+      border-radius: 50%;
+      color: var(--blue-dark);
+      background: #fff;
+      font-size: 0.72rem;
+    }
+
+    .problem-module { margin-top: 1.15rem; }
+    .problem-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 0.85rem;
+    }
+    .problem-heading .kicker {
+      margin-bottom: 0.25rem;
+      color: var(--blue);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .problem-heading h2 {
+      margin-bottom: 0.25rem;
+      font-size: 1.45rem;
+      line-height: 1.15;
+      letter-spacing: -0.018em;
+    }
+    .problem-heading .lead { margin-bottom: 0; color: var(--muted); font-size: 0.9rem; }
+    .slide-map {
+      min-width: 10rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #b8d0e2;
+      background: var(--soft-blue);
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      text-align: right;
+    }
+    .slide-map a { display: block; font-weight: 800; }
+    .slide-map span { color: var(--muted); }
+
+    .content-block {
+      margin-top: 0.85rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--line);
+    }
+    .content-block > h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.55rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .content-block > h3::before {
+      width: 1.15rem;
+      height: 3px;
+      background: var(--blue);
+      content: "";
+    }
+    .content-block p:last-child { margin-bottom: 0; }
+
+    .description-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 0.65fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .problem-copy {
+      padding: 0.75rem 0.9rem;
+      border-left: 4px solid var(--blue);
+      background: var(--warm);
+      font-size: 0.9rem;
+    }
+    .problem-copy p { margin-bottom: 0.45rem; }
+    .data-line { color: var(--muted); }
+    .data-line code { color: var(--ink); font-weight: 650; }
+    .console {
+      overflow: hidden;
+      border: 1px solid #0d1720;
+      background: var(--console);
+      color: var(--console-text);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.42rem 0.7rem;
+      border-bottom: 1px solid #cfd7dd;
+      color: #34404a;
+      background: #e8edf1;
+      font-size: 0.72rem;
+      font-weight: 750;
+    }
+    .console .panel-head {
+      border-color: #344451;
+      color: #c9d6df;
+      background: #111921;
+    }
+    .console pre {
+      margin: 0;
+      padding: 0.72rem 0.8rem;
+      color: inherit;
+      font: 0.78rem/1.4 var(--mono);
+      white-space: pre-wrap;
+    }
+    .console .typed { color: #9bd3ad; font-weight: 700; }
+
+    .concept-overview {
+      display: grid;
+      grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+      gap: 0.9rem;
+      align-items: start;
+    }
+    .learning-outcome {
+      margin: 0;
+      padding: 0.75rem 0.85rem;
+      border-left: 4px solid var(--blue);
+      background: var(--soft-blue);
+      font-size: 0.87rem;
+    }
+    .learning-outcome strong {
+      display: block;
+      margin-bottom: 0.15rem;
+      color: var(--blue-dark);
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .concept-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.38rem 0.7rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .concept-links a {
+      display: flex;
+      gap: 0.45rem;
+      align-items: baseline;
+      min-height: 2rem;
+      padding: 0.38rem 0.5rem;
+      border: 1px solid #d0d8df;
+      color: #26323b;
+      background: #fff;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-decoration: none;
+    }
+    .concept-links a:hover,
+    .concept-links a:focus-visible { border-color: var(--blue); background: var(--soft-blue); }
+    .concept-links code { color: var(--blue-dark); font-size: 0.71rem; font-weight: 800; }
+
+    .section-note { margin-bottom: 0.5rem; color: var(--muted); font-size: 0.78rem; }
+    .code-workbench { overflow: hidden; border: 1px solid #adb7c0; background: var(--code); }
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.48rem 0.65rem;
+      border-bottom: 1px solid #c5ced5;
+      background: #eef1f3;
+    }
+    .code-switches { display: flex; gap: 0.3rem; }
+    .code-switch,
+    .copy-code {
+      min-height: 2rem;
+      padding: 0.35rem 0.65rem;
+      border: 1px solid #9eabb5;
+      border-radius: 3px;
+      color: #28343d;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+    .code-switch[aria-selected="true"] {
+      border-color: var(--blue-dark);
+      color: #fff;
+      background: var(--blue-dark);
+    }
+    .copy-code { margin-left: auto; color: var(--blue-dark); border-color: #8eb5d2; }
+    .code-switch:focus-visible,
+    .copy-code:focus-visible { outline: 3px solid rgba(23, 105, 170, 0.3); outline-offset: 2px; }
+    .code-version {
+      overflow-x: auto;
+      margin: 0;
+      padding: 0.9rem 1rem;
+      color: #172029;
+      background: var(--code);
+      font: 0.78rem/1.42 var(--mono);
+      tab-size: 3;
+      white-space: pre;
+    }
+    .code-version[hidden] { display: none; }
+    .copy-status {
+      min-height: 1.35rem;
+      margin: 0;
+      padding: 0.28rem 0.65rem;
+      border-top: 1px solid #d5dce2;
+      color: var(--success);
+      background: #fff;
+      font-size: 0.73rem;
+    }
+
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+    }
+    .concept-note {
+      scroll-margin-top: 4.5rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #d0d7dd;
+      border-top: 3px solid var(--blue);
+      background: #fff;
+    }
+    .concept-note:target { outline: 3px solid rgba(23, 105, 170, 0.25); outline-offset: 2px; }
+    .concept-note h4 { margin-bottom: 0.28rem; font-size: 0.84rem; line-height: 1.25; }
+    .concept-note h4 code { margin-right: 0.28rem; color: var(--blue-dark); font-size: 0.72rem; }
+    .concept-note p { margin-bottom: 0; color: #36414a; font-size: 0.78rem; line-height: 1.38; }
+    .concept-note .teaching-line { margin-top: 0.3rem; color: var(--muted); }
+    .concept-note .teaching-line strong { color: var(--blue-dark); }
+    .wide-note { grid-column: 1 / -1; }
+
+    .trace-wrap { overflow-x: auto; margin-top: 0.55rem; }
+    .trace {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      line-height: 1.3;
+    }
+    .trace th,
+    .trace td { padding: 0.32rem 0.42rem; border: 1px solid #cfd7dd; text-align: left; }
+    .trace th { color: var(--blue-dark); background: var(--soft-blue); }
+    .trace .update { color: var(--success); font-weight: 750; }
+    .mistake {
+      margin-top: 0.55rem;
+      padding: 0.5rem 0.65rem;
+      border-left: 3px solid var(--danger);
+      color: #63312e;
+      background: #fbf1f0;
+      font-size: 0.76rem;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.73rem;
+    }
+
+    @media (max-width: 760px) {
+      .screen-nav { align-items: flex-start; flex-wrap: wrap; gap: 0.5rem 1rem; }
+      .screen-nav strong { width: 100%; }
+      main { padding: 1rem 0.6rem 2rem; }
+      .page { min-height: 0; padding: 1.2rem 1rem; }
+      .course-header,
+      .problem-heading,
+      .description-grid,
+      .concept-overview { grid-template-columns: 1fr; }
+      .document-meta { padding: 0.65rem 0 0; border-top: 1px solid var(--line); border-left: 0; text-align: left; }
+      .problem-heading { align-items: start; }
+      .slide-map { text-align: left; }
+      .goal-grid,
+      .reference-grid { grid-template-columns: 1fr; }
+      .concept-links { grid-template-columns: 1fr; }
+      .wide-note { grid-column: auto; }
+      .code-toolbar { flex-wrap: wrap; }
+      .copy-code { margin-left: 0; }
+      .code-version { font-size: 0.7rem; }
+    }
+
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+      html, body { width: 210mm; margin: 0; background: #fff; }
+      body { font-size: 8pt; line-height: 1.28; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .skip-link,
+      .screen-nav,
+      .code-toolbar,
+      .copy-status { display: none !important; }
+      main { padding: 0; }
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 297mm;
+        max-height: 297mm;
+        margin: 0;
+        padding: 8mm 10mm 7mm;
+        overflow: hidden;
+        break-after: page;
+        page-break-after: always;
+        box-shadow: none;
+      }
+      .page:last-child { break-after: auto; page-break-after: auto; }
+      .course-header { gap: 5mm; padding-bottom: 2.3mm; border-bottom-width: 1mm; }
+      .course-header { grid-template-columns: minmax(0, 1fr) auto; }
+      .breadcrumb { gap: 1mm; margin-bottom: 1.2mm; font-size: 6.5pt; }
+      .breadcrumb span::after { margin-left: 1mm; }
+      h1 { margin-bottom: 0.8mm; font-size: 17pt; }
+      .subtitle { font-size: 7.8pt; }
+      .document-meta { min-width: 32mm; padding: 0 0 0 4mm; border-top: 0; border-left: 1px solid var(--line); font-size: 7pt; line-height: 1.35; text-align: right; }
+      .document-meta strong { font-size: 8pt; }
+      .lecture-goals { margin-top: 2.5mm; padding: 2.3mm 2.8mm; border-left-width: 1.2mm; }
+      .lecture-goals h2 { margin-bottom: 1.8mm; font-size: 8.5pt; }
+      .goal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.2mm; }
+      .goal { gap: 1.3mm; font-size: 6.8pt; line-height: 1.25; }
+      .goal b { width: 5mm; height: 5mm; font-size: 6pt; }
+      .problem-module { margin-top: 3mm; }
+      .page:not(.page-one) .problem-module { margin-top: 4mm; }
+      .problem-heading { grid-template-columns: minmax(0, 1fr) auto; gap: 4mm; align-items: end; margin-bottom: 2mm; }
+      .problem-heading .kicker { margin-bottom: 0.7mm; font-size: 6.3pt; }
+      .problem-heading h2 { margin-bottom: 0.7mm; font-size: 12pt; }
+      .problem-heading .lead { font-size: 7.2pt; }
+      .slide-map { min-width: 34mm; padding: 1.5mm 2mm; font-size: 6.5pt; text-align: right; }
+      .content-block { margin-top: 2mm; padding-top: 1.7mm; }
+      .content-block > h3 { gap: 1.5mm; margin-bottom: 1.4mm; font-size: 8.7pt; }
+      .content-block > h3::before { width: 4mm; height: 0.7mm; }
+      .description-grid { grid-template-columns: minmax(0, 1.3fr) minmax(42mm, 0.7fr); gap: 2.5mm; }
+      .problem-copy { padding: 1.8mm 2.2mm; border-left-width: 1mm; font-size: 7.1pt; }
+      .problem-copy p { margin-bottom: 1mm; }
+      .panel-head { padding: 1mm 1.6mm; font-size: 6.2pt; }
+      .console pre { padding: 1.7mm 2mm; font-size: 6.5pt; line-height: 1.3; }
+      .concept-overview { grid-template-columns: minmax(44mm, 0.8fr) minmax(0, 1.2fr); gap: 2.4mm; }
+      .learning-outcome { padding: 1.8mm 2.1mm; border-left-width: 1mm; font-size: 6.8pt; }
+      .learning-outcome strong { margin-bottom: 0.5mm; font-size: 6.1pt; }
+      .concept-links { gap: 1mm 1.5mm; }
+      .concept-links a { gap: 1.1mm; min-height: 0; padding: 1mm 1.2mm; font-size: 6.4pt; }
+      .concept-links code { font-size: 5.9pt; }
+      .section-note { margin-bottom: 1.2mm; font-size: 6.3pt; }
+      .code-version { padding: 2mm 2.4mm; font-size: 6.45pt; line-height: 1.23; }
+      #problem-2 .content-block { margin-top: 1.7mm; padding-top: 1.4mm; }
+      #problem-2 .code-version { padding: 1.5mm 2.2mm; font-size: 6.15pt; line-height: 1.15; }
+      #problem-2 .concept-note { padding: 1.2mm 1.5mm; }
+      #problem-2 .trace th,
+      #problem-2 .trace td { padding: 0.55mm 0.9mm; }
+      #problem-2 .mistake { margin-top: 0.7mm; padding: 0.8mm 1mm; }
+      .code-version[data-code-version="starter"] { display: none !important; }
+      .code-version[data-code-version="complete"] { display: block !important; }
+      .reference-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4mm; }
+      .concept-note { padding: 1.5mm 1.7mm; border-top-width: 0.7mm; }
+      .concept-note h4 { margin-bottom: 0.7mm; font-size: 6.8pt; }
+      .concept-note h4 code { margin-right: 0.7mm; font-size: 5.9pt; }
+      .concept-note p { font-size: 6.25pt; line-height: 1.28; }
+      .concept-note .teaching-line { margin-top: 0.7mm; }
+      .wide-note { grid-column: 1 / -1; }
+      .trace-wrap { margin-top: 1.2mm; }
+      .trace { font-size: 6pt; }
+      .trace th,
+      .trace td { padding: 0.8mm 1mm; }
+      .mistake { margin-top: 1.2mm; padding: 1.2mm 1.5mm; border-left-width: 0.8mm; font-size: 6.2pt; }
+      .page-footer { position: absolute; right: 10mm; bottom: 5mm; left: 10mm; margin: 0; padding-top: 1.5mm; font-size: 6.2pt; }
+    }
+  @media print {
+ .code-version, #problem-2 .code-version {font-size:8pt;line-height:1.25;padding:2mm 2.4mm}
+ .concept-note p {font-size:7.3pt;line-height:1.3}
+ .concept-note h4 {font-size:7.8pt}
+ .reference-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .problem-copy {font-size:8pt}.learning-outcome{font-size:7.5pt}.concept-links a{font-size:7pt}
+ .section-note{font-size:7pt}.wide-note{grid-column:1/-1}
+ }
+.problem-actions {display:flex;align-items:center;gap:1rem;margin-bottom:.7rem;}
+.copy-problem {padding:.45rem .8rem;border:1px solid var(--blue);color:var(--blue-dark);background:var(--soft-blue);font-weight:650;cursor:pointer;}
+.copy-problem:focus-visible {outline:3px solid var(--blue);outline-offset:3px;}
+.problem-copy-status {font-size:.8rem;color:var(--blue-dark);}
+.problem-copy ol {margin:.65rem 0 0;padding-left:1.25rem;}
+.problem-copy li {margin:0 0 .45rem;}
+@media print {
+ .problem-actions {display:none!important;}
+ .description-grid {grid-template-columns:minmax(0,1.8fr) minmax(38mm,.7fr);}
+ .problem-copy ol {margin:1mm 0 0;padding-left:3.8mm;}
+ .problem-copy li {margin-bottom:.8mm;}
+}
+@media print { #problem-3 .code-version {line-height:1.15;padding-top:1.5mm;padding-bottom:1.5mm;} }
+.concept-links code {white-space:nowrap;flex-shrink:0;}
+
+.token.keyword {color:#713f9b;font-weight:650;}
+.token.string {color:#226b42;}
+.token.comment {color:#596169;font-style:italic;}
+.token.number {color:#a13b35;}
+.token.type {color:#0d4d7f;}
+.syntax-key {display:flex;flex-wrap:wrap;gap:.75rem;font-size:.75rem;color:var(--muted);margin:0;padding:.5rem .9rem;border-top:1px solid var(--line);}
+@media print {.syntax-key{display:none}.concept-links{grid-template-columns:1fr 1fr}.code-version,#problem-2 .code-version,#problem-3 .code-version{font-size:8pt;line-height:1.2}.concept-note p{font-size:7.2pt;line-height:1.28}}
+</style>
+</head>
+<body><a class="skip-link" href="#problem-1">Skip to the first problem</a><nav class="screen-nav" aria-label="Instructor resources"><strong>ICS 108 · Lecture 7 instructor set</strong><a href="../slides/index.html">Supporting slides</a><a href="concept-refresher.html">Concept refresher</a><a href="../student-problems.md">Student problems</a></nav><main>
+<article class="page page-one" id="problem-1">
+<header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 7</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">Classes and objects: one campus wallet, three extensions.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 30 min<br>Page 1 of 3</p></header><section class="lecture-goals"><h2>What will students learn in this lecture?</h2><div class="goal-grid"><p class="goal"><b>1</b><span>Explain classes, objects, and references.</span></p><p class="goal"><b>2</b><span>Read and change an object through methods.</span></p><p class="goal"><b>3</b><span>Create two objects with independent state.</span></p></div></section>
+<section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 1 · About 8 minutes</p><h2>Show a campus wallet balance</h2><p class="lead">CampusWallet1.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-3">Supporting slides 3–8</a><span>IDE checkpoint: slide 8.</span></div></header>
+<section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="1" aria-label="Copy Problem 1 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="1" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>A student has 20 SAR in a campus wallet. Write a program that stores this balance and displays it as shown.</p><p>No keyboard input is required.</p></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>Balance: 20 SAR</pre></div></div></section>
+<section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Distinguish a class, an object, and a reference; access an object’s field.</p><ul class="concept-links"><li><a href="#p1-c1"><code>P1-C1</code><span>Classes define types</span></a></li><li><a href="#p1-c2"><code>P1-C2</code><span>Instance fields store object data</span></a></li><li><a href="#p1-c3"><code>P1-C3</code><span>Objects are class instances</span></a></li><li><a href="#p1-c4"><code>P1-C4</code><span>Reference variables refer to objects</span></a></li><li><a href="#p1-c5"><code>P1-C5</code><span>The dot operator accesses members</span></a></li></ul></div></section>
+<section class="content-block"><h3>Complete code</h3><p class="section-note">Instructor solution · Pause at each concept ID. Run: <code>javac CampusWallet1.java</code>, then <code>java CampusWallet1</code>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusWallet1.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button></div><pre class="code-version" data-code-version="complete"><code class="language-java"><span class="token comment">// P1-C1: A class defines a type for campus wallet objects.</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token type">CampusWallet1</span> {
+   <span class="token comment">// P1-C2: Each wallet has an instance field named balance.</span>
+   <span class="token keyword">public</span> <span class="token keyword">int</span> balance;
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(<span class="token type">String</span>[] args) {
+      <span class="token comment">// P1-C3: new creates one object of this class.</span>
+      <span class="token comment">// P1-C4: wallet stores a reference to that object.</span>
+      <span class="token type">CampusWallet1</span> wallet = <span class="token keyword">new</span> <span class="token type">CampusWallet1</span>();
+      <span class="token comment">// P1-C5: The dot selects a member of this object.</span>
+      wallet.balance = <span class="token number">20</span>;
+      <span class="token type">System</span>.out.println(<span class="token string">&quot;Balance: &quot;</span> + wallet.balance + <span class="token string">&quot; SAR&quot;</span>);
+   }
+}
+</code></pre><p class="syntax-key" aria-label="Syntax colors"><span class="token keyword">Keywords</span><span class="token type">Types</span><span class="token string">Strings</span><span class="token number">Numbers</span><span class="token comment">Comments</span></p><p class="copy-status" data-copy-status role="status" aria-live="polite"></p></div></section>
+<section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p1-c1"><h4><code>P1-C1</code> Classes define types</h4><p>A class defines a type by declaring its fields and methods. CampusWallet1 is the type; wallet is a variable. The class declaration alone creates no wallet object.</p></article><article class="concept-note" id="p1-c2"><h4><code>P1-C2</code> Instance fields store object data</h4><p>An instance field is a variable declared in the class, outside methods, without static. balance belongs to a wallet and keeps its value between method calls. A local variable belongs to a method or block.</p></article><article class="concept-note" id="p1-c3"><h4><code>P1-C3</code> Objects are class instances</h4><p>An object is one instance of a class. new CampusWallet1() creates one. With no declared constructor, Java supplies a no-argument constructor. The int field initially holds 0; the next assignment sets it to 20.</p></article><article class="concept-note" id="p1-c4"><h4><code>P1-C4</code> Reference variables refer to objects</h4><p>wallet stores a reference to the object, not the balance itself. Declaring a reference alone does not create an object. The class name before wallet specifies which type of object it can refer to.</p></article><article class="concept-note" id="p1-c5"><h4><code>P1-C5</code> The dot operator accesses members</h4><p>wallet.balance selects this wallet’s field. The same dot syntax later selects methods, such as wallet.getBalance(). A field access has no parentheses; a method call has parentheses.</p></article><article class="concept-note wide-note"><h4>Traces, predictions, and checks</h4><p>Trace: create one object → set its balance to 20 → read 20 for printing. Change 20 to 0: the output becomes Balance: 0 SAR. Public field access is a first step; Problem 2 puts operations around the data.</p><p class="mistake"><strong>Recovery:</strong> Removing new leaves no initialized object to use. Bare balance in static main needs an object reference. Restore the creation and wallet.balance, rebuild, and rerun.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 7 · Problem 1</span><span>Supporting slides 3–8 · Page 1 of 3</span></footer></article>
+<article class="page " id="problem-2">
+<header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 7</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">Classes and objects: one campus wallet, three extensions.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 30 min<br>Page 2 of 3</p></header>
+<section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 2 · About 8 minutes</p><h2>Add money to the same wallet</h2><p class="lead">CampusWallet2.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-9">Supporting slides 9–12</a><span>IDE checkpoint: slide 12.</span></div></header>
+<section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="2" aria-label="Copy Problem 2 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="2" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>Extend Problem 1 so the student can add 10 SAR to the wallet’s 20 SAR balance. Display the balance before and after the addition.</p><p>No keyboard input is required.</p></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>Before: 20 SAR
+After: 30 SAR</pre></div></div></section>
+<section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Explain encapsulation and distinguish methods that change state from methods that read it.</p><ul class="concept-links"><li><a href="#p2-c1"><code>P2-C1</code><span>Encapsulation hides internal data</span></a></li><li><a href="#p2-c2"><code>P2-C2</code><span>Mutators change object state</span></a></li><li><a href="#p2-c3"><code>P2-C3</code><span>Accessors read object state</span></a></li></ul></div></section>
+<section class="content-block"><h3>Complete code</h3><p class="section-note">Instructor solution · Pause at each concept ID. Run: <code>javac CampusWallet2.java</code>, then <code>java CampusWallet2</code>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusWallet2.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button></div><pre class="code-version" data-code-version="complete"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token type">CampusWallet2</span> {
+   <span class="token comment">// P2-C1: private keeps the field inside the class&#x27;s implementation.</span>
+   <span class="token keyword">private</span> <span class="token keyword">int</span> balance = <span class="token number">20</span>;
+
+   <span class="token comment">// P2-C2: A mutator changes the receiving object&#x27;s state.</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> addMoney(<span class="token keyword">int</span> amount) {
+      balance = balance + amount;
+   }
+
+   <span class="token comment">// P2-C3: An accessor returns data without changing it.</span>
+   <span class="token keyword">public</span> <span class="token keyword">int</span> getBalance() {
+      <span class="token keyword">return</span> balance;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(<span class="token type">String</span>[] args) {
+      <span class="token type">CampusWallet2</span> wallet = <span class="token keyword">new</span> <span class="token type">CampusWallet2</span>();
+      <span class="token type">System</span>.out.println(<span class="token string">&quot;Before: &quot;</span> + wallet.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      wallet.addMoney(<span class="token number">10</span>);
+      <span class="token type">System</span>.out.println(<span class="token string">&quot;After: &quot;</span> + wallet.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+   }
+}
+</code></pre><p class="syntax-key" aria-label="Syntax colors"><span class="token keyword">Keywords</span><span class="token type">Types</span><span class="token string">Strings</span><span class="token number">Numbers</span><span class="token comment">Comments</span></p><p class="copy-status" data-copy-status role="status" aria-live="polite"></p></div></section>
+<section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p2-c1"><h4><code>P2-C1</code> Encapsulation hides internal data</h4><p>Encapsulation groups data with its operations and controls access. private hides balance from other classes; public exposes addMoney and getBalance. Because main is inside this same class, privacy does not prevent main from accessing balance; it uses the public methods to demonstrate the interface.</p></article><article class="concept-note" id="p2-c2"><h4><code>P2-C2</code> Mutators change object state</h4><p>A mutator is a method that changes the receiving object. wallet.addMoney(10) adds 10 to that wallet’s stored balance. This method returns no value. Unlike Lecture 6’s preview, it changes the object immediately.</p></article><article class="concept-note" id="p2-c3"><h4><code>P2-C3</code> Accessors read object state</h4><p>An accessor reads an object without changing its state. getBalance returns an int; println displays that returned value. Calling getBalance twice leaves the balance unchanged. Neither instance method is static.</p></article><article class="concept-note wide-note"><h4>Traces, predictions, and checks</h4><p>Retain the same balance from Problem 1. Before the addition it is 20; afterward it is 30. Adding 0 leaves 20 unchanged. Two additions of 10 give 40. Reading twice makes no change. Use nonnegative whole SAR values whose sum fits int.</p><p class="mistake"><strong>Recovery:</strong> Printing inside getBalance without returning an int fails to compile. An addition only to the parameter leaves the field unchanged. Restore the return or field assignment, rebuild, and rerun.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 7 · Problem 2</span><span>Supporting slides 9–12 · Page 2 of 3</span></footer></article>
+<article class="page " id="problem-3">
+<header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 7</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">Classes and objects: one campus wallet, three extensions.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 30 min<br>Page 3 of 3</p></header>
+<section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 3 · About 10 minutes</p><h2>Keep two students’ balances separate</h2><p class="lead">CampusWallet3.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-13">Supporting slides 13–16</a><span>IDE checkpoint: slide 16.</span></div></header>
+<section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="3" aria-label="Copy Problem 3 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="3" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>Extend Problem 2 for two students whose wallets start at 20 SAR and 50 SAR. Add 10 SAR to the first wallet, then display both balances. The second balance must stay unchanged.</p><p>No keyboard input is required.</p></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>First: 30 SAR
+Second: 50 SAR</pre></div></div></section>
+<section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Initialize objects with constructors, explain this, and trace independent instance fields.</p><ul class="concept-links"><li><a href="#p3-c1"><code>P3-C1</code><span>Constructors initialize new objects</span></a></li><li><a href="#p3-c2"><code>P3-C2</code><span>this refers to the current object</span></a></li><li><a href="#p3-c3"><code>P3-C3</code><span>Objects have separate instance fields</span></a></li></ul></div></section>
+<section class="content-block"><h3>Complete code</h3><p class="section-note">Instructor solution · Pause at each concept ID. Run: <code>javac CampusWallet3.java</code>, then <code>java CampusWallet3</code>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusWallet3.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button></div><pre class="code-version" data-code-version="complete"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token type">CampusWallet3</span> {
+   <span class="token keyword">private</span> <span class="token keyword">int</span> balance;
+
+   <span class="token comment">// P3-C1: A constructor initializes an object during creation.</span>
+   <span class="token keyword">public</span> <span class="token type">CampusWallet3</span>(<span class="token keyword">int</span> balance) {
+      <span class="token comment">// P3-C2: this.balance is the field; balance is the parameter.</span>
+      <span class="token keyword">this</span>.balance = balance;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> addMoney(<span class="token keyword">int</span> amount) {
+      balance = balance + amount;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">int</span> getBalance() {
+      <span class="token keyword">return</span> balance;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(<span class="token type">String</span>[] args) {
+      <span class="token comment">// P3-C3: Two new expressions create separate instance fields.</span>
+      <span class="token type">CampusWallet3</span> first = <span class="token keyword">new</span> <span class="token type">CampusWallet3</span>(<span class="token number">20</span>);
+      <span class="token type">CampusWallet3</span> second = <span class="token keyword">new</span> <span class="token type">CampusWallet3</span>(<span class="token number">50</span>);
+      first.addMoney(<span class="token number">10</span>);
+      <span class="token type">System</span>.out.println(<span class="token string">&quot;First: &quot;</span> + first.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      <span class="token type">System</span>.out.println(<span class="token string">&quot;Second: &quot;</span> + second.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+   }
+}
+</code></pre><p class="syntax-key" aria-label="Syntax colors"><span class="token keyword">Keywords</span><span class="token type">Types</span><span class="token string">Strings</span><span class="token number">Numbers</span><span class="token comment">Comments</span></p><p class="copy-status" data-copy-status role="status" aria-live="polite"></p></div></section>
+<section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p3-c1"><h4><code>P3-C1</code> Constructors initialize new objects</h4><p>A constructor runs during object creation. It has the class’s exact name and no return type, not even void. The argument supplies each starting balance. Once this constructor is declared, Java no longer supplies a no-argument one.</p></article><article class="concept-note" id="p3-c2"><h4><code>P3-C2</code> this refers to the current object</h4><p>this refers to the object being initialized or receiving a method call. In this.balance = balance, the left side is that object’s field; the right side is the parameter. balance = balance only assigns the parameter to itself.</p></article><article class="concept-note" id="p3-c3"><h4><code>P3-C3</code> Objects have separate instance fields</h4><p>Each new expression creates a different wallet with its own balance. first.addMoney(10) changes only first’s object: 20 → 30; second stays 50. Keep the field non-static. second = first would share an object instead of copying it.</p></article><article class="concept-note wide-note"><h4>Traces, predictions, and checks</h4><p>The two methods from Problem 2 are unchanged. Start both wallets at 20 and add 10 to first: results are 30 and 20. Start first at 0 and add 0: it stays 0. Use nonnegative whole SAR values whose sum fits int.</p><p class="mistake"><strong>Recovery:</strong> Adding void makes the constructor an ordinary method. Omitting this silently leaves the field at 0. Making balance static shares it. Restore the constructor, field assignment, or instance field, rebuild, and rerun.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 7 · Problem 3</span><span>Supporting slides 13–16 · Page 3 of 3</span></footer></article></main><script>
+async function copyText(text) {
+ if(navigator.clipboard && window.isSecureContext) {try {await navigator.clipboard.writeText(text); return;} catch(error) { /* Fall back when local-file clipboard access is denied. */ }}
+ const active=document.activeElement;
+ const area=document.createElement('textarea'); area.value=text; area.setAttribute('readonly',''); area.style.cssText='position:fixed;opacity:0;left:0;top:0'; document.body.appendChild(area); area.select(); area.setSelectionRange(0,area.value.length);
+ const ok=document.execCommand('copy'); area.remove(); active?.focus(); if(!ok) throw new Error('Copy unavailable');
+}
+document.querySelectorAll('[data-code-workbench]').forEach(workbench=>workbench.querySelector('[data-copy-code]').addEventListener('click',async()=>{
+ const status=workbench.querySelector('[data-copy-status]'); try {await copyText(workbench.querySelector('code').textContent);status.textContent='Complete code copied.';}catch(error){status.textContent='Copy failed. Select the code and copy it manually.';}
+}));
+</script><script type="application/json" id="student-problems">{"1": "Problem 1 — Show a campus wallet balance\n\nA student has 20 SAR in a campus wallet. Write a program that stores this balance and displays it as shown.\n\nNo keyboard input is required.\n\nExpected output:\nBalance: 20 SAR", "2": "Problem 2 — Add money to the same wallet\n\nExtend Problem 1 so the student can add 10 SAR to the wallet’s 20 SAR balance. Display the balance before and after the addition.\n\nNo keyboard input is required.\n\nExpected output:\nBefore: 20 SAR\nAfter: 30 SAR", "3": "Problem 3 — Keep two students’ balances separate\n\nExtend Problem 2 for two students whose wallets start at 20 SAR and 50 SAR. Add 10 SAR to the first wallet, then display both balances. The second balance must stay unchanged.\n\nNo keyboard input is required.\n\nExpected output:\nFirst: 30 SAR\nSecond: 50 SAR"}</script><script>
+const studentProblems=JSON.parse(document.getElementById("student-problems").textContent);
+document.querySelectorAll("[data-copy-problem]").forEach(button=>button.addEventListener("click",async()=>{const id=button.dataset.copyProblem;const status=document.querySelector(`[data-problem-status="${id}"]`);try{await copyText(studentProblems[id]);status.textContent="Problem and expected output copied.";}catch(error){status.textContent="Copy failed. Select the problem and expected output manually.";}}));
+</script></body></html>

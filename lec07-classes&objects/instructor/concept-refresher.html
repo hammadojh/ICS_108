@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Instructor refresher for classes, objects, fields, encapsulation, constructors, and this.">
+  <meta name="theme-color" content="#111820">
+  <title>ICS 108 Lecture 7 - Classes and objects concept refresher</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111820'/%3E%3Cg fill='none' stroke='%238ec5ff' stroke-width='4'%3E%3Crect x='8' y='20' width='12' height='24'/%3E%3Crect x='26' y='20' width='12' height='24'/%3E%3Crect x='44' y='20' width='12' height='24'/%3E%3C/g%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: oklch(24% 0.018 250);
+      --ink-soft: oklch(43% 0.022 250);
+      --paper: oklch(98% 0.008 85);
+      --canvas: oklch(93% 0.012 245);
+      --line: oklch(82% 0.018 245);
+      --line-strong: oklch(66% 0.045 245);
+      --blue: oklch(51% 0.145 250);
+      --blue-dark: oklch(38% 0.11 250);
+      --blue-pale: oklch(95% 0.026 245);
+      --warm: oklch(95% 0.025 78);
+      --stage: oklch(18% 0.025 250);
+      --stage-soft: oklch(72% 0.035 245);
+      --code-bg: oklch(22% 0.025 250);
+      --code-ink: oklch(94% 0.012 245);
+      --focus: oklch(70% 0.15 245);
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      max-width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scroll-padding-top: 1rem;
+      background: var(--canvas);
+    }
+    body {
+      max-width: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3, p, ul, ol, table, pre { margin-top: 0; }
+    p, ul, ol { max-width: var(--measure); }
+    h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+    h1 {
+      max-width: 14ch;
+      margin-bottom: 1.5rem;
+      font-size: clamp(2.7rem, 8vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+    h2 {
+      margin-bottom: 0.75rem;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    h3 { margin-bottom: 0.5rem; font-size: 1.2rem; line-height: 1.25; }
+    a { color: var(--blue-dark); text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+    a:hover { text-decoration-thickness: 0.13em; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-variant-ligatures: none;
+    }
+    code {
+      padding: 0.08em 0.28em;
+      background: var(--blue-pale);
+      color: var(--blue-dark);
+      font-size: 0.92em;
+      overflow-wrap: anywhere;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    pre code { padding: 0; background: transparent; color: inherit; overflow-wrap: normal; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 30;
+      top: 0.5rem;
+      left: 0.5rem;
+      transform: translateY(-180%);
+      padding: 0.65rem 0.9rem;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .skip-link:focus { transform: none; }
+    .masthead {
+      padding: clamp(2rem, 7vw, 6rem) max(1.25rem, env(safe-area-inset-left)) clamp(3rem, 8vw, 6.5rem);
+      background: var(--stage);
+      color: var(--paper);
+    }
+    .masthead-inner { width: min(1180px, 100%); margin: 0 auto; }
+    .breadcrumb,
+    .eyebrow,
+    .concept-number,
+    .source-ref,
+    .reading-label,
+    .problem-tag {
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; color: var(--stage-soft); }
+    .breadcrumb a { color: inherit; }
+    .breadcrumb span + span::before { content: "/"; margin-right: 0.5rem; }
+    .eyebrow { margin-bottom: 0.75rem; color: oklch(80% 0.1 245); }
+    .chapter-abstract {
+      display: grid;
+      gap: 1rem;
+      max-width: 900px;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid oklch(39% 0.035 250);
+    }
+    .chapter-abstract .reading-label { color: oklch(80% 0.1 245); }
+    .chapter-abstract p {
+      margin-bottom: 0;
+      color: oklch(91% 0.012 245);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: clamp(1.18rem, 2.5vw, 1.55rem);
+      line-height: 1.5;
+    }
+    .reading-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+    .reading-controls button {
+      min-height: 44px;
+      padding: 0.65rem 1rem;
+      border: 1px solid oklch(52% 0.04 245);
+      border-radius: 0;
+      background: transparent;
+      color: var(--paper);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .reading-controls button:hover { background: oklch(26% 0.035 250); }
+    #readingStatus { color: var(--stage-soft); font-size: 0.86rem; }
+
+    .reading-layout {
+      display: grid;
+      grid-template-columns: minmax(14rem, 0.28fr) minmax(0, 0.72fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3rem 0 5rem;
+    }
+    .reading-map { position: sticky; top: 1rem; align-self: start; min-width: 0; }
+    .reading-map h2 {
+      margin-bottom: 1rem;
+      font: 800 0.72rem/1.2 "Avenir Next", Avenir, sans-serif;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .reading-map ol { display: grid; margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+    .reading-map a {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr);
+      min-height: 44px;
+      align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+    .reading-map a:hover { color: var(--blue-dark); }
+    .map-number { color: var(--blue); font: 700 0.76rem "SFMono-Regular", monospace; }
+    .map-links { display: grid; gap: 0.45rem; margin-top: 1.2rem; font-size: 0.86rem; }
+    .map-links a { display: block; min-height: 0; padding: 0.25rem 0; border-bottom: 0; }
+
+    .reading-main { min-width: 0; }
+    .reading-note { margin-bottom: 3rem; padding: 1.2rem 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .reading-note p:last-child { margin-bottom: 0; }
+    .mental-model { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0 4rem; }
+    .model-term { min-width: 0; padding-top: 0.8rem; border-top: 4px solid var(--blue); }
+    .model-term strong { display: block; margin-bottom: 0.3rem; }
+    .model-term span { display: block; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.45; }
+
+    .concept { margin-bottom: 0; padding: 3rem 0; border-top: 1px solid var(--line-strong); scroll-margin-top: 1rem; }
+    .concept:first-of-type { border-top-width: 3px; }
+    .concept-header { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr); gap: 1rem; margin-bottom: 1.2rem; }
+    .concept-number { padding-top: 0.6rem; color: var(--blue); font-family: "SFMono-Regular", monospace; }
+    .source-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; margin-bottom: 0.4rem; color: var(--ink-soft); }
+    .source-ref a { color: inherit; }
+    .problem-tag { display: inline-flex; align-items: center; min-height: 1.7rem; padding: 0.2rem 0.55rem; background: var(--blue); color: white; }
+    .concept-abstract {
+      margin-bottom: 1rem;
+      color: var(--ink-soft);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 1.18rem;
+      line-height: 1.55;
+    }
+    .key-rule { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; margin: 1rem 0; padding: 1rem 1.5rem; background: var(--blue-pale); }
+    .key-rule strong { color: var(--blue-dark); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .key-rule p { margin-bottom: 0; font-weight: 650; }
+
+    details { max-width: 100%; margin-top: 0.75rem; border-top: 1px solid var(--line); background: var(--paper); }
+    summary {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      min-height: 56px;
+      align-items: center;
+      padding: 0.75rem 3.2rem 0.75rem 1rem;
+      color: var(--blue-dark);
+      font-weight: 750;
+      cursor: pointer;
+      list-style: none;
+      overflow-wrap: anywhere;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue);
+      font: 400 1.5rem "Avenir Next", Avenir, sans-serif;
+    }
+    details[open] summary::after { content: "−"; }
+    .details-body { min-width: 0; max-width: 100%; padding: 0.2rem 1rem 1.2rem; }
+    .details-body > *:last-child { margin-bottom: 0; }
+    .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .details-grid > div { min-width: 0; }
+    .details-grid h3 { margin-top: 0.5rem; }
+    .teaching-line { margin: 1rem 0 0; padding: 0.85rem 1rem; background: var(--warm); }
+    .teaching-line strong { color: var(--blue-dark); }
+    .teaching-line p { margin-bottom: 0; }
+    .compare-wrap { max-width: 100%; overflow-x: auto; }
+    .compare-table { width: 100%; min-width: 31rem; border-collapse: collapse; font-size: 0.88rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--blue-pale); color: var(--blue-dark); }
+    .trace-list { margin: 0; padding-left: 1.25rem; }
+    .trace-list li + li { margin-top: 0.45rem; }
+    .warning { padding: 0.85rem 1rem; background: var(--warm); color: var(--blue-dark); }
+    .concept-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 1rem; font-size: 0.86rem; }
+
+    .readiness, .source-notes { padding: 3rem 0; border-top: 3px solid var(--ink); }
+    .readiness ol { padding-left: 1.4rem; }
+    .readiness li + li { margin-top: 0.55rem; }
+    .readiness code { white-space: normal; }
+    .source-notes { border-top-width: 1px; }
+    .source-notes ul { padding-left: 1.2rem; }
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+      padding: 1.5rem max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom));
+      background: var(--stage);
+      color: var(--stage-soft);
+      font-size: 0.86rem;
+    }
+    .page-footer a { color: var(--paper); }
+
+    @media (max-width: 900px) {
+      .reading-layout { grid-template-columns: minmax(0, 1fr); }
+      .reading-map { position: static; }
+      .reading-map ol { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+      .mental-model { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .masthead { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+      .reading-layout { width: min(calc(100% - 1.5rem), 1180px); padding-top: 2rem; }
+      .reading-map ol, .mental-model, .details-grid { grid-template-columns: minmax(0, 1fr); }
+      .concept-header { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .key-rule { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; padding: 1rem; }
+      .reading-controls { align-items: stretch; }
+      .reading-controls button { flex: 1 1 9rem; }
+      pre { padding: 1rem; font-size: 0.76rem; }
+      .compare-wrap { overflow: visible; }
+      .compare-table,
+      .compare-table tbody,
+      .compare-table tr,
+      .compare-table td { display: block; width: 100%; min-width: 0; }
+      .compare-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .compare-table tr { margin-bottom: 0.8rem; border: 1px solid var(--line); background: var(--paper); }
+      .compare-table td {
+        display: grid;
+        grid-template-columns: minmax(7.5rem, 0.42fr) minmax(0, 0.58fr);
+        gap: 0.75rem;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .compare-table td:last-child { border-bottom: 0; }
+      .compare-table td::before {
+        content: attr(data-label);
+        color: var(--blue-dark);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .page-footer { display: block; }
+      .page-footer span { display: block; }
+      .page-footer span + span { margin-top: 0.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      html, body { overflow: visible; background: white; font-size: 10pt; }
+      .masthead { padding: 0 0 10mm; background: white; color: var(--ink); }
+      .masthead h1 { max-width: none; font-size: 34pt; }
+      .skip-link, .breadcrumb, .reading-controls, .reading-map, .concept-links, .page-footer { display: none !important; }
+      .chapter-abstract p { color: var(--ink); }
+      .reading-layout { display: block; width: auto; padding: 8mm 0 0; }
+      .mental-model { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5mm; }
+      .concept { margin-bottom: 10mm; break-before: page; }
+      details { break-inside: avoid; }
+      details:not([open]) > .details-body { display: block; }
+      summary::after { display: none; }
+      .compare-wrap { overflow: visible; }
+      .compare-table { min-width: 0; }
+      pre { overflow: visible; white-space: pre-wrap; word-break: break-word; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to concepts</a>
+<header class="masthead"><div class="masthead-inner">
+<nav class="breadcrumb" aria-label="Resource location"><span>ICS 108</span><span>Lecture 7</span><span>Instructor concept refresher</span></nav>
+<p class="eyebrow">Quick review · expandable teaching notes</p><h1>Classes and objects</h1>
+<section class="chapter-abstract"><span class="reading-label">Chapter abstract</span><p>A class defines a type that groups related fields and methods. An object is one instance of that type; a reference variable lets a program use it. Instance fields hold the object’s state. Public methods can provide access to private fields, and constructors establish the starting state. This lecture selects those foundations from Chapter 7 through three versions of one campus wallet: display a balance, add money through methods, then create two wallets with different starting balances. Each problem extends the preceding one. Collections, wrapper classes, and larger class designs remain for later study.</p></section>
+<div class="reading-controls"><button type="button" id="openAll">Open all details</button><button type="button" id="closeAll">Close all details</button><span id="readingStatus" role="status" aria-live="polite">Eleven concept summaries are visible.</span></div>
+</div></header>
+<div class="reading-layout"><aside class="reading-map" aria-label="Concept map"><h2>Concept map</h2><ol><li><a href="#concept-1"><span class="map-number">01</span><span>Classes define types</span></a></li><li><a href="#concept-2"><span class="map-number">02</span><span>Instance fields store object data</span></a></li><li><a href="#concept-3"><span class="map-number">03</span><span>Objects are class instances</span></a></li><li><a href="#concept-4"><span class="map-number">04</span><span>Reference variables refer to objects</span></a></li><li><a href="#concept-5"><span class="map-number">05</span><span>The dot operator accesses members</span></a></li><li><a href="#concept-6"><span class="map-number">06</span><span>Encapsulation hides internal data</span></a></li><li><a href="#concept-7"><span class="map-number">07</span><span>Mutators change object state</span></a></li><li><a href="#concept-8"><span class="map-number">08</span><span>Accessors read object state</span></a></li><li><a href="#concept-9"><span class="map-number">09</span><span>Constructors initialize new objects</span></a></li><li><a href="#concept-10"><span class="map-number">10</span><span>this refers to the current object</span></a></li><li><a href="#concept-11"><span class="map-number">11</span><span>Objects have separate instance fields</span></a></li></ol><div class="map-links"><a href="../slides/index.html">Supporting slides</a><a href="walkthroughs.html">IDE walkthroughs</a><a href="../examples/README.md">Runnable examples</a><a href="#readiness">Readiness check</a></div></aside>
+<main class="reading-main" id="main-content" tabindex="-1">
+<section class="reading-note"><h2>Read the definitions, then expand</h2><p>The visible summaries define all eleven concepts. Open a detail for execution steps, likely errors, and teaching language. Concept IDs match the supporting slides and Java comments. The live lesson takes about 30 minutes; these details provide preparation and follow-up depth.</p></section>
+<section><h2>A class, an object, and its state</h2><div class="mental-model"><div class="model-term"><strong>Define</strong><span>The class describes the fields and methods.</span></div><div class="model-term"><strong>Create</strong><span>new creates an object and runs its constructor.</span></div><div class="model-term"><strong>Refer</strong><span>A reference variable gives access to that object.</span></div><div class="model-term"><strong>Use</strong><span>Read or change the selected object’s fields through its members.</span></div></div></section>
+<section class="concept" id="concept-1">
+<header class="concept-header"><span class="concept-number">01</span><div><p class="source-ref"><span class="problem-tag">Problem 1 · P1-C1</span>zyBooks §7.1–7.3 · pp. 1–15</p><h2>Classes define types</h2><p class="concept-abstract">A class is a definition of a type. It groups related fields and methods. A field is a variable declared in a class; a method supplies an operation. Defining a class makes that type available, but does not by itself create an object.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>The class defines the type; an object is an instance of that type.</p></div>
+<details id="detail-p1-c1"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p><code>public class CampusWallet1</code> introduces the type <code>CampusWallet1</code>. Its braces contain the field and the familiar <code>main</code> method. In later extensions, this same kind of wallet also has methods for adding money and reading the balance. A class keeps the data and operations for one kind of thing together.</p><p>Each problem uses one public class and one file. The file name must match the public class name, including its capital letters. These three names identify successive versions of the same exercise; they do not imply inheritance.</p><h3>Misconception and recovery</h3><p>A class name is not the name of one particular wallet. <code>CampusWallet1</code> is the type; <code>wallet</code> will be a variable referring to one object. If the file is named <code>CampusWallet1.java</code> but the public class still says <code>CampusWallet2</code>, restore the matching name and compile again.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>The class says what a wallet can contain and do. We still need to create a wallet.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-1">Problem 1 handout</a><a href="../slides/index.html#slide-3">Supporting slide 3</a><a href="../examples/CampusWallet1.java">CampusWallet1.java</a></div>
+</section>
+<section class="concept" id="concept-2">
+<header class="concept-header"><span class="concept-number">02</span><div><p class="source-ref"><span class="problem-tag">Problem 1 · P1-C2</span>zyBooks §7.3, 7.5, 7.16 · pp. 12–15, 27–30, 107</p><h2>Instance fields store object data</h2><p class="concept-abstract">An instance field is a variable that belongs to an object. It is declared inside the class, outside its methods, without static. Its value is part of the object’s state: the data the object holds at that moment.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>Put balance at class level so it belongs to each wallet object.</p></div>
+<details id="detail-p1-c2"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><pre><code>public int balance;</code></pre><p>This declaration is inside <code>CampusWallet1</code> and outside <code>main</code>. The object holds an <code>int</code> balance. In Problem 1, <code>public</code> lets code in other classes access the field; Problem 2 will hide it. Public fields are used here only to make the first object easy to inspect.</p><p>Java initially gives an uninitialized <code>int</code> field the value 0. Problem 1 explicitly assigns 20 before printing. A local variable declared inside a method is different: it must be assigned before it is read. Problem 2 uses <code>private int balance = 20;</code>, so each newly created wallet starts at 20.</p><h3>Misconception and recovery</h3><p>Moving <code>int balance;</code> into <code>main</code> makes it a local variable, so it is no longer the object’s field. Move it back to class level. Do not add <code>static</code> to fix an access error: that changes the design to one shared class field. Static <code>main</code> can access an instance field through a reference such as <code>wallet.balance</code>.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>Balance is data in the wallet object, so it stays with that object between method calls.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-1">Problem 1 handout</a><a href="../slides/index.html#slide-4">Supporting slide 4</a><a href="../examples/CampusWallet1.java">CampusWallet1.java</a></div>
+</section>
+<section class="concept" id="concept-3">
+<header class="concept-header"><span class="concept-number">03</span><div><p class="source-ref"><span class="problem-tag">Problem 1 · P1-C3</span>zyBooks §7.2, 7.5, 7.8 · pp. 8–10, 28–30, 43–45</p><h2>Objects are class instances</h2><p class="concept-abstract">An object is an instance of a class. A new expression creates an object and gives back a reference to it. Creating an object also runs a constructor, which initializes the new object.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>new CampusWallet1() creates one CampusWallet1 object.</p></div>
+<details id="detail-p1-c3"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><pre><code>new CampusWallet1()</code></pre><p><code>new</code> creates the object. The class name gives its type, and the parentheses supply constructor arguments. The empty parentheses mean no arguments. Problem 1 declares no constructor, so Java supplies an implicit no-argument default constructor. Problem 3 will define a constructor explicitly.</p><p>A reference variable declaration by itself does not create a wallet. The complete program assigns the reference returned by <code>new CampusWallet1()</code> to <code>wallet</code>, and then gives the object’s balance the value 20.</p><h3>Misconception and recovery</h3><p><code>CampusWallet1 wallet;</code> declares only a local reference variable. Trying to read or use it before assigning a value fails to compile. Restore the object creation. Do not replace <code>new CampusWallet1()</code> with <code>CampusWallet1()</code>: constructors are used as part of object creation, not as ordinary method calls.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>Each time this new expression runs successfully, it creates a new wallet.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-1">Problem 1 handout</a><a href="../slides/index.html#slide-5">Supporting slide 5</a><a href="../examples/CampusWallet1.java">CampusWallet1.java</a></div>
+</section>
+<section class="concept" id="concept-4">
+<header class="concept-header"><span class="concept-number">04</span><div><p class="source-ref"><span class="problem-tag">Problem 1 · P1-C4</span>zyBooks §7.2, 7.8, 7.10 · pp. 8–10, 43–47, 54</p><h2>Reference variables refer to objects</h2><p class="concept-abstract">A reference variable stores a reference to an object, rather than the object’s fields. A variable with a class type, such as CampusWallet1, is a reference variable. An int variable stores an integer value directly.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>wallet refers to the object that contains balance.</p></div>
+<details id="detail-p1-c4"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>Read the declaration in parts</h3><pre><code>CampusWallet1 wallet = new CampusWallet1();</code></pre><ol class="trace-list"><li><code>CampusWallet1 wallet</code> declares the local reference variable and its type.</li><li><code>new CampusWallet1()</code> creates the object and produces a reference.</li><li><code>=</code> stores that reference in <code>wallet</code>.</li></ol><p>Draw <code>wallet → object { balance: 20 }</code> after the assignment to the field. The arrow is a teaching representation of a reference; it is not a numeric memory address students can read in Java.</p><h3>Misconception and recovery</h3><p>One variable name does not guarantee one separate object. Assigning one reference variable to another copies the reference; it does not copy the object. The independence check in Problem 3 therefore uses two separate <code>new</code> expressions.</p><p>If a reference is explicitly set to <code>null</code>, it refers to no object. Using an instance field or calling an instance method through it causes a <code>NullPointerException</code>. Restore a valid object reference and rerun. This differs from reading a never-assigned local variable, which fails at compile time.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>The variable lets us reach the object. The balance lives in the object.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-1">Problem 1 handout</a><a href="../slides/index.html#slide-6">Supporting slide 6</a><a href="../examples/CampusWallet1.java">CampusWallet1.java</a></div>
+</section>
+<section class="concept" id="concept-5">
+<header class="concept-header"><span class="concept-number">05</span><div><p class="source-ref"><span class="problem-tag">Problem 1 · P1-C5</span>zyBooks §7.2–7.3 · pp. 8–15</p><h2>The dot operator accesses members</h2><p class="concept-abstract">The dot operator selects a member of the object referred to by the expression before it. Members include fields and methods. Field access uses the field name; a method call also uses parentheses for its arguments.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>wallet.balance selects the balance field of the object wallet refers to.</p></div>
+<details id="detail-p1-c5"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><pre><code>wallet.balance = 20;
+System.out.println("Balance: " + wallet.balance + " SAR");</code></pre><p>The first statement writes 20 into the field. The second reads that same field when constructing the output text. The complete Problem 1 output is:</p><pre><code>Balance: 20 SAR</code></pre><p>In Problem 2, <code>wallet.addMoney(10)</code> selects and calls a method on that wallet. The expression before the dot tells Java which object to use. Access rules still apply: a dot does not bypass <code>private</code>.</p><h3>Misconception and recovery</h3><p><code>wallet.balance()</code> incorrectly treats the field as a method. Remove the parentheses. Writing only <code>balance = 20;</code> inside static <code>main</code> does not select a wallet instance; restore <code>wallet.</code>. These are compile-time errors, not arithmetic mistakes.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>Before the dot is the object reference. After the dot is the member we want.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-1">Problem 1 handout</a><a href="../slides/index.html#slide-7">Supporting slide 7</a><a href="../examples/CampusWallet1.java">CampusWallet1.java</a></div>
+</section>
+<section class="concept" id="concept-6">
+<header class="concept-header"><span class="concept-number">06</span><div><p class="source-ref"><span class="problem-tag">Problem 2 · P2-C1</span>zyBooks §7.1, 7.3–7.5 · pp. 4–6, 12–15, 21–28</p><h2>Encapsulation hides internal data</h2><p class="concept-abstract">Encapsulation groups related data and operations and controls access to the data. A private field cannot be accessed directly from an unrelated class. Public methods provide the operations that other classes can use.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>Keep balance private and expose the wallet’s intended operations.</p></div>
+<details id="detail-p2-c1"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>Extend the first wallet</h3><pre><code>private int balance = 20;</code></pre><p>Problem 2 keeps the balance concept but hides direct field access from other classes. Its public operations are <code>addMoney(int amount)</code> and <code>getBalance()</code>. The initializer gives every new wallet 20 SAR before it is used. Calls do not need to know the field’s declaration to add money or read a balance.</p><h3>Be precise about private</h3><p><code>main</code> is inside <code>CampusWallet2</code> in this one-file exercise. It is therefore allowed to access this class’s private field through an object reference. Do not claim that <code>wallet.balance</code> fails there. A direct access from a separate, unrelated class fails. We deliberately use public methods in <code>main</code> to model how a caller should use the wallet.</p><p>Private is an access rule, not automatic input validation. <code>addMoney</code> could later check an amount in one place, but this lesson assumes nonnegative whole-SAR amounts and totals that fit <code>int</code>.</p><h3>Misconception and recovery</h3><p>Do not make the field public merely to make another class’s direct access compile. Use the intended accessor or mutator. If an access error is demonstrated in a separate scratch caller, restore the method call, rebuild, and rerun the same values.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>The caller asks the wallet to do something; the wallet controls how its data is used.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-2">Problem 2 handout</a><a href="../slides/index.html#slide-9">Supporting slide 9</a><a href="../examples/CampusWallet2.java">CampusWallet2.java</a></div>
+</section>
+<section class="concept" id="concept-7">
+<header class="concept-header"><span class="concept-number">07</span><div><p class="source-ref"><span class="problem-tag">Problem 2 · P2-C2</span>zyBooks §7.3–7.4 · pp. 14–23</p><h2>Mutators change object state</h2><p class="concept-abstract">A mutator is a method that can change an object’s fields. Its purpose is defined by what it does to the object’s state. A setter is one kind of mutator; a mutator can also add to an existing value.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>addMoney changes the balance in the object on which it is called.</p></div>
+<details id="detail-p2-c2"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>Trace the state change</h3><pre><code>public void addMoney(int amount) {
+    balance = balance + amount;
+}</code></pre><ol class="trace-list"><li>The wallet’s field holds 20.</li><li><code>wallet.addMoney(10)</code> supplies 10 to the local parameter <code>amount</code>.</li><li>The assignment calculates <code>20 + 10</code> and stores 30 in the wallet’s field.</li><li>The call returns to <code>main</code>. The field still holds 30.</li></ol><p>The method is an instance method: there is no <code>static</code> keyword, and it acts on the selected wallet. Its <code>void</code> return type says it returns no value. Changing a field is still an effect of the call. This differs from the previous lecture’s primitive-copy preview: the assignment here targets an object’s field.</p><h3>Misconception and recovery</h3><p>Writing <code>balance = amount;</code> replaces 20 with 10 instead of adding to it. Restore <code>balance = balance + amount;</code> and rerun. A second call with 10 gives 40; a call with 0 leaves the balance unchanged. Negative amounts are not rejected by this implementation; domain checks are deferred.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>The parameter is temporary input. The updated field stays in the wallet after the call ends.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-2">Problem 2 handout</a><a href="../slides/index.html#slide-10">Supporting slide 10</a><a href="../examples/CampusWallet2.java">CampusWallet2.java</a></div>
+</section>
+<section class="concept" id="concept-8">
+<header class="concept-header"><span class="concept-number">08</span><div><p class="source-ref"><span class="problem-tag">Problem 2 · P2-C3</span>zyBooks §7.4 · pp. 21–23</p><h2>Accessors read object state</h2><p class="concept-abstract">An accessor is a method that reads information without changing the object’s state. A getter is an accessor that returns a value. Accessor and mutator describe behavior; Java does not enforce those labels from a method’s name.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>getBalance returns the current balance without changing it.</p></div>
+<details id="detail-p2-c3"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><pre><code>public int getBalance() {
+    return balance;
+}</code></pre><p>The <code>int</code> return type means the caller receives one integer. <code>return balance;</code> reads the field; it does not print. The returned integer is a value, so storing it in a local variable does not give that variable control over the field.</p><p>Problem 2 reads the balance, adds 10, then reads it again. The two calls to the same accessor return different values because the mutator changed the object between them:</p><pre><code>Before: 20 SAR
+After: 30 SAR</code></pre><h3>Misconception and recovery</h3><p>Repeated <code>getBalance()</code> calls alone do not add money. A name beginning with <code>get</code> does not prevent a programmer from writing an assignment in its body, but doing so would violate this accessor’s intended behavior. If the getter unexpectedly changes the value, remove that mutation and rerun. Changing <code>return balance;</code> to a print statement also leaves this <code>int</code> method without its required returned value.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>The accessor reports the wallet’s state. The println in main decides how to display it.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-2">Problem 2 handout</a><a href="../slides/index.html#slide-11">Supporting slide 11</a><a href="../examples/CampusWallet2.java">CampusWallet2.java</a></div>
+</section>
+<section class="concept" id="concept-9">
+<header class="concept-header"><span class="concept-number">09</span><div><p class="source-ref"><span class="problem-tag">Problem 3 · P3-C1</span>zyBooks §7.5, 7.7 · pp. 27–30, 36–40</p><h2>Constructors initialize new objects</h2><p class="concept-abstract">A constructor initializes a new object. It has the same name as its class and has no return type, not even void. Arguments in a new expression supply values to the constructor’s parameters.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>new CampusWallet3(20) creates a wallet and supplies its starting balance.</p></div>
+<details id="detail-p3-c1"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>Extend the second wallet</h3><pre><code>public CampusWallet3(int balance) {
+    this.balance = balance;
+}</code></pre><p>Problem 2 gave every wallet the same starting value in its field declaration. Problem 3 keeps the private field and the same two public methods, but lets each creation supply a starting balance. The first creation supplies 20 and the second supplies 50. The assignment’s <code>this</code> is explained in the next concept.</p><p>Problem 1 and Problem 2 have no programmer-declared constructors, so Java supplies a default no-argument constructor. Once Problem 3 declares this constructor, Java does not also supply a no-argument one. This exercise intentionally requires the starting balance, so <code>new CampusWallet3()</code> is no longer supported. A programmer-written no-argument constructor and a compiler-supplied default constructor should not be confused.</p><h3>Misconception and recovery</h3><p><code>public void CampusWallet3(int balance)</code> defines an ordinary method, not a constructor. Remove <code>void</code>. If a copied creation still has empty parentheses, supply the starting balance. Rebuild and rerun both wallets. Constructor overloading is deferred; one parameterized constructor is sufficient here.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>The constructor sets the starting state while the object is being created.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-3">Problem 3 handout</a><a href="../slides/index.html#slide-13">Supporting slide 13</a><a href="../examples/CampusWallet3.java">CampusWallet3.java</a></div>
+</section>
+<section class="concept" id="concept-10">
+<header class="concept-header"><span class="concept-number">10</span><div><p class="source-ref"><span class="problem-tag">Problem 3 · P3-C2</span>zyBooks §7.9, 7.16 · pp. 47–53, 110–112</p><h2>this refers to the current object</h2><p class="concept-abstract">this is a reference to the current object inside an instance method or constructor. It can identify an object’s field when a parameter uses the same name. Static methods do not have a current object through this.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>In this.balance = balance, the left side is the field and the right side is the parameter.</p></div>
+<details id="detail-p3-c2"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>Trace the constructor assignment</h3><pre><code>this.balance = balance;</code></pre><p>In <code>new CampusWallet3(20)</code>, the constructor parameter <code>balance</code> receives 20, and <code>this</code> refers to the new first wallet. The assignment stores 20 in that object’s field. During <code>new CampusWallet3(50)</code>, <code>this</code> refers to the new second wallet, so 50 goes into its field instead.</p><p>In <code>addMoney(int amount)</code>, the names <code>balance</code> and <code>amount</code> are different. Therefore <code>balance</code> already identifies the field, and <code>this.balance</code> is optional there. Using the same field and parameter name in the constructor makes the distinction visible.</p><h3>Misconception and recovery</h3><p><code>balance = balance;</code> assigns the parameter to itself. It compiles but leaves the field at its default 0 in Problem 3. With the rest of the example unchanged, the output becomes <code>First: 10 SAR</code> and <code>Second: 0 SAR</code>. Restore <code>this.</code> on the left and rerun. <code>this.balance</code> in static <code>main</code> is a compile-time error; use an object reference there.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>This balance belongs to the object. The unqualified balance is the constructor’s input.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-3">Problem 3 handout</a><a href="../slides/index.html#slide-14">Supporting slide 14</a><a href="../examples/CampusWallet3.java">CampusWallet3.java</a></div>
+</section>
+<section class="concept" id="concept-11">
+<header class="concept-header"><span class="concept-number">11</span><div><p class="source-ref"><span class="problem-tag">Problem 3 · P3-C3</span>zyBooks §7.2, 7.8, 7.16 · pp. 8–10, 43–47, 107</p><h2>Objects have separate instance fields</h2><p class="concept-abstract">Each separate object has its own instance fields. Two objects created from the same class can therefore hold different balances. Changing a field in one does not change the corresponding field in a different object.</p></div></header>
+<div class="key-rule"><strong>Key rule</strong><p>Two new expressions create two wallets with separate balances.</p></div>
+<details id="detail-p3-c3"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>Trace both objects</h3><pre><code>CampusWallet3 first = new CampusWallet3(20);
+CampusWallet3 second = new CampusWallet3(50);
+first.addMoney(10);</code></pre><div class="compare-wrap"><table class="compare-table"><thead><tr><th>Moment</th><th>First wallet</th><th>Second wallet</th></tr></thead><tbody><tr><td data-label="Moment">After both creations</td><td data-label="First wallet">20</td><td data-label="Second wallet">50</td></tr><tr><td data-label="Moment">After first.addMoney(10)</td><td data-label="First wallet">30</td><td data-label="Second wallet">50</td></tr></tbody></table></div><p>The public methods have the same definitions for both objects. The reference before each call selects whose fields the method reads or changes. The complete output is:</p><pre><code>First: 30 SAR
+Second: 50 SAR</code></pre><h3>Separate objects versus two references</h3><p>If the second declaration were <code>CampusWallet3 second = first;</code>, there would be one wallet and two references to it. This is called aliasing. Calling <code>first.addMoney(10)</code> would then make both accessors report 30. Assignment copies the reference; only the second <code>new</code> creates the separate second wallet in the actual solution.</p><h3>Misconception and recovery</h3><p>Do not make <code>balance</code> static: a static field belongs to the class and is shared, so it cannot represent separate wallet balances. Keep the instance field and both creations. As an independent check, add 10 to the second wallet afterward: the results should be 30 and 60.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>Same class means the same kind of object. Separate new expressions give us separate object state.</p></div></div></details>
+<div class="concept-links"><a href="walkthroughs.html#problem-3">Problem 3 handout</a><a href="../slides/index.html#slide-15">Supporting slide 15</a><a href="../examples/CampusWallet3.java">CampusWallet3.java</a></div>
+</section>
+<section class="readiness" id="readiness"><p class="eyebrow">Before teaching</p><h2>Readiness self-check</h2><ol><li>Does declaring <code>CampusWallet1 wallet;</code> create a wallet?</li><li>Where is the balance stored: in the reference variable or in the object?</li><li>Why can <code>main</code> access a private field in this one-class exercise?</li><li>What is the difference between <code>addMoney(10)</code> and <code>getBalance()</code>?</li><li>Why does Problem 3 require an argument in <code>new CampusWallet3(20)</code>?</li><li>What goes wrong if the constructor says <code>balance = balance;</code>?</li><li>Why does the second wallet stay at 50 after adding 10 to the first?</li><li>What changes if the second declaration is <code>CampusWallet3 second = first;</code>?</li></ol><details id="readiness-answers"><summary>Show answers after trying</summary><div class="details-body"><ol><li>No. It declares a reference variable. A <code>new</code> expression creates the object.</li><li>The <code>int</code> balance is an instance field in the object. The variable stores a reference to that object.</li><li>Because <code>main</code> is defined in the same class. Private restricts access from unrelated classes; it does not block methods inside its own class.</li><li><code>addMoney</code> changes the selected wallet’s state and returns no value. <code>getBalance</code> returns the current integer balance without changing state.</li><li>The class declares one constructor that requires an int. Java supplies no implicit default constructor once a constructor is declared.</li><li>It assigns the parameter to itself and leaves the field at 0. Use <code>this.balance = balance;</code>.</li><li>Two separate <code>new</code> expressions created two objects. Each has its own balance field.</li><li>Both variables refer to one object. After adding 10 to its starting 20, both accessors report 30.</li></ol></div></details></section>
+<section class="source-notes" id="source-notes"><p class="eyebrow">Source and scope</p><h2>Chapter references and deferred depth</h2><p>Based on the user-supplied 127-page zyBooks Chapter 7 export dated September 8, 2026. The lecture selects class and object foundations from 7.1–7.5, constructor arguments from 7.7, references from 7.8, and the current-object meaning of <code>this</code> from 7.9. Brief terminology and static-context clarifications come from 7.10 and 7.16. Read the licensed chapter through authorized course access.</p><p>Deferred: designing multiple collaborating classes, private helper methods, constructor overload sets and constructor chaining, wrapper classes and conversions, ArrayList and other collections, reference-type method parameters, static member designs, packages, and the salary/domain-name case studies. The detailed section map records all 19 source sections.</p><p>The campus-wallet problems, explanations, traces, and questions are instructor-created. Whole-SAR integer amounts are used only for this console exercise. There is no keyboard input, persistence, payment processing, negative-amount validation, or overflow handling; supplied balances and additions are nonnegative and totals fit int.</p><p><a href="../docs/CONTENT_MAP.md">Complete section and page map</a> · <a href="../private-source/README.md">Private source access notes</a></p></section>
+</main></div><footer class="page-footer"><span>ICS 108 · Lecture 7 · Instructor concept refresher</span><span><a href="../slides/index.html">Supporting slides</a> · <a href="walkthroughs.html">IDE walkthroughs</a></span></footer>
+<script>
+    const details = Array.from(document.querySelectorAll("details"));
+    const status = document.getElementById("readingStatus");
+
+    function updateStatus() {
+      const openCount = details.filter((item) => item.open).length;
+      if (openCount === 0) {
+        status.textContent = "Eleven concept summaries are visible; details are closed.";
+      } else if (openCount === details.length) {
+        status.textContent = `All ${details.length} detail sections are open.`;
+      } else {
+        status.textContent = `${openCount} of ${details.length} detail sections are open.`;
+      }
+    }
+
+    function setAll(open) {
+      details.forEach((item) => { item.open = open; });
+      updateStatus();
+    }
+
+    document.getElementById("openAll").addEventListener("click", () => setAll(true));
+    document.getElementById("closeAll").addEventListener("click", () => setAll(false));
+    details.forEach((item) => item.addEventListener("toggle", updateStatus));
+
+    function openHashTarget() {
+      if (!window.location.hash) return;
+      let target;
+      try {
+        target = document.querySelector(window.location.hash);
+      } catch {
+        return;
+      }
+      if (!target) return;
+      if (target.matches("details")) target.open = true;
+      const containingDetail = target.closest("details");
+      if (containingDetail) containingDetail.open = true;
+      if (target.matches(".concept")) {
+        const firstDetail = target.querySelector("details");
+        if (firstDetail) firstDetail.open = true;
+      }
+      updateStatus();
+      requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+    }
+
+    window.addEventListener("hashchange", openHashTarget);
+    openHashTarget();
+
+    let printState = [];
+    window.addEventListener("beforeprint", () => {
+      printState = details.map((item) => item.open);
+      details.forEach((item) => { item.open = true; });
+    });
+    window.addEventListener("afterprint", () => {
+      details.forEach((item, index) => { item.open = printState[index] ?? false; });
+      updateStatus();
+    });
+
+    updateStatus();
+  </script>
+</body>
+</html>

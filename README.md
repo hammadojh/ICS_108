@@ -8,20 +8,23 @@ Supporting slides, instructor-led problem walkthroughs, concept refreshers, and 
 
 | Lecture | Supporting slides | Instructor handout | Concept refresher |
 |---|---|---|---|
+| 7 — Classes and objects | [Slides](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/slides/index.html) | [Handout](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/instructor/walkthroughs.html) | [Refresher](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/instructor/concept-refresher.html) |
 | 6 — User-defined methods | [Slides](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/slides/index.html) | [Handout](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/instructor/walkthroughs.html) | [Refresher](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/instructor/concept-refresher.html) |
 | 5 — Arrays | [Slides](https://hammadojh.github.io/ICS_108/lec05-arrays/slides/index.html) | [Handout](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/walkthroughs.html) | [Refresher](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/concept-refresher.html) |
 
 ## Teaching with the materials
 
-Each lecture uses three small instructor-led Java problems. The supporting slides explain one new concept at a time and identify the related problem. Teaching IDs such as `P2-C1` connect slide headers to comments in the complete Java code.
+Each lecture uses three small instructor-led Java problems. Lecture 7 develops one campus wallet program through three extensions, with brief student prompts, syntax-colored solutions, and simple definition slides. The supporting slides explain one new concept at a time and identify the related problem. Teaching IDs such as `P2-C1` connect slide headers to comments in the complete Java code.
 
 1. Start with the problem description in the instructor handout.
 2. Write and discuss the program in the IDE, switching to the matching slides at each teaching comment.
 3. Compile and run the program, compare the exact output, and use the prediction and recovery notes.
 
-Handouts print as three A4 pages. The concept refreshers provide visible summaries with expandable explanations and checks. Lecture 6 includes **Copy problem** buttons that copy self-contained student prompts and expected output, plus a [student-only problem sheet](lec06-user-defined-methods/student-problems.md).
+Handouts print as three A4 pages. The concept refreshers provide visible summaries with expandable explanations and checks. Lectures 6 and 7 include **Copy problem** buttons that copy self-contained student prompts and expected output, plus a [student-only problem sheet](lec06-user-defined-methods/student-problems.md).
 
 ## Files and source maps
+
+- [Lecture 7 package guide](lec07-classes%26objects/README.md), [Java examples](lec07-classes%26objects/examples/README.md), and [content map](lec07-classes%26objects/docs/CONTENT_MAP.md)
 
 - [Lecture 6 package guide](lec06-user-defined-methods/README.md), [Java examples](lec06-user-defined-methods/examples/README.md), and [content map](lec06-user-defined-methods/docs/CONTENT_MAP.md)
 - [Lecture 5 package guide](lec05-arrays/README.md), [Java examples](lec05-arrays/examples/README.md), and [content map](lec05-arrays/docs/CONTENT_MAP.md)
@@ -52,6 +55,10 @@ java -cp lec06-user-defined-methods/output/classes WalletTopUp
 ```
 
 See each lecture's examples README for its inputs, expected outputs, and boundary checks.
+
+## Authoring process
+
+The [versioned lecture skill](authoring/skills/ics-108-raw-lecture/SKILL.md) preserves the course format and the Lecture 7 refinements for future lectures.
 
 ## GitHub Pages
 

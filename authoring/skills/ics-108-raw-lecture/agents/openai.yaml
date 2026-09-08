@@ -1,0 +1,4 @@
+interface:
+  display_name: "ICS 108 Raw Lecture"
+  short_description: "Build cumulative ICS 108 Java lecture packages"
+  default_prompt: "Use $ics-108-raw-lecture to turn this source into three concise cumulative Java problems, simple concept-definition Supporting slides, a syntax-colored instructor handout, a student-only problem sheet, and a concept refresher."
