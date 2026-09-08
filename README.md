@@ -8,13 +8,13 @@ Use these materials to review what you learned in class, practice writing Java p
 
 | Lecture | What you will study | Slides | Practice |
 |---|---|---|---|
-| **1 — Course introduction** | Course goals, semester topics, assessment, and expectations. | [Open slides](https://hammadojh.github.io/ICS_108/lec1-intro-course/slides/index.html) | Course discussion |
-| **2 — Introduction to Java** | Algorithms, input/output, running programs, and finding errors. | [Open slides](https://hammadojh.github.io/ICS_108/lec02-intro-java/slides/index.html) | [Practice in the slides](https://hammadojh.github.io/ICS_108/lec02-intro-java/slides/index.html#slide-17) |
-| **3 — Variables, expressions, and data types** | Store values, evaluate expressions, choose types, and read input. | [Open slides](https://hammadojh.github.io/ICS_108/lec03-variables/slides/index.html) | [Problems and worked solutions](https://hammadojh.github.io/ICS_108/lec03-variables/instructor/walkthroughs.html) |
-| **4 — Branches and loops** | Make decisions with conditions and repeat work with loops. | [Open slides](https://hammadojh.github.io/ICS_108/lec04-branches-loops/slides/index.html) | [Problems and worked solutions](https://hammadojh.github.io/ICS_108/lec04-branches-loops/instructor/walkthroughs.html) |
-| **5 — Arrays** | Store several values, work with indexes, and find totals and maximums. | [Open slides](https://hammadojh.github.io/ICS_108/lec05-arrays/slides/index.html) | [Problems and worked solutions](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/walkthroughs.html) |
-| **6 — User-defined methods** | Define and call methods, pass arguments, and return values. | [Open slides](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/slides/index.html) | [Practice problems](lec06-user-defined-methods/student-problems.md) |
-| **7 — Classes and objects** | Create objects, read and change their data, and use constructors. | [Open slides](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/slides/index.html) | [Practice problems](lec07-classes%26objects/student-problems.md) |
+| **1 — Course introduction** | Course goals, semester topics, assessment, and expectations. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec01-intro-course/slides/index.html) | Course discussion |
+| **2 — Introduction to Java** | Algorithms, input/output, running programs, and finding errors. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec02-intro-java/slides/index.html) | [Practice in the slides](https://hammadojh.github.io/ICS_108/lectures/lec02-intro-java/slides/index.html#slide-17) |
+| **3 — Variables, expressions, and data types** | Store values, evaluate expressions, choose types, and read input. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec03-variables/slides/index.html) | [Problems and worked solutions](https://hammadojh.github.io/ICS_108/lectures/lec03-variables/instructor/walkthroughs.html) |
+| **4 — Branches and loops** | Make decisions with conditions and repeat work with loops. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec04-branches-loops/slides/index.html) | [Problems and worked solutions](https://hammadojh.github.io/ICS_108/lectures/lec04-branches-loops/instructor/walkthroughs.html) |
+| **5 — Arrays** | Store several values, work with indexes, and find totals and maximums. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec05-arrays/slides/index.html) | [Problems and worked solutions](https://hammadojh.github.io/ICS_108/lectures/lec05-arrays/instructor/walkthroughs.html) |
+| **6 — User-defined methods** | Define and call methods, pass arguments, and return values. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec06-user-defined-methods/slides/index.html) | [Practice problems](lectures/lec06-user-defined-methods/student-problems.md) |
+| **7 — Classes and objects** | Create objects, read and change their data, and use constructors. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec07-classes%26objects/slides/index.html) | [Practice problems](lectures/lec07-classes%26objects/student-problems.md) |
 
 In Lecture 7, the three problems extend the same campus wallet program: display a balance, add money, then keep two students’ balances separate.
 
@@ -33,13 +33,13 @@ The **worked solutions** include complete code and explanations. From Lecture 3 
 
 | Lecture | Worked solutions | Concept notes | Java examples |
 |---|---|---|---|
-| 1 — Course introduction | — | [Course overview](https://hammadojh.github.io/ICS_108/lec1-intro-course/slides/index.html) | — |
-| 2 — Introduction to Java | [Worked IDE demos](https://hammadojh.github.io/ICS_108/lec02-intro-java/instructor/walkthroughs.html) | [Definitions and examples in the slides](https://hammadojh.github.io/ICS_108/lec02-intro-java/slides/index.html) | [Code in the demo handout](https://hammadojh.github.io/ICS_108/lec02-intro-java/instructor/walkthroughs.html) |
-| 3 — Variables, expressions, and data types | [Solutions](https://hammadojh.github.io/ICS_108/lec03-variables/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lec03-variables/instructor/concept-refresher.html) | [Files and run instructions](lec03-variables/examples/README.md) |
-| 4 — Branches and loops | [Solutions](https://hammadojh.github.io/ICS_108/lec04-branches-loops/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lec04-branches-loops/instructor/concept-refresher.html) | [Files and run instructions](lec04-branches-loops/examples/README.md) |
-| 5 — Arrays | [Solutions](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/concept-refresher.html) | [Files and run instructions](lec05-arrays/examples/README.md) |
-| 6 — User-defined methods | [Solutions](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/instructor/concept-refresher.html) | [Files and run instructions](lec06-user-defined-methods/examples/README.md) |
-| 7 — Classes and objects | [Solutions](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/instructor/concept-refresher.html) | [Files and run instructions](lec07-classes%26objects/examples/README.md) |
+| 1 — Course introduction | — | [Course overview](https://hammadojh.github.io/ICS_108/lectures/lec01-intro-course/slides/index.html) | — |
+| 2 — Introduction to Java | [Worked IDE demos](https://hammadojh.github.io/ICS_108/lectures/lec02-intro-java/instructor/walkthroughs.html) | [Definitions and examples in the slides](https://hammadojh.github.io/ICS_108/lectures/lec02-intro-java/slides/index.html) | [Code in the demo handout](https://hammadojh.github.io/ICS_108/lectures/lec02-intro-java/instructor/walkthroughs.html) |
+| 3 — Variables, expressions, and data types | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec03-variables/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec03-variables/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec03-variables/examples/README.md) |
+| 4 — Branches and loops | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec04-branches-loops/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec04-branches-loops/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec04-branches-loops/examples/README.md) |
+| 5 — Arrays | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec05-arrays/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec05-arrays/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec05-arrays/examples/README.md) |
+| 6 — User-defined methods | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec06-user-defined-methods/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec06-user-defined-methods/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec06-user-defined-methods/examples/README.md) |
+| 7 — Classes and objects | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec07-classes%26objects/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec07-classes%26objects/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec07-classes%26objects/examples/README.md) |
 
 ## Run a Java example
 
@@ -50,7 +50,7 @@ You need a Java Development Kit (JDK) to compile and run Java code. Use the Java
 **In a terminal:** after downloading or cloning this repository, open a terminal in the `ICS_108` folder and run:
 
 ```sh
-cd "lec07-classes&objects/examples"
+cd "lectures/lec07-classes&objects/examples"
 javac CampusWallet1.java
 java CampusWallet1
 ```
@@ -66,6 +66,8 @@ Balance: 20 SAR
 For the next two versions, replace `CampusWallet1` with `CampusWallet2` or `CampusWallet3` in the `javac` and `java` commands. Lecture 7’s examples do not require keyboard input. See each lecture’s Java examples page for any required input.
 
 ## Study offline
+
+All lecture folders are under `lectures/`, numbered `lec01` through `lec07`.
 
 Download or clone this repository, then open `index.html` in your browser. You can also open a lecture’s `slides/index.html` directly. The slides and notes work without internet access; you only need a browser to read them.
 

@@ -1,6 +1,6 @@
 # Lecture 2 — Introduction to Java
 
-[Open the slides](slides/index.html) · [Worked IDE demos](instructor/walkthroughs.html) · [All lectures](../README.md)
+[Open the slides](slides/index.html) · [Worked IDE demos](instructor/walkthroughs.html) · [All lectures](../../README.md)
 
 The 20-slide programming foundations lecture introduces programs and algorithms, variables, input and output, comments, compilation errors, logic errors, and the IDE workflow.
 

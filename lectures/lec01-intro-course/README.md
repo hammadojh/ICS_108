@@ -1,6 +1,6 @@
 # Lecture 1 — Course introduction
 
-[Open the slides](slides/index.html) · [All lectures](../README.md)
+[Open the slides](slides/index.html) · [All lectures](../../README.md)
 
 Review the course goals, semester topics, assessment overview, and expectations for lectures and labs. This introductory session has seven slides; there is no separate programming problem sheet.
 

@@ -73,6 +73,7 @@ Read [references/package-contract.md](references/package-contract.md) and [refer
    - Use plain tutorial English in both summaries and details. Define a technical term before relying on it.
 
 8. Integrate the package.
+   - Keep course lecture folders under `lectures/lecNN-topic/`, using a two-digit lecture number (for example, `lectures/lec01-intro-course/`). Update the root README, course homepage, public URLs, and run instructions when adding or moving a package.
    - Link the three primary artifacts to one another.
    - Add or update a local portal/README/instructor guide when the target already uses them.
    - Separate instructor-created material from licensed source access.

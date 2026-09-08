@@ -17,7 +17,7 @@ In the walkthroughs, each problem opens on **Starter** code. Predict and demonst
 ## Folder map
 
 ```text
-lec04-branches-loops/
+lectures/lec04-branches-loops/
 ├── slides/          Student-facing interactive lecture
 ├── instructor/      IDE walkthrough handout and concept refresher
 ├── examples/        Complete runnable Java programs

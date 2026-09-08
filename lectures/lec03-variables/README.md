@@ -2,7 +2,7 @@
 
 A student-ready Java learning package with a 25-slide interactive lecture, six runnable programs, and six problem-solving walkthroughs.
 
-**Open the course site:** [Lecture 3 — Values, Types, and State](https://hammadojh.github.io/ICS_108/lec03-variables/)
+**Open the course site:** [Lecture 3 — Values, Types, and State](https://hammadojh.github.io/ICS_108/lectures/lec03-variables/)
 
 > **Numbering note:** this is **Lecture 3** in ICS 108. The assigned reading and section numbers refer to zyBooks **Chapter 2**.
 
@@ -10,11 +10,11 @@ A student-ready Java learning package with a 25-slide interactive lecture, six r
 
 | I want to… | Open |
 |---|---|
-| Begin the lesson | [Interactive lecture](https://hammadojh.github.io/ICS_108/lec03-variables/slides/#slide-1) |
+| Begin the lesson | [Interactive lecture](https://hammadojh.github.io/ICS_108/lectures/lec03-variables/slides/#slide-1) |
 | Study independently | [Student guide](docs/STUDENT_GUIDE.md) |
 | Compile the examples | [Runnable Java programs](examples/README.md) |
-| Refresh the concepts before teaching | [Expandable instructor refresher](https://hammadojh.github.io/ICS_108/lec03-variables/instructor/concept-refresher.html) |
-| Review worked solutions | [Problem-solving walkthroughs](https://hammadojh.github.io/ICS_108/lec03-variables/instructor/walkthroughs.html) |
+| Refresh the concepts before teaching | [Expandable instructor refresher](https://hammadojh.github.io/ICS_108/lectures/lec03-variables/instructor/concept-refresher.html) |
+| Review worked solutions | [Problem-solving walkthroughs](https://hammadojh.github.io/ICS_108/lectures/lec03-variables/instructor/walkthroughs.html) |
 | Teach the lesson | [Instructor guide](docs/INSTRUCTOR_GUIDE.md) |
 | Check accessibility support | [Accessibility notes](docs/ACCESSIBILITY.md) |
 | Review source alignment | [Content map](docs/CONTENT_MAP.md) |
@@ -69,7 +69,7 @@ Clone the course repository, enter the Lecture 3 folder, and serve it as static 
 
 ```bash
 git clone https://github.com/hammadojh/ICS_108.git
-cd ICS_108/lec03-variables
+cd ICS_108/lectures/lec03-variables
 python3 -m http.server 8000
 ```
 

@@ -7,7 +7,7 @@ Lecture 7 updates the process with brief solution-free student prompts, three ex
 Run the package validator from this repository root:
 
 ```sh
-node authoring/skills/ics-108-raw-lecture/scripts/validate_package.mjs 'lec07-classes&objects'
+node authoring/skills/ics-108-raw-lecture/scripts/validate_package.mjs 'lectures/lec07-classes&objects'
 ```
 
 The content map and instructor/browser/Java checks remain required. Source PDFs and authoring outputs are excluded from public releases.

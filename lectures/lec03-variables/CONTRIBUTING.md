@@ -13,7 +13,7 @@ Small corrections and accessibility improvements are welcome.
 
 ```bash
 git clone https://github.com/hammadojh/ICS_108.git
-cd ICS_108/lec03-variables
+cd ICS_108/lectures/lec03-variables
 python3 -m http.server 8000
 ```
 
