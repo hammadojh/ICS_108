@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="ICS 108 learning package for Java variables, expressions, data types, input, and debugging.">
+  <meta name="theme-color" content="#0b0d10">
+  <meta property="og:title" content="ICS 108 — Values, Types, and State">
+  <meta property="og:description" content="Interactive lecture, runnable Java examples, and worked problem-solving walkthroughs.">
+  <meta property="og:type" content="website">
+  <title>ICS 108 — Values, Types, and State</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230b0d10'/%3E%3Cpath d='M12 16h40M12 32h28M12 48h40' stroke='%238ec5ff' stroke-width='6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to course materials</a>
+
+  <header class="site-header">
+    <a class="course-mark" href="index.html" aria-label="ICS 108 home">
+      <span>ICS</span>
+      <strong>108</strong>
+    </a>
+    <div class="header-context">
+      <span>Course module 03</span>
+      <span>Source alignment: Chapter 02</span>
+    </div>
+    <a class="repo-link" href="https://github.com/hammadojh/ICS_108">View repository <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Java foundations</p>
+        <h1 id="page-title">Values.<br>Types.<br>State.</h1>
+        <p class="hero-summary">Learn how Java stores information, evaluates expressions, reads input, and exposes mistakes through six connected problems.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="slides/index.html#slide-1">Start the lecture</a>
+          <a class="button button-secondary" href="https://github.com/hammadojh/ICS_108/blob/main/lec03-variables/docs/STUDENT_GUIDE.md">Open the study guide</a>
+        </div>
+      </div>
+
+      <div class="state-trace" aria-label="A variable changes from five to eight to six">
+        <p>Program state changes one statement at a time.</p>
+        <div class="trace-line">
+          <span><small>START</small><strong>5</strong></span>
+          <code>+= 3</code>
+          <span><small>STORE</small><strong>8</strong></span>
+          <code>-= 2</code>
+          <span><small>STORE</small><strong>6</strong></span>
+        </div>
+        <p class="trace-rule"><code>right side → calculate → store on the left</code></p>
+      </div>
+    </section>
+
+    <section class="outcomes section-shell" aria-labelledby="outcomes-title">
+      <div class="section-heading">
+        <p class="section-number">01</p>
+        <div>
+          <p class="eyebrow">Learning outcomes</p>
+          <h2 id="outcomes-title">What you should be able to do</h2>
+        </div>
+      </div>
+      <ol class="outcome-list">
+        <li><span>Trace</span><p>Follow variable assignments in execution order and explain why copied primitive values remain independent.</p></li>
+        <li><span>Evaluate</span><p>Apply grouping, precedence, integer division, modulo, and casts to predict an expression’s value.</p></li>
+        <li><span>Choose</span><p>Select <code>int</code>, <code>long</code>, <code>double</code>, <code>char</code>, or <code>String</code> from the meaning and range of a value.</p></li>
+        <li><span>Read</span><p>Use the appropriate <code>Scanner</code> method and reason about the input that remains after each read.</p></li>
+        <li><span>Debug</span><p>Distinguish compile-time, runtime, and logic errors with a predict-and-test workflow.</p></li>
+      </ol>
+    </section>
+
+    <section class="study-route section-shell" aria-labelledby="route-title">
+      <div class="section-heading">
+        <p class="section-number">02</p>
+        <div>
+          <p class="eyebrow">Recommended route</p>
+          <h2 id="route-title">Study in evidence-first order</h2>
+        </div>
+      </div>
+      <div class="route-list">
+        <a href="slides/index.html#slide-1">
+          <span class="route-index">1</span>
+          <div><strong>Interactive lecture</strong><p>Predict, reveal, run, and check the complete 25-slide lesson.</p></div>
+          <small>30 min</small>
+          <b aria-hidden="true">→</b>
+        </a>
+        <a href="https://github.com/hammadojh/ICS_108/tree/main/lec03-variables/examples">
+          <span class="route-index">2</span>
+          <div><strong>Runnable Java examples</strong><p>Compile six complete programs and change one assumption at a time.</p></div>
+          <small>20–30 min</small>
+          <b aria-hidden="true">→</b>
+        </a>
+        <a href="instructor/concept-refresher.html">
+          <span class="route-index">3</span>
+          <div><strong>Instructor concept refresher</strong><p>Read the chapter abstract, then expand only the concepts that need a deeper review.</p></div>
+          <small>Pre-lecture</small>
+          <b aria-hidden="true">→</b>
+        </a>
+        <a href="instructor/walkthroughs.html">
+          <span class="route-index">4</span>
+          <div><strong>Problem-solving walkthroughs</strong><p>Review each problem, prediction, trace, concept, common error, and transfer check.</p></div>
+          <small>Self-study</small>
+          <b aria-hidden="true">→</b>
+        </a>
+      </div>
+    </section>
+
+    <section class="materials section-shell" aria-labelledby="materials-title">
+      <div class="section-heading">
+        <p class="section-number">03</p>
+        <div>
+          <p class="eyebrow">Repository map</p>
+          <h2 id="materials-title">Find the right resource quickly</h2>
+        </div>
+      </div>
+      <div class="material-grid">
+        <div>
+          <p class="material-label">Learn</p>
+          <a href="slides/index.html#slide-1"><strong>Lecture deck</strong><span>Keyboard-friendly interactive presentation</span></a>
+          <a href="https://github.com/hammadojh/ICS_108/blob/main/lec03-variables/docs/STUDENT_GUIDE.md"><strong>Student guide</strong><span>Study workflow, controls, and troubleshooting</span></a>
+        </div>
+        <div>
+          <p class="material-label">Practice</p>
+          <a href="https://github.com/hammadojh/ICS_108/tree/main/lec03-variables/examples"><strong>Java examples</strong><span>Six programs that compile independently</span></a>
+          <a href="instructor/walkthroughs.html"><strong>Worked walkthroughs</strong><span>Problem → demo → concept → transfer</span></a>
+        </div>
+        <div>
+          <p class="material-label">Understand the package</p>
+          <a href="instructor/concept-refresher.html"><strong>Concept refresher</strong><span>Expandable instructor review from abstract to detail</span></a>
+          <a href="https://github.com/hammadojh/ICS_108/blob/main/lec03-variables/docs/CONTENT_MAP.md"><strong>Content map</strong><span>Concept-to-slide and source alignment</span></a>
+          <a href="resources/index.html"><strong>Source access</strong><span>How to use the assigned course source</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-start section-shell" aria-labelledby="quick-start-title">
+      <div>
+        <p class="eyebrow">Local use</p>
+        <h2 id="quick-start-title">No installation is required for the lecture.</h2>
+        <p>Clone the repository, start any static file server, and open the local address in a modern browser.</p>
+      </div>
+      <pre><code>git clone https://github.com/hammadojh/ICS_108.git
+cd ICS_108/lec03-variables
+python3 -m http.server 8000
+
+# Open http://localhost:8000</code></pre>
+    </section>
+
+    <aside class="source-note section-shell" aria-labelledby="source-note-title">
+      <p class="section-number">NOTE</p>
+      <div>
+        <h2 id="source-note-title">Course numbering and source access</h2>
+        <p>This is Lecture 3 in ICS 108, while the assigned source and the lecture itself align to <strong>Chapter 2</strong>. The licensed zyBooks PDF is intentionally not published here. Enrolled students should open the assigned chapter through the course’s authorized zyBooks or LMS access.</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="site-footer">
+    <span>ICS 108 · Java foundations</span>
+    <nav aria-label="Repository documentation">
+      <a href="https://github.com/hammadojh/ICS_108/tree/main/lec03-variables#readme">README</a>
+      <a href="https://github.com/hammadojh/ICS_108/blob/main/lec03-variables/docs/INSTRUCTOR_GUIDE.md">Instructor guide</a>
+      <a href="https://github.com/hammadojh/ICS_108/blob/main/lec03-variables/CONTRIBUTING.md">Contributing</a>
+      <a href="https://github.com/hammadojh/ICS_108/blob/main/lec03-variables/NOTICE.md">Notice</a>
+    </nav>
+  </footer>
+</body>
+</html>

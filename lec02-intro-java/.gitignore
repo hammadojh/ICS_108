@@ -1,0 +1,9 @@
+.DS_Store
+*.pdf
+*.pptx
+*.class
+/output/
+/tmp/
+.playwright-cli/
+/Raw/
+/Generated/

@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="ICS 108 Lecture 4 on Java branches and loops: selecting paths, repeating work, tracing state, and proving termination.">
+  <title>ICS 108 — Lecture 4: Branches + Loops</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23090909'/%3E%3Cpath d='M18 14v15c0 11 9 20 20 20h8M18 29h28M40 23l6 6-6 6M40 43l6 6-6 6' fill='none' stroke='%238ec5ff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css?v=20260830d">
+</head>
+<body>
+  <a class="skip-link" href="#stage">Skip to slide</a>
+  <main class="app">
+    <div class="deck-shell">
+      <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+      <div class="stage" id="stage">
+
+        <section class="slide cover is-active" data-title="Control the path" aria-hidden="false">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Lecture 4</span><strong>Overview</strong></nav>
+          <div class="cover-layout">
+            <div class="cover-copy"><p class="eyebrow">Java control flow</p><h1>Choose.<br>Repeat.<br>Stop.</h1><p class="subtitle">Branches select a path. Loops repeat a path while a condition stays true.</p></div>
+            <div class="decision-poster" aria-label="A condition controlling a repeated path"><span class="poster-input">count = 0</span><div class="poster-diamond">count &lt; 3?</div><div class="poster-path yes"><small>true</small><strong>run body ↺</strong></div><div class="poster-path no"><small>false</small><strong>continue</strong></div></div>
+          </div>
+          <footer class="slide-footer"><span>ICS 108</span><span>38-minute lecture · 28 slides</span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Will this loop stop?" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 1 · The control question</span><strong>Hook</strong></nav>
+          <div class="hook-layout">
+            <header><p class="part-label">Part 1 · The control question</p><h2>Will this loop stop?</h2><p class="lead">A correct condition is not enough. The state must move toward an exit.</p></header>
+            <div class="demo-panel hook-demo">
+              <pre><code><span class="kw">int</span> count = 0;
+
+<span class="kw">while</span> (count &lt; 3) {
+   System.out.println(count);
+}</code></pre>
+              <p>What happens after the program prints <code>0</code>?</p>
+              <div class="choice-row" data-predict="hook"><button type="button" data-value="stops">It stops after 3 prints</button><button type="button" data-value="forever">It prints 0 forever</button></div>
+              <output id="hookResult" aria-live="polite">Commit to a prediction. Then name the state that should change.</output>
+            </div>
+          </div>
+          <footer class="slide-footer"><span>The condition is rechecked, but <code>count</code> never changes.</span><span>§§4.1–4.2</span></footer>
+        </section>
+
+        <section class="slide" data-title="Lecture goals" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 1 · The control question</span><strong>Goals</strong></nav>
+          <div class="content-stack goals-layout">
+            <header><h2>What you will be able to do</h2><p class="lead">Predict control flow by tracking condition, path, state, and exit.</p></header>
+            <ol class="goal-list">
+              <li data-step="1"><span>01</span><p>Trace <code>if</code>, <code>if-else</code>, and ordered <code>else if</code> chains.</p></li>
+              <li data-step="2"><span>02</span><p>Translate policies into precise Boolean conditions and boundaries.</p></li>
+              <li data-step="3"><span>03</span><p>Trace <code>while</code> loops and explain how progress reaches an exit.</p></li>
+              <li data-step="4"><span>04</span><p>Use <code>for</code> when initialization, condition, and update form one counting rule.</p></li>
+              <li data-step="5"><span>05</span><p>Compose branches and loops to classify, count, and summarize data.</p></li>
+            </ol>
+          </div>
+          <footer class="slide-footer"><span>Final application: summarize a series of scores.</span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Branch or loop?" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 2 · Choose a path</span><strong>Control-flow model</strong></nav>
+          <div class="content-stack">
+            <header><p class="part-label">Part 2 · Choose a path</p><h2>The same Boolean question can control two different shapes.</h2></header>
+            <div class="control-duel">
+              <div data-step="1"><span class="term">Branch</span><code>if (condition)</code><strong>Ask once here</strong><p>Choose whether a body executes, then continue.</p></div>
+              <div data-step="2"><span class="term">Loop</span><code>while (condition)</code><strong>Ask before every iteration</strong><p>Run the body, return, and ask again.</p></div>
+            </div>
+            <p class="rule-strip" data-step="3"><strong>Unifying model:</strong> evaluate a condition → select a path → update state → either continue or exit.</p>
+          </div>
+          <footer class="slide-footer"><span>A branch selects. A loop rechecks and may repeat.</span><span>§§3.1, 4.1</span></footer>
+        </section>
+
+        <section class="slide" data-title="The if statement" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 2 · Choose a path</span><strong>§3.1 if</strong></nav>
+          <div class="content-stack">
+            <header><h2><code>if</code>: run a body only when true</h2></header>
+            <div class="syntax-stage">
+              <pre data-step="1"><code><span class="kw">if</span> (<mark>temperature &lt; 0</mark>) {
+   System.out.println(<span class="str">"Freezing"</span>);
+}</code></pre>
+              <dl class="syntax-notes"><div data-step="2"><dt>condition</dt><dd>Evaluates to exactly <code>true</code> or <code>false</code>.</dd></div><div data-step="3"><dt>true</dt><dd>Execute the complete controlled body.</dd></div><div data-step="4"><dt>false</dt><dd>Skip the body and continue after the braces.</dd></div></dl>
+            </div>
+            <p class="rule-strip" data-step="4">The condition is evaluated once each time execution reaches this <code>if</code>.</p>
+          </div>
+          <footer class="slide-footer"><span>Ask: “What Boolean value does this expression produce?”</span><span>§3.1</span></footer>
+        </section>
+
+        <section class="slide" data-title="if-else chooses one path" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 2 · Choose a path</span><strong>§3.1 if-else</strong></nav>
+          <div class="content-stack">
+            <header><h2><code>if-else</code>: exactly one of two paths</h2><p class="lead">The two bodies are mutually exclusive.</p></header>
+            <div class="split-code">
+              <pre><code><span class="kw">if</span> (age &gt;= 18) {
+   message = <span class="str">"Adult"</span>;
+}
+<span class="kw">else</span> {
+   message = <span class="str">"Minor"</span>;
+}</code></pre>
+              <div class="path-ledger"><div data-step="1"><span>age = 20</span><strong>true → Adult</strong><small><code>else</code> skipped</small></div><div data-step="2"><span>age = 16</span><strong>false → Minor</strong><small><code>if</code> body skipped</small></div></div>
+            </div>
+            <p class="rule-strip" data-step="3"><code>else</code> means “every remaining case”; it has no condition of its own.</p>
+          </div>
+          <footer class="slide-footer"><span>Two paths enter; one path executes.</span><span>§3.1</span></footer>
+        </section>
+
+        <section class="slide" data-title="else-if is ordered" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 2 · Choose a path</span><strong>§3.3 else-if</strong></nav>
+          <div class="content-stack">
+            <header><h2>An <code>else if</code> chain is an ordered search.</h2></header>
+            <div class="chain-layout">
+              <pre><code><span class="kw">if</span> (score &gt;= 90) grade = <span class="str">"A"</span>;
+<span class="kw">else if</span> (score &gt;= 80) grade = <span class="str">"B"</span>;
+<span class="kw">else if</span> (score &gt;= 70) grade = <span class="str">"C"</span>;
+<span class="kw">else</span> grade = <span class="str">"Below C"</span>;</code></pre>
+              <ol class="search-steps"><li data-step="1"><span>1</span>Test from top to bottom.</li><li data-step="2"><span>2</span>Run the first true body.</li><li data-step="3"><span>3</span>Skip every remaining branch.</li><li data-step="4"><span>4</span>Use <code>else</code> for what remains.</li></ol>
+            </div>
+            <p class="rule-strip" data-step="4">Put specific or high thresholds before broader ones. Order is part of the policy.</p>
+          </div>
+          <footer class="slide-footer"><span>First true wins.</span><span>§3.3</span></footer>
+        </section>
+
+        <section class="slide" data-title="Build precise conditions" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 2 · Choose a path</span><strong>§§3.2, 3.4–3.5</strong></nav>
+          <div class="content-stack">
+            <header><h2>Translate the boundary before writing the branch.</h2></header>
+            <div class="logic-layout">
+              <pre><code><span class="kw">boolean</span> isTeen =
+   age &gt;= 13 <mark>&amp;&amp;</mark> age &lt;= 19;</code></pre>
+              <div class="truth-cases"><div data-step="1"><span>age 12</span><code>false &amp;&amp; true</code><b>false</b></div><div data-step="2"><span>age 13</span><code>true &amp;&amp; true</code><b>true</b></div><div data-step="3"><span>age 19</span><code>true &amp;&amp; true</code><b>true</b></div><div data-step="4"><span>age 20</span><code>true &amp;&amp; false</code><b>false</b></div></div>
+            </div>
+            <div class="two-rules" data-step="5"><span><strong><code>&amp;&amp;</code> narrows</strong>Both requirements must hold.</span><span><strong><code>||</code> broadens</strong>Either alternative is enough.</span></div>
+            <p class="rule-strip" data-step="6">Java needs two complete comparisons: not <code>13 &lt;= age &lt;= 19</code>.</p>
+          </div>
+          <footer class="slide-footer"><span>Test just below, at, and just above each boundary.</span><span>§§3.4–3.5</span></footer>
+        </section>
+
+        <section class="slide" data-title="Trace the selected path" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 2 · Choose a path</span><strong>Branch trace</strong></nav>
+          <div class="content-stack">
+            <header><h2>Trace only until the path is determined.</h2><p class="lead">For <code>score = 83</code>, later conditions do not execute after the B branch wins.</p></header>
+            <div class="trace-table">
+              <div class="trace-head"><span>condition</span><span>result</span><span>decision</span></div>
+              <div data-step="1"><code>83 &gt;= 90</code><b class="false">false</b><span>continue</span></div>
+              <div data-step="2"><code>83 &gt;= 80</code><b class="true">true</b><span>store <code>"B"</code></span></div>
+              <div data-step="3" class="muted-row"><code>83 &gt;= 70</code><b>not tested</b><span>skipped</span></div>
+              <div data-step="3" class="muted-row"><code>else</code><b>not reached</b><span>skipped</span></div>
+            </div>
+            <div class="boundary-row" data-step="4"><span>79 → C</span><span>80 → B</span><span>89 → B</span><span>90 → A</span></div>
+          </div>
+          <footer class="slide-footer"><span>Trace the first unexpected Boolean result.</span><span>§3.3</span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Repeat while true" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 3 · Repeat while true</span><strong>§4.1 Loop model</strong></nav>
+          <div class="content-stack">
+            <header><p class="part-label">Part 3 · Repeat while true</p><h2>A loop sends control back to the question.</h2><p class="lead">Each complete execution of the body is one <strong>iteration</strong>.</p></header>
+            <div class="loop-cycle" data-step="1"><span>check condition</span><b>true ↓</b><span>execute body</span><b>↓</b><span>update state</span><b>↺ recheck</b><span class="exit">false → continue after loop</span></div>
+            <p class="rule-strip" data-step="2">Once an iteration starts, Java completes the body before checking the condition again.</p>
+          </div>
+          <footer class="slide-footer"><span>Loop = condition + body + return path.</span><span>§4.1</span></footer>
+        </section>
+
+        <section class="slide" data-title="The while statement" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 3 · Repeat while true</span><strong>§4.2 while</strong></nav>
+          <div class="content-stack">
+            <header><h2><code>while</code> checks before every iteration.</h2></header>
+            <div class="syntax-stage">
+              <pre data-step="1"><code><span class="kw">int</span> count = 0;
+
+<span class="kw">while</span> (<mark>count &lt; 3</mark>) {
+   System.out.println(count);
+   count++;
+}</code></pre>
+              <dl class="syntax-notes"><div data-step="2"><dt>initialize</dt><dd>Establish the state before the first check.</dd></div><div data-step="3"><dt>condition</dt><dd>True enters; false exits. It may be false initially.</dd></div><div data-step="4"><dt>update</dt><dd>Change state so a future check can become false.</dd></div></dl>
+            </div>
+            <p class="rule-strip" data-step="5">A pre-check loop may execute zero times.</p>
+          </div>
+          <footer class="slide-footer"><span>Initialization is outside; progress is usually inside.</span><span>§4.2</span></footer>
+        </section>
+
+        <section class="slide" data-title="Trace every while check" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 3 · Repeat while true</span><strong>Trace</strong></nav>
+          <div class="content-stack">
+            <header><h2>Record state at the condition—not from memory.</h2></header>
+            <div class="short-lab">
+              <pre><code><span class="kw">int</span> count = 0;
+<span class="kw">while</span> (count &lt; limit) {
+   System.out.print(count + <span class="str">" "</span>);
+   count++;
+}</code></pre>
+              <div class="short-controls"><label for="whileLimit">Limit (0–5)</label><input id="whileLimit" type="number" min="0" max="5" value="3"><button id="runWhileTrace" type="button">Trace checks</button><output id="whileTraceResult" aria-live="polite">0&lt;3 T → 1&lt;3 T → 2&lt;3 T → 3&lt;3 F</output></div>
+            </div>
+            <div class="trace-table compact-trace" data-step="1"><div class="trace-head"><span>check state</span><span>condition</span><span>action</span></div><div><code>count = 0</code><b class="true">0 &lt; 3</b><span>print 0; increment</span></div><div><code>count = 1</code><b class="true">1 &lt; 3</b><span>print 1; increment</span></div><div><code>count = 2</code><b class="true">2 &lt; 3</b><span>print 2; increment</span></div><div><code>count = 3</code><b class="false">3 &lt; 3</b><span>exit</span></div></div>
+          </div>
+          <footer class="slide-footer"><span>The final false check is part of the trace.</span><span>§4.2</span></footer>
+        </section>
+
+        <section class="slide" data-title="Progress proves termination" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 3 · Repeat while true</span><strong>Progress</strong></nav>
+          <div class="content-stack">
+            <header><h2>Termination needs a progress argument.</h2><p class="lead">Explain why repeated updates must eventually make the condition false.</p></header>
+            <div class="progress-grid">
+              <div data-step="1"><span>State</span><code>count</code><p>What value controls the condition?</p></div>
+              <div data-step="2"><span>Direction</span><code>count++</code><p>How does each iteration move it?</p></div>
+              <div data-step="3"><span>Boundary</span><code>count &lt; 3</code><p>What value makes the test false?</p></div>
+              <div data-step="4"><span>Conclusion</span><code>0 → 1 → 2 → 3</code><p>The boundary is reached after three updates.</p></div>
+            </div>
+            <div class="code-compare" data-step="5"><div><small>terminates</small><code>count++;</code></div><div><small>stuck forever</small><code>// count never changes</code></div></div>
+          </div>
+          <footer class="slide-footer"><span>“It looks finite” is not evidence; show the state moving to the exit.</span><span>§4.2</span></footer>
+        </section>
+
+        <section class="slide" data-title="Sentinel-controlled input" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 3 · Repeat while true</span><strong>§4.3 Sentinel</strong></nav>
+          <div class="content-stack">
+            <header><h2>A sentinel ends input without becoming data.</h2><p class="lead">Here, <code>0</code> means “stop”; it is not one of the measurements.</p></header>
+            <div class="sentinel-layout">
+              <pre><code>System.out.print(<span class="str">"Value (0 to stop): "</span>);
+<span class="kw">int</span> value = input.nextInt();
+
+<span class="kw">while</span> (value != 0) {
+   total += value;
+   count++;
+   value = input.nextInt();
+}</code></pre>
+              <div class="iteration-strip"><span data-step="1"><b>5</b>process</span><span data-step="2"><b>7</b>process</span><span data-step="3"><b>2</b>process</span><span class="stop" data-step="4"><b>0</b>exit</span></div>
+            </div>
+            <p class="rule-strip" data-step="5"><strong>Read → test → process → read again.</strong> The second read is the progress step.</p>
+          </div>
+          <footer class="slide-footer"><span>A sentinel controls the loop; it does not belong in the total or count.</span><span>§4.3</span></footer>
+        </section>
+
+        <section class="slide" data-title="Accumulators and counters" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 3 · Repeat while true</span><strong>§4.3 Running state</strong></nav>
+          <div class="content-stack">
+            <header><h2>Give each running value one job.</h2></header>
+            <div class="operator-duel">
+              <div data-step="1"><code>total += value;</code><strong>Accumulator</strong><p>Combines each input into a running sum.</p></div>
+              <div data-step="2"><code>count++;</code><strong>Counter</strong><p>Records how many valid values were processed.</p></div>
+              <div data-step="3"><code>average = total / count;</code><strong>Derived result</strong><p>Compute after the loop, once the data set is complete.</p></div>
+            </div>
+            <div class="trace-table" data-step="4"><div class="trace-head"><span>input</span><span>total</span><span>count</span></div><div><code>5</code><b>5</b><span>1</span></div><div><code>7</code><b>12</b><span>2</span></div><div><code>2</code><b>14</b><span>3</span></div></div>
+            <p class="rule-strip" data-step="5">Before dividing, branch on <code>count &gt; 0</code>; a loop can process zero values.</p>
+          </div>
+          <footer class="slide-footer"><span>Initialize totals and counts to their neutral value: zero.</span><span>§4.3</span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Count with for" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 4 · Count deliberately</span><strong>§4.4 for</strong></nav>
+          <div class="content-stack">
+            <header><p class="part-label">Part 4 · Count deliberately</p><h2><code>for</code> puts the counting rule in one line.</h2></header>
+            <div class="for-anatomy" data-step="1"><span><b>initialize</b><code>int i = 0</code></span><i>;</i><span><b>continue while</b><code>i &lt; 5</code></span><i>;</i><span><b>update</b><code>i++</code></span></div>
+            <pre class="wide-code" data-step="2"><code><span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 5; i++) {
+   System.out.println(i);
+}</code></pre>
+            <p class="rule-strip" data-step="3">Execution order: initialize once → test → body → update → test again.</p>
+          </div>
+          <footer class="slide-footer"><span>The update runs after the body, before the next condition check.</span><span>§4.4</span></footer>
+        </section>
+
+        <section class="slide" data-title="Trace a for loop" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 4 · Count deliberately</span><strong>§4.4 Trace</strong></nav>
+          <div class="content-stack">
+            <header><h2>Count iterations from the values that enter the body.</h2></header>
+            <pre class="wide-code"><code><span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 5; i++) {
+   System.out.print(i + <span class="str">" "</span>);
+}</code></pre>
+            <div class="iteration-strip large"><span data-step="1"><b>i = 0</b>1st</span><span data-step="2"><b>i = 1</b>2nd</span><span data-step="3"><b>i = 2</b>3rd</span><span data-step="4"><b>i = 3</b>4th</span><span data-step="5"><b>i = 4</b>5th</span><span class="stop" data-step="6"><b>i = 5</b>exit</span></div>
+            <p class="rule-strip" data-step="7"><code>0, 1, 2, 3, 4</code> are five body entries. <code>i = 5</code> is only the final false check.</p>
+          </div>
+          <footer class="slide-footer"><span>Half-open range: include 0, exclude 5.</span><span>§4.4</span></footer>
+        </section>
+
+        <section class="slide" data-title="Choose while or for" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 4 · Count deliberately</span><strong>Loop choice</strong></nav>
+          <div class="content-stack">
+            <header><h2>Choose the loop from what is known before it starts.</h2></header>
+            <div class="choice-matrix">
+              <div data-step="1"><p class="term">Known count</p><strong>Use <code>for</code></strong><p>Process 10 scores. Visit every character. Repeat once per row.</p></div>
+              <div data-step="2"><p class="term">Unknown count</p><strong>Use <code>while</code></strong><p>Read until 0. Retry while invalid. Continue until a state changes.</p></div>
+            </div>
+            <div class="code-compare" data-step="3"><div><small>counting rule together</small><code>for (int i = 0; i &lt; n; i++)</code></div><div><small>condition-led rule</small><code>while (value != sentinel)</code></div></div>
+            <p class="rule-strip" data-step="4">Both can express repetition. Prefer the form that makes the stopping rule easiest to inspect.</p>
+          </div>
+          <footer class="slide-footer"><span>Known iterations → <code>for</code>. Otherwise → <code>while</code>.</span><span>§4.4</span></footer>
+        </section>
+
+        <section class="slide" data-title="Off-by-one errors" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 4 · Count deliberately</span><strong>Boundaries</strong></nav>
+          <div class="content-stack">
+            <header><h2>Off-by-one bugs are boundary bugs.</h2><p class="lead">State the first and last body values before choosing <code>&lt;</code> or <code>&lt;=</code>.</p></header>
+            <div class="range-proof">
+              <div data-step="1"><span>Indices of a 5-item array or string</span><code>0, 1, 2, 3, 4</code><strong><code>i &lt; 5</code></strong></div>
+              <div data-step="2"><span>Human counts from 1 through 5</span><code>1, 2, 3, 4, 5</code><strong><code>i &lt;= 5</code></strong></div>
+            </div>
+            <div class="boundary-row" data-step="3"><span>start?</span><span>first body value?</span><span>last body value?</span><span>first exit value?</span></div>
+            <p class="rule-strip" data-step="4">Predict those four values, then trace. Do not repair the operator by guessing.</p>
+          </div>
+          <footer class="slide-footer"><span>A five-iteration loop does not imply that the final index is 5.</span><span>§4.4</span></footer>
+        </section>
+
+        <section class="slide" data-title="Loop through a string" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 4 · Count deliberately</span><strong>§4.6 Strings</strong></nav>
+          <div class="content-stack">
+            <header><h2>A string gives the loop its exact index range.</h2></header>
+            <pre class="wide-code"><code><span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; word.length(); i++) {
+   <span class="kw">char</span> letter = word.charAt(i);
+   System.out.println(i + <span class="str">": "</span> + letter);
+}</code></pre>
+            <div class="index-walk" aria-label="Character indices for the word JAVA"><span data-step="1"><b>0</b>J</span><span data-step="2"><b>1</b>A</span><span data-step="3"><b>2</b>V</span><span data-step="4"><b>3</b>A</span><span class="stop" data-step="5"><b>4</b>exit</span></div>
+            <p class="rule-strip" data-step="6">Valid indices are <code>0</code> through <code>length() - 1</code>; therefore the condition uses <code>i &lt; word.length()</code>.</p>
+          </div>
+          <footer class="slide-footer"><span>The data structure supplies the boundary.</span><span>§4.6</span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Compose control flow" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 5 · Compose control flow</span><strong>Branches inside loops</strong></nav>
+          <div class="content-stack">
+            <header><p class="part-label">Part 5 · Compose control flow</p><h2>A loop selects the records. A branch classifies each one.</h2></header>
+            <pre class="wide-code" data-step="1"><code><span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; scoreCount; i++) {
+   <span class="kw">int</span> score = input.nextInt();
+   <span class="kw">if</span> (score &gt;= 60) passed++;
+   <span class="kw">else</span> failed++;
+}</code></pre>
+            <div class="control-duel compact"><div data-step="2"><span class="term">Outer loop</span><strong>Which score now?</strong><p>Repeat once per score.</p></div><div data-step="3"><span class="term">Inner branch</span><strong>Which category?</strong><p>Increment exactly one counter.</p></div></div>
+            <p class="rule-strip" data-step="4">Read the nesting from outside in: repeat this decision for every input.</p>
+          </div>
+          <footer class="slide-footer"><span>Composition turns small control rules into useful programs.</span><span>§§3.1, 4.4</span></footer>
+        </section>
+
+        <section class="slide" data-title="Branch inside a loop" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 5 · Compose control flow</span><strong>Classify and count</strong></nav>
+          <div class="content-stack">
+            <header><h2>Each iteration should make one local decision.</h2></header>
+            <div class="trace-table">
+              <div class="trace-head"><span>score</span><span>branch</span><span>running state</span></div>
+              <div data-step="1"><code>72</code><b class="true">pass</b><span>passed = 1, failed = 0</span></div>
+              <div data-step="2"><code>58</code><b class="false">fail</b><span>passed = 1, failed = 1</span></div>
+              <div data-step="3"><code>90</code><b class="true">pass</b><span>passed = 2, failed = 1</span></div>
+            </div>
+            <div class="two-rules" data-step="4"><span><strong>Loop invariant</strong>After each iteration, <code>passed + failed</code> equals processed scores.</span><span><strong>Exit evidence</strong>After 3 iterations, both counters summarize all 3 scores.</span></div>
+            <p class="rule-strip" data-step="5">An invariant is a fact that remains true after every completed iteration.</p>
+          </div>
+          <footer class="slide-footer"><span>Use the running state to check your trace.</span><span>Teaching addition grounded in §§3.1, 4.4</span></footer>
+        </section>
+
+        <section class="slide" data-title="Nested loops" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 5 · Compose control flow</span><strong>§4.7 Nested loops</strong></nav>
+          <div class="content-stack">
+            <header><h2>The inner loop runs fully for each outer iteration.</h2></header>
+            <div class="chain-layout">
+              <pre><code><span class="kw">for</span> (<span class="kw">int</span> row = 1; row &lt;= 2; row++) {
+   <span class="kw">for</span> (<span class="kw">int</span> col = 1; col &lt;= 3; col++) {
+      System.out.print(row + <span class="str">","</span> + col + <span class="str">" "</span>);
+   }
+}</code></pre>
+              <div class="nested-grid" aria-label="Two rows by three columns"><span data-step="1">1,1</span><span data-step="2">1,2</span><span data-step="3">1,3</span><span data-step="4">2,1</span><span data-step="5">2,2</span><span data-step="6">2,3</span></div>
+            </div>
+            <p class="rule-strip" data-step="7">2 outer iterations × 3 inner iterations = 6 executions of the inner body.</p>
+          </div>
+          <footer class="slide-footer"><span>Trace the inner variable fastest.</span><span>§4.7</span></footer>
+        </section>
+
+        <section class="slide" data-title="Loop variable scope" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 5 · Compose control flow</span><strong>§4.10 Scope</strong></nav>
+          <div class="content-stack">
+            <header><h2>A variable exists only inside its declaring block.</h2></header>
+            <div class="scope-ledger">
+              <pre><code><span class="kw">int</span> total = 0;
+
+<span class="kw">for</span> (<mark><span class="kw">int</span> i = 0</mark>; i &lt; 3; i++) {
+   <span class="kw">int</span> score = input.nextInt();
+   total += score;
+}
+
+System.out.println(total);
+// i and score do not exist here</code></pre>
+              <div><span data-step="1"><strong><code>total</code></strong>Declared outside; survives after the loop.</span><span data-step="2"><strong><code>i</code></strong>Declared in the <code>for</code> header; scoped through the loop.</span><span data-step="3"><strong><code>score</code></strong>Declared in the body; recreated each iteration.</span></div>
+            </div>
+            <p class="rule-strip" data-step="4">Declare a variable in the smallest scope that still covers every place it is needed.</p>
+          </div>
+          <footer class="slide-footer"><span>Scope controls visibility, not just lifetime.</span><span>§4.10</span></footer>
+        </section>
+
+        <section class="slide" data-title="Integrated score report" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 5 · Compose control flow</span><strong>Integrated demo</strong></nav>
+          <div class="content-stack score-slide">
+            <header><h2>Integrated demo: summarize three scores.</h2></header>
+            <div class="score-layout">
+              <pre><code><span class="kw">int</span> total = 0;
+<span class="kw">int</span> passed = 0;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 3; i++) {
+   <span class="kw">int</span> score = scores[i];
+   total += score;
+   <span class="kw">if</span> (score &gt;= 60) passed++;
+}
+
+<span class="kw">double</span> average = total / 3.0;</code></pre>
+              <div class="toll-controls"><label for="scoreOne">Score 1</label><input id="scoreOne" type="number" min="0" max="100" value="72"><label for="scoreTwo">Score 2</label><input id="scoreTwo" type="number" min="0" max="100" value="58"><label for="scoreThree">Score 3</label><input id="scoreThree" type="number" min="0" max="100" value="90"><button id="runScoreReport" type="button">Build report</button><output id="scoreResult" aria-live="polite">Average 73.3 · Passed 2 · Failed 1</output></div>
+            </div>
+            <p class="rule-strip" data-step="1">Loop for coverage. Branch for classification. Accumulator and counters for the report.</p>
+          </div>
+          <footer class="slide-footer"><span>Test 59/60 and all-pass/all-fail input sets.</span><span>Integrated teaching example</span></footer>
+        </section>
+
+        <section class="slide" data-title="Debug with evidence" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 5 · Compose control flow</span><strong>Debugging method</strong></nav>
+          <div class="content-stack">
+            <header><h2>Debug the first broken transition.</h2><p class="lead">Keep the input fixed. Compare predicted and observed condition, path, state, and exit.</p></header>
+            <div class="debug-loop"><span data-step="1">State the rule</span><b>→</b><span data-step="2">Choose a boundary or small N</span><b>→</b><span data-step="3">Predict every check</span><b>→</b><span data-step="4">Run and compare</span><b>↺</b></div>
+            <div class="test-table" data-step="5"><span>High-value evidence</span><code>59 / 60</code><code>N = 0</code><code>N = 1</code><code>sentinel first</code><strong>branch edge</strong><strong>zero iterations</strong><strong>one iteration</strong><strong>empty data</strong></div>
+            <p class="rule-strip" data-step="6">Branch bug: find the first unexpected condition. Loop bug: find the first unexpected check or update.</p>
+          </div>
+          <footer class="slide-footer"><span>Repair one claim, rebuild, and rerun the same evidence.</span><span>Teaching addition</span></footer>
+        </section>
+
+        <section class="slide" data-title="Check your understanding" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Part 5 · Compose control flow</span><strong>Quiz</strong></nav>
+          <div class="content-stack quiz-layout">
+            <header><h2>Check the path, state, and exit.</h2></header>
+            <ol class="choice-quiz">
+              <li data-correct="first"><p>1. After a true condition in an <code>else if</code> chain?</p><div><button data-value="all" type="button">all true bodies run</button><button data-value="first" type="button">remaining branches skip</button><output></output></div></li>
+              <li data-correct="zero"><p>2. How many times may a pre-check <code>while</code> body run?</p><div><button data-value="one" type="button">at least once</button><button data-value="zero" type="button">possibly zero</button><output></output></div></li>
+              <li data-correct="for"><p>3. Best default for exactly 10 iterations?</p><div><button data-value="while" type="button"><code>while</code></button><button data-value="for" type="button"><code>for</code></button><output></output></div></li>
+              <li data-correct="four"><p>4. Body entries for <code>for (int i=0; i&lt;4; i++)</code>?</p><div><button data-value="four" type="button">4</button><button data-value="five" type="button">5</button><output></output></div></li>
+            </ol>
+            <p class="rule-strip">For each answer, name the condition checks and the first exit value.</p>
+          </div>
+          <footer class="slide-footer"><span>Explain why each rejected option is wrong.</span><span></span></footer>
+        </section>
+
+        <section class="slide closing" data-title="Control flow is state plus questions" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Lecture 4</span><strong>Summary</strong></nav>
+          <div class="closing-layout">
+            <div><p class="eyebrow">Branches + loops</p><h2>Control flow is state plus questions.</h2><p class="closing-summary">Write the rule in words. Translate it into a condition. Trace the selected path. For repetition, prove that state reaches an exit.</p></div>
+            <div class="closing-rules"><span><b>01</b>A branch evaluates a condition and chooses a path.</span><span><b>02</b>A loop reevaluates its condition after each iteration.</span><span><b>03</b>Progress must move state toward a false condition.</span><span><b>04</b>Use <code>for</code> for a known count; <code>while</code> otherwise.</span><span><b>05</b>Compose loops and branches to process and classify data.</span><a href="../instructor/walkthroughs.html">Open instructor walkthroughs →</a><a href="../instructor/concept-refresher.html">Open concept refresher →</a></div>
+          </div>
+          <footer class="slide-footer"><span>Core coverage: §§3.1–3.5, 4.1–4.4, 4.6–4.7, 4.10</span><span>Questions?</span></footer>
+        </section>
+
+      </div>
+      <div class="deck-controls" aria-label="Presentation controls"><button id="prevButton" type="button" aria-label="Previous step or slide">←</button><span id="slideTitle" aria-live="polite">Control the path</span><span id="slideCounter">01 / 28</span><button id="nextButton" type="button" aria-label="Next step or slide">→</button></div>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

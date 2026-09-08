@@ -1,0 +1,1592 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Self-contained ICS 108 instructor notes for Java variables, expressions, numeric types, text input, debugging, and overflow.">
+  <title>ICS 108 Chapter 2 - Instructor Problem-Solving Notes</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23ffffff'/%3E%3Cpath d='M14 16h36M14 32h36M14 48h24' stroke='%231769aa' stroke-width='6'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #15181b;
+      --muted: #596169;
+      --line: #c8d0d7;
+      --blue: #1769aa;
+      --blue-dark: #0d4d7f;
+      --soft: #eef5fb;
+      --soft-warm: #f7f4ed;
+      --paper: #ffffff;
+      --code: #f6f8fa;
+      --danger: #a13b35;
+      --success: #226b42;
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      background: #e5e8eb;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      max-width: 1120px;
+      margin: 32px auto;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      line-height: 1.58;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      position: relative;
+      min-height: 0;
+      margin-bottom: var(--space-6);
+      padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 6vw, 4.5rem) clamp(3rem, 6vw, 4.5rem);
+      background: var(--paper);
+      box-shadow: 0 8px 30px rgba(18, 31, 43, 0.12);
+      break-after: page;
+    }
+
+    .page:last-child {
+      margin-bottom: 0;
+      break-after: auto;
+    }
+
+    h1, h2, h3, p, ol, ul, pre, table { margin-top: 0; }
+
+    h1 {
+      max-width: 22ch;
+      margin-bottom: var(--space-2);
+      font-size: clamp(2rem, 3.5vw, 2.65rem);
+      line-height: 1.06;
+      letter-spacing: -0.035em;
+    }
+
+    h2 {
+      margin: var(--space-6) 0 var(--space-3);
+      color: var(--blue-dark);
+      font-size: 1.45rem;
+      line-height: 1.18;
+      letter-spacing: -0.015em;
+    }
+
+    h3 {
+      margin-bottom: var(--space-2);
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+
+    p { margin-bottom: var(--space-3); }
+
+    a {
+      color: var(--blue-dark);
+      text-underline-offset: 0.18em;
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--blue) 55%, white);
+      outline-offset: 3px;
+    }
+
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    code { font-size: 0.94em; }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-6);
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-4);
+      border-bottom: 3px solid var(--blue);
+    }
+
+    .page-header .subtitle {
+      max-width: 68ch;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .meta {
+      flex: 0 0 auto;
+      min-width: 132px;
+      color: var(--muted);
+      text-align: right;
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .meta strong {
+      display: block;
+      color: var(--ink);
+      font-size: 0.95rem;
+    }
+
+    .kicker {
+      margin-bottom: var(--space-2);
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .lead {
+      max-width: 78ch;
+      margin-bottom: var(--space-5);
+      font-size: 1.08rem;
+      line-height: 1.58;
+    }
+
+    .goal-grid,
+    .concept-grid,
+    .orientation,
+    .cue-grid,
+    .two-column {
+      display: grid;
+      gap: var(--space-4);
+    }
+
+    .goal-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-3) var(--space-5);
+      margin: 0 0 var(--space-5);
+      padding: 0;
+      list-style: none;
+    }
+
+    .goal-grid li {
+      position: relative;
+      padding-left: 1.25rem;
+    }
+
+    .goal-grid li::before {
+      content: "";
+      position: absolute;
+      top: 0.58em;
+      left: 0;
+      width: 0.5rem;
+      height: 0.5rem;
+      background: var(--blue);
+    }
+
+    .sequence {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+      margin: 0 0 var(--space-5);
+      padding: 0;
+      list-style: none;
+      counter-reset: sequence;
+    }
+
+    .sequence li {
+      min-height: 3.5rem;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--line);
+      counter-increment: sequence;
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .sequence li::before {
+      content: counter(sequence) ". ";
+      color: var(--blue);
+    }
+
+    .orientation {
+      grid-template-columns: repeat(2, 1fr);
+      margin-bottom: var(--space-6);
+    }
+
+    .orientation div {
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--line);
+    }
+
+    .orientation strong,
+    .orientation span { display: block; }
+
+    .orientation span {
+      margin-top: var(--space-1);
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .module-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+
+    .module-title h2 { margin: 0; }
+
+    .source-ref {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .problem-card {
+      margin: var(--space-4) 0 var(--space-5);
+      border-left: 5px solid var(--blue);
+      background: var(--soft);
+    }
+
+    .learning-outcome {
+      display: grid;
+      grid-template-columns: minmax(10.5rem, auto) 1fr;
+      align-items: baseline;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-5);
+      border-bottom: 1px solid color-mix(in srgb, var(--blue) 22%, var(--line));
+      background: var(--soft-warm);
+    }
+
+    .learning-outcome h3 {
+      margin: 0;
+      color: var(--blue-dark);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .learning-outcome p {
+      max-width: 72ch;
+      margin: 0;
+      font-weight: 650;
+      line-height: 1.48;
+    }
+
+    .problem-statement {
+      padding: var(--space-4) var(--space-5);
+    }
+
+    .problem-label {
+      display: block;
+      margin-bottom: var(--space-1);
+      color: var(--blue-dark);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .problem-statement p:last-child { margin-bottom: 0; }
+
+    .cue-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+
+    .cue {
+      min-height: 0;
+      padding: var(--space-4);
+      border: 1px solid var(--line);
+    }
+
+    .cue strong {
+      display: block;
+      margin-bottom: var(--space-1);
+      color: var(--blue-dark);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .cue p:last-child { margin-bottom: 0; }
+
+    .two-column {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+
+    .code-panel,
+    .reasoning-panel,
+    .trace-panel {
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-3);
+      margin: 0;
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+      font-size: 0.92rem;
+    }
+
+    .panel-title span {
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      padding: 0.55rem 0.7rem;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+    }
+
+    .code-switches {
+      display: inline-flex;
+      gap: 2px;
+      padding: 2px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .code-switch,
+    .copy-code {
+      min-height: 40px;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid transparent;
+      border-radius: 0;
+      color: var(--blue-dark);
+      background: transparent;
+      font: 700 0.78rem/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      cursor: pointer;
+    }
+
+    .code-switch[aria-pressed="true"] {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+    }
+
+    .copy-code {
+      border-color: var(--blue);
+      background: var(--paper);
+    }
+
+    .copy-code:hover { background: var(--soft); }
+    .code-version[hidden] { display: none; }
+
+    .copy-status {
+      min-height: 1.8rem;
+      margin: 0;
+      padding: 0.35rem 0.75rem;
+      border-top: 1px solid var(--line);
+      color: var(--success);
+      background: #fbfdfb;
+      font-size: 0.76rem;
+      line-height: 1.4;
+    }
+
+    .copy-status:empty { display: none; }
+
+    pre {
+      overflow-x: auto;
+      margin-bottom: 0;
+      padding: 1.125rem 1.25rem;
+      background: var(--code);
+      font-size: 0.88rem;
+      line-height: 1.52;
+      overflow-wrap: anywhere;
+      tab-size: 2;
+      white-space: pre-wrap;
+    }
+
+    .console {
+      margin-top: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--line);
+      background: #20252a;
+      color: #f7f8f9;
+      font: 0.86rem/1.5 "SFMono-Regular", Consolas, monospace;
+      white-space: pre-wrap;
+    }
+
+    .console strong {
+      display: block;
+      margin-bottom: var(--space-1);
+      color: #9bcdf5;
+      font: 700 0.7rem/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .reasoning {
+      margin: 0;
+      padding: var(--space-4) var(--space-5) var(--space-5) 2.75rem;
+    }
+
+    .reasoning li { padding-left: var(--space-1); }
+    .reasoning li + li { margin-top: var(--space-2); }
+
+    .reasoning strong { color: var(--blue-dark); }
+
+    .trace-table,
+    .error-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .trace-table th,
+    .trace-table td,
+    .error-table th,
+    .error-table td {
+      padding: 6px 7px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .trace-table th,
+    .error-table th {
+      background: var(--soft);
+      font-size: 0.78rem;
+    }
+
+    .trace-table th,
+    .trace-table td,
+    .error-table th,
+    .error-table td {
+      padding: 0.65rem 0.75rem;
+      line-height: 1.45;
+    }
+
+    .trace-table td code { font-weight: 700; }
+
+    .concept-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+      margin-top: var(--space-5);
+    }
+
+    .concept {
+      padding: var(--space-4) 1.125rem;
+      border-top: 2px solid var(--blue);
+      background: #fafbfc;
+    }
+
+    .concept h3 { color: var(--blue-dark); }
+    .concept p:last-child { margin-bottom: 0; }
+
+    .mistake,
+    .transfer,
+    .recovery {
+      margin-top: var(--space-4);
+      padding: var(--space-3) var(--space-4);
+      line-height: 1.55;
+    }
+
+    .mistake {
+      border-left: 4px solid var(--danger);
+      background: #fbefee;
+    }
+
+    .transfer {
+      border-left: 4px solid var(--success);
+      background: #eef7f1;
+    }
+
+    .recovery {
+      border-left: 4px solid var(--blue);
+      background: var(--soft);
+    }
+
+    .mistake strong,
+    .transfer strong,
+    .recovery strong {
+      color: inherit;
+    }
+
+    .answer {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .answer strong { color: var(--ink); }
+
+    .mini-code {
+      display: block;
+      margin: var(--space-2) 0 0;
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--line);
+      background: var(--code);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .checklist {
+      columns: 2;
+      column-gap: var(--space-6);
+      margin-bottom: 0;
+      padding-left: 1.4rem;
+    }
+
+    .checklist li {
+      break-inside: avoid;
+      margin-bottom: var(--space-2);
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-5);
+      margin-top: var(--space-6);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .page-footer a { text-decoration: none; }
+
+    @media print {
+      @page { size: A4; margin: 0; }
+
+      html, body { background: white; }
+
+      body {
+        width: 210mm;
+        max-width: none;
+        margin: 0;
+        font-size: 10pt;
+        line-height: 1.34;
+      }
+
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 0;
+        margin: 0;
+        padding: 8mm 11mm 13mm;
+        overflow: hidden;
+        box-shadow: none;
+      }
+
+      h1 { max-width: none; margin-bottom: 3px; font-size: 23px; }
+      h2 { margin: 12px 0 6px; font-size: 17px; }
+      h3 { margin-bottom: 4px; font-size: 12.5px; }
+      p { margin-bottom: 5px; }
+      .page-header { gap: 18px; margin-bottom: 8px; padding-bottom: 8px; }
+      .page-header .subtitle { max-width: 640px; font-size: 9pt; line-height: 1.3; }
+      .meta { min-width: 96px; font-size: 7.5pt; line-height: 1.35; }
+      .meta strong { font-size: 8.7pt; }
+      .kicker { margin-bottom: 2px; font-size: 7.2pt; }
+      .lead { max-width: none; margin-bottom: 7px; font-size: 10.2pt; line-height: 1.38; }
+      .goal-grid { gap: 4px 14px; margin-bottom: 8px; }
+      .goal-grid li { padding-left: 13px; }
+      .goal-grid li::before { width: 6px; height: 6px; }
+      .sequence { grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 8px; }
+      .sequence li { min-height: 36px; padding: 5px; font-size: 7.5pt; line-height: 1.25; }
+      .orientation { grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
+      .orientation div { padding: 6px 7px; }
+      .orientation span { font-size: 7.5pt; line-height: 1.3; }
+      .module-title { margin-top: 8px; }
+      .source-ref { font-size: 7.4pt; }
+      .problem-card { margin: 6px 0 7px; }
+      .learning-outcome {
+        grid-template-columns: 92px 1fr;
+        gap: 7px;
+        padding: 5px 9px;
+      }
+      .learning-outcome h3,
+      .problem-label { font-size: 7.3pt; }
+      .learning-outcome p { font-size: 8.45pt; line-height: 1.28; }
+      .problem-statement { padding: 6px 9px 7px; }
+      .cue-grid { grid-template-columns: repeat(2, 1fr); gap: 7px; margin-bottom: 7px; }
+      .cue { min-height: 0; padding: 6px 8px; }
+      .cue strong { font-size: 7.3pt; }
+      .two-column { grid-template-columns: 1.05fr 0.95fr; gap: 8px; }
+      .panel-title { padding: 5px 7px; font-size: 8.4pt; }
+      .code-toolbar,
+      .copy-status { display: none !important; }
+      .code-version[data-code-version="starter"] { display: none !important; }
+      .code-version[data-code-version="complete"] { display: block !important; }
+      pre { overflow: visible; padding: 6px 8px; font-size: 8.5pt; line-height: 1.26; }
+      .console { margin-top: 5px; padding: 6px 8px; font-size: 8.4pt; line-height: 1.3; }
+      .console strong { font-size: 7.2pt; }
+      .reasoning { padding: 6px 9px 6px 28px; }
+      .reasoning li + li { margin-top: 3px; }
+      .trace-table th,
+      .trace-table td,
+      .error-table th,
+      .error-table td { padding: 4px 5px; line-height: 1.3; }
+      .trace-table th,
+      .error-table th { font-size: 7.5pt; }
+      .concept-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 7px; }
+      .concept { padding: 6px 8px; }
+      .mistake, .transfer, .recovery { margin-top: 6px; padding: 6px 8px; line-height: 1.32; }
+      .answer { font-size: 8.5pt; }
+      .mini-code { margin-top: 4px; padding: 5px 7px; font-size: 8.4pt; line-height: 1.28; }
+      .checklist { column-gap: 20px; padding-left: 16px; }
+      .checklist li { margin-bottom: 3px; }
+      .page-footer {
+        position: absolute;
+        right: 11mm;
+        bottom: 4.5mm;
+        left: 11mm;
+        margin-top: 0;
+        padding-top: 5px;
+        font-size: 7.4pt;
+        line-height: 1.25;
+      }
+
+      #module-1 {
+        font-size: 9.8pt;
+        line-height: 1.31;
+      }
+
+      #module-1 .page-header { margin-bottom: 6px; padding-bottom: 6px; }
+      #module-1 .lead { margin-bottom: 5px; }
+      #module-1 .goal-grid,
+      #module-1 .sequence,
+      #module-1 .orientation { margin-bottom: 6px; }
+      #module-1 .sequence li { min-height: 32px; padding: 4px 5px; }
+      #module-1 .orientation div { padding: 5px 7px; }
+      #module-1 .module-title { margin-top: 6px; }
+      #module-1 .problem-card { margin: 5px 0 6px; }
+      #module-1 .problem-statement { padding-top: 5px; padding-bottom: 6px; }
+      #module-1 .cue-grid { margin-bottom: 6px; }
+      #module-1 .concept-grid { margin-top: 6px; }
+
+      #module-1 pre {
+        font-size: 8.2pt;
+        line-height: 1.2;
+      }
+
+      #module-1 .concept,
+      #module-1 .mistake,
+      #module-1 .transfer {
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      #module-5 .page-header { margin-bottom: 6px; padding-bottom: 6px; }
+      #module-5 .module-title { margin-top: 6px; }
+      #module-5 .learning-outcome { padding-top: 4px; padding-bottom: 4px; }
+      #module-5 .error-table th,
+      #module-5 .error-table td { padding-top: 3px; padding-bottom: 3px; }
+
+      #module-6 {
+        padding-top: 7mm;
+        font-size: 9.45pt;
+        line-height: 1.26;
+      }
+
+      #module-6 h1 { font-size: 21px; }
+      #module-6 h2 { margin: 8px 0 4px; font-size: 16px; }
+      #module-6 .page-header { margin-bottom: 6px; padding-bottom: 6px; }
+      #module-6 .module-title { margin-top: 6px; }
+      #module-6 .problem-card { margin: 5px 0 6px; }
+      #module-6 .learning-outcome { padding: 4px 8px; }
+      #module-6 .problem-statement { padding: 5px 8px 6px; }
+      #module-6 .cue-grid { gap: 6px; margin-bottom: 6px; }
+      #module-6 .cue { padding: 5px 7px; }
+      #module-6 .two-column { gap: 7px; }
+      #module-6 .panel-title { padding: 4px 6px; font-size: 8.1pt; }
+      #module-6 pre { padding: 5px 7px; font-size: 7.9pt; line-height: 1.17; }
+      #module-6 .console { margin-top: 4px; padding: 5px 7px; font-size: 7.9pt; line-height: 1.2; }
+      #module-6 .reasoning { padding: 5px 7px 5px 26px; }
+      #module-6 .reasoning li + li { margin-top: 2px; }
+      #module-6 .trace-table th,
+      #module-6 .trace-table td { padding: 3px 4px; }
+      #module-6 .concept-grid { gap: 7px; margin-top: 6px; }
+      #module-6 .concept { padding: 5px 7px; }
+      #module-6 .mistake,
+      #module-6 .transfer { margin-top: 5px; padding: 5px 7px; }
+      #module-6 .mini-code { padding: 4px 6px; font-size: 8pt; line-height: 1.2; }
+      #module-6 .checklist {
+        column-gap: 16px;
+        font-size: 8.5pt;
+        line-height: 1.2;
+      }
+      #module-6 .checklist li { margin-bottom: 2px; }
+
+      a { color: inherit; text-decoration: none; }
+    }
+
+    @media screen and (max-width: 720px) {
+      body { margin: 0; }
+      .page { min-height: 0; margin: 0; padding: 2rem 1.25rem 2.5rem; box-shadow: none; }
+      .page-header, .module-title { align-items: flex-start; flex-direction: column; gap: 7px; }
+      .meta { text-align: left; }
+      .learning-outcome { grid-template-columns: 1fr; gap: var(--space-1); }
+      .goal-grid,
+      .concept-grid,
+      .orientation,
+      .cue-grid,
+      .two-column,
+      .sequence { grid-template-columns: 1fr; }
+      .code-toolbar { align-items: stretch; flex-direction: column; }
+      .code-switches { display: grid; grid-template-columns: 1fr 1fr; }
+      .code-switch,
+      .copy-code { min-height: 44px; }
+      pre { padding: 0.875rem; font-size: 0.82rem; }
+      .trace-table,
+      .error-table { table-layout: fixed; }
+      .trace-table th,
+      .trace-table td,
+      .error-table th,
+      .error-table td,
+      .trace-table code,
+      .error-table code {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+      .page-footer { align-items: flex-start; flex-direction: column; gap: var(--space-2); }
+      .checklist { columns: 1; }
+    }
+
+    @media screen and (max-width: 520px) {
+      .error-table,
+      .error-table tbody,
+      .error-table tr,
+      .error-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .error-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .error-table tr {
+        margin-top: var(--space-3);
+        border: 1px solid var(--line);
+      }
+
+      .error-table td {
+        padding: var(--space-3);
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .error-table td:last-child { border-bottom: 0; }
+
+      .error-table td::before {
+        display: block;
+        margin-bottom: var(--space-1);
+        color: var(--blue-dark);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .error-table td:nth-child(1)::before { content: "Error type"; }
+      .error-table td:nth-child(2)::before { content: "Deliberate edit"; }
+      .error-table td:nth-child(3)::before { content: "Observation and recovery"; }
+    }
+  </style>
+</head>
+<body>
+  <article class="page" id="module-1">
+    <header class="page-header">
+      <div>
+        <p class="kicker">ICS 108 / Chapter 2 / Instructor notes</p>
+        <h1>Problem-solving walkthroughs</h1>
+        <p class="subtitle">Variables, expressions, numeric types, text input, debugging, and overflow - taught through six live Java problems.</p>
+      </div>
+      <div class="meta">Full sequence<strong>32-36 minutes</strong>Page 1 of 6</div>
+    </header>
+
+    <p class="lead"><strong>Use these notes without the slide deck.</strong> Every module supplies the question, exact code, expected output, reasoning trace, concept explanation, likely mistake, and a transfer check.</p>
+
+    <ul class="goal-grid" aria-label="Teaching goals">
+      <li>Trace assignments as changes to program state.</li>
+      <li>Decompose a quantity with integer division and modulo.</li>
+      <li>Explain why operand types determine division behavior.</li>
+      <li>Choose the right <code>Scanner</code> method for text input.</li>
+      <li>Classify compile-time, runtime, and logic errors.</li>
+      <li>Use constants and <code>long</code> to prevent overflow.</li>
+    </ul>
+
+    <ol class="sequence" aria-label="Teaching sequence">
+      <li>Present the problem</li>
+      <li>Ask for a prediction</li>
+      <li>Type and run</li>
+      <li>Trace the values</li>
+      <li>Explain the rule</li>
+      <li>Transfer the idea</li>
+    </ol>
+
+    <div class="orientation" aria-label="IDE orientation">
+      <div><strong>Project tree</strong><span>Create one Java file per module.</span></div>
+      <div><strong>Editor</strong><span>Type one logical block at a time.</span></div>
+      <div><strong>Run control</strong><span>Compile and run after each change.</span></div>
+      <div><strong>Console</strong><span>Keep inputs, outputs, and errors visible.</span></div>
+    </div>
+
+    <div class="module-title">
+      <h2>1. Trace changing state</h2>
+      <span class="source-ref">6 min / Source sections 2.1-2.3</span>
+    </div>
+
+    <div class="problem-card">
+      <div class="learning-outcome">
+        <h3>Students will learn</h3>
+        <p>Trace assignment state changes and explain why a copied value does not update with the original.</p>
+      </div>
+      <div class="problem-statement">
+        <strong class="problem-label">Problem</strong>
+        <p>A bus starts with 5 people. Then 3 get on, 2 get off, 4 get off, and 5 get on. Store the original count separately. What should the two variables contain at the end?</p>
+      </div>
+    </div>
+
+    <div class="cue-grid">
+      <div class="cue"><strong>Ask before typing</strong><p>"Does copying <code>numPeople</code> make a live connection, or copy only its current value?"</p></div>
+      <div class="cue"><strong>Expected prediction</strong><p>Final count <code>7</code>; saved first count <code>5</code>.</p></div>
+    </div>
+
+    <div class="two-column">
+      <div>
+        <div class="code-panel code-workbench" data-code-workbench>
+          <h3 class="panel-title">Type: <code>StateTrace.java</code><span>trace each update</span></h3>
+          <div class="code-toolbar" aria-label="StateTrace code controls">
+            <div class="code-switches">
+              <button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button>
+              <button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button>
+            </div>
+            <button type="button" class="copy-code" data-copy-code>Copy starter code</button>
+          </div>
+          <pre class="code-version" data-code-version="starter"><code>public class StateTrace {
+  public static void main(String[] args) {
+    int numPeople = 5;
+    int firstCount = numPeople;
+
+    // TODO: update the current count after each stop.
+    // TODO: print the current and original counts.
+  }
+}</code></pre>
+          <pre class="code-version" data-code-version="complete" hidden><code>public class StateTrace {
+  public static void main(String[] args) {
+    int numPeople = 5;
+    int firstCount = numPeople;
+
+    numPeople += 3;
+    numPeople -= 2;
+    numPeople -= 4;
+    numPeople += 5;
+
+    System.out.println("Current: " + numPeople);
+    System.out.println("First: " + firstCount);
+  }
+}</code></pre>
+          <p class="copy-status" data-copy-status aria-live="polite"></p>
+        </div>
+        <div class="console"><strong>Expected output</strong>Current: 7
+First: 5</div>
+      </div>
+
+      <div class="trace-panel">
+        <h3 class="panel-title">Walk through the state<span>read, calculate, store</span></h3>
+        <table class="trace-table">
+          <thead><tr><th>Statement</th><th><code>numPeople</code></th><th><code>firstCount</code></th></tr></thead>
+          <tbody>
+            <tr><td>initialize</td><td><code>5</code></td><td>-</td></tr>
+            <tr><td>copy current value</td><td><code>5</code></td><td><code>5</code></td></tr>
+            <tr><td><code>+= 3</code></td><td><code>8</code></td><td><code>5</code></td></tr>
+            <tr><td><code>-= 2</code></td><td><code>6</code></td><td><code>5</code></td></tr>
+            <tr><td><code>-= 4</code></td><td><code>2</code></td><td><code>5</code></td></tr>
+            <tr><td><code>+= 5</code></td><td><code>7</code></td><td><code>5</code></td></tr>
+          </tbody>
+        </table>
+        <ol class="reasoning">
+          <li>Evaluate the right side using the <strong>current</strong> value.</li>
+          <li>Store the result in the left-side variable.</li>
+          <li>A prior copy does not change when the source changes later.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept"><h3>Explain: variable and initialization</h3><p>A <strong>variable</strong> is a named item that holds one current value. <code>int numPeople = 5;</code> declares an integer variable and gives it its initial value.</p></div>
+      <div class="concept"><h3>Explain: assignment is an action</h3><p><code>=</code> is not mathematical equality. Java evaluates the right side, then overwrites the one variable on the left. Lower camel case makes a multiword identifier readable.</p></div>
+    </div>
+
+    <div class="mistake"><strong>Deliberate compile-time error:</strong> type <code>numPeople + 3 = numPeople;</code>. The compiler rejects it because the left side of assignment must be one variable. Undo it and restore the last working version.</div>
+    <div class="transfer"><strong>Transfer check:</strong> If <code>int snapshot = numPeople;</code> is added immediately after <code>numPeople += 3;</code>, what is <code>snapshot</code> at the end? <span class="answer"><strong>Answer:</strong> 8.</span></div>
+
+    <footer class="page-footer"><span>Deck reference: <a href="../slides/index.html#slide-4">state</a> / <a href="../slides/index.html#slide-5">assignment</a> / <a href="../slides/index.html#slide-7">identifiers</a></span><span>Module 1 / Page 1 of 6</span></footer>
+  </article>
+
+  <article class="page" id="module-2">
+    <header class="page-header">
+      <div>
+        <p class="kicker">ICS 108 / Chapter 2 / Expressions</p>
+        <h1>Break a total into units</h1>
+        <p class="subtitle">Use quotient and remainder to convert one total into hours, minutes, and seconds.</p>
+      </div>
+      <div class="meta">Target time<strong>6 minutes</strong>Page 2 of 6</div>
+    </header>
+
+    <div class="module-title">
+      <h2>2. Integer division and modulo</h2>
+      <span class="source-ref">Source sections 2.4, 2.5, and 2.11</span>
+    </div>
+
+    <div class="problem-card">
+      <div class="learning-outcome">
+        <h3>Students will learn</h3>
+        <p>Use integer division and modulo together to break a total into complete groups and a remainder.</p>
+      </div>
+      <div class="problem-statement">
+        <strong class="problem-label">Problem</strong>
+        <p>A recording lasts <code>7,325</code> seconds. Display the duration as complete hours, remaining complete minutes, and remaining seconds: <code>hours:minutes:seconds</code>.</p>
+      </div>
+    </div>
+
+    <div class="cue-grid">
+      <div class="cue"><strong>Ask before typing</strong><p>"Which operator finds complete groups? Which operator keeps what is left over?"</p></div>
+      <div class="cue"><strong>Expected prediction</strong><p><code>7325</code> seconds should become <code>2:2:5</code>.</p></div>
+    </div>
+
+    <div class="two-column">
+      <div>
+        <div class="code-panel code-workbench" data-code-workbench>
+          <h3 class="panel-title">Type: <code>TimeBreakdown.java</code><span>run with 7325 seconds</span></h3>
+          <div class="code-toolbar" aria-label="TimeBreakdown code controls">
+            <div class="code-switches">
+              <button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button>
+              <button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button>
+            </div>
+            <button type="button" class="copy-code" data-copy-code>Copy starter code</button>
+          </div>
+          <pre class="code-version" data-code-version="starter"><code>public class TimeBreakdown {
+  public static void main(String[] args) {
+    int totalSeconds = 7325;
+
+    // TODO: find complete hours.
+    // TODO: keep the seconds left after those hours.
+    // TODO: find complete minutes and final seconds.
+  }
+}</code></pre>
+          <pre class="code-version" data-code-version="complete" hidden><code>public class TimeBreakdown {
+  public static void main(String[] args) {
+    int totalSeconds = 7325;
+
+    int hours = totalSeconds / 3600;
+    int afterHours = totalSeconds % 3600;
+    int minutes = afterHours / 60;
+    int seconds = afterHours % 60;
+
+    System.out.println(hours + ":" +
+        minutes + ":" + seconds);
+  }
+}</code></pre>
+          <p class="copy-status" data-copy-status aria-live="polite"></p>
+        </div>
+        <div class="console"><strong>Expected output</strong>2:2:5</div>
+      </div>
+
+      <div class="reasoning-panel">
+        <h3 class="panel-title">Reason from the required output<span>largest unit first</span></h3>
+        <ol class="reasoning">
+          <li><strong>Hours:</strong> <code>7325 / 3600 = 2</code> complete hours.</li>
+          <li><strong>Remainder:</strong> <code>7325 % 3600 = 125</code> seconds remain.</li>
+          <li><strong>Minutes:</strong> <code>125 / 60 = 2</code> complete minutes.</li>
+          <li><strong>Seconds:</strong> <code>125 % 60 = 5</code> remain.</li>
+          <li><strong>Assemble:</strong> concatenate the three values with colon strings.</li>
+        </ol>
+        <table class="trace-table">
+          <thead><tr><th>Question</th><th>Operator</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>How many complete groups?</td><td><code>/</code></td><td>quotient</td></tr>
+            <tr><td>What remains?</td><td><code>%</code></td><td>remainder</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept"><h3>Explain: expression</h3><p>An <strong>expression</strong> combines values and operators and evaluates to one value. With two <code>int</code> operands, <code>/</code> returns only the whole-number quotient.</p></div>
+      <div class="concept"><h3>Explain: precedence</h3><p>Parentheses run first, then unary minus, then <code>* / %</code>, then <code>+ -</code>. Equal-precedence operators evaluate left to right. Use extra parentheses when they make intent clearer.</p></div>
+    </div>
+
+    <div class="mistake"><strong>Common logic mistake:</strong> <code>minutes = totalSeconds / 60;</code> calculates 122 total minutes, not the minutes remaining after complete hours. Decompose the problem in stages.</div>
+    <div class="transfer"><strong>Transfer check:</strong> Predict the output for <code>59</code>, <code>3600</code>, and <code>3661</code> seconds. <span class="answer"><strong>Answers:</strong> <code>0:0:59</code>, <code>1:0:0</code>, and <code>1:1:1</code>.</span></div>
+
+    <footer class="page-footer"><span>Deck reference: <a href="../slides/index.html#slide-10">precedence</a> / <a href="../slides/index.html#slide-11">division and modulo</a> / <a href="../slides/index.html#slide-12">converter</a></span><span>Module 2 / Page 2 of 6</span></footer>
+  </article>
+
+  <article class="page" id="module-3">
+    <header class="page-header">
+      <div>
+        <p class="kicker">ICS 108 / Chapter 2 / Numeric types</p>
+        <h1>Make division preserve a fraction</h1>
+        <p class="subtitle">Expose why assigning an integer quotient to <code>double</code> does not restore the discarded fraction.</p>
+      </div>
+      <div class="meta">Target time<strong>5 minutes</strong>Page 3 of 6</div>
+    </header>
+
+    <div class="module-title">
+      <h2>3. Integer versus floating-point division</h2>
+      <span class="source-ref">Source sections 2.7 and 2.12</span>
+    </div>
+
+    <div class="problem-card">
+      <div class="learning-outcome">
+        <h3>Students will learn</h3>
+        <p>Predict division from operand types and cast before division to preserve a fractional result.</p>
+      </div>
+      <div class="problem-statement">
+        <strong class="problem-label">Problem</strong>
+        <p>A student earned <code>175</code> total points across <code>2</code> attempts. The average should be <code>87.5</code>, but the first Java calculation prints <code>87.0</code>. Find where the fraction is lost and repair the expression.</p>
+      </div>
+    </div>
+
+    <div class="cue-grid">
+      <div class="cue"><strong>Ask before running</strong><p>"Does the type on the left control division, or do the operand types on the right control it?"</p></div>
+      <div class="cue"><strong>Expected claim</strong><p>The operands control the operation before assignment occurs.</p></div>
+    </div>
+
+    <div class="two-column">
+      <div>
+        <div class="code-panel code-workbench" data-code-workbench>
+          <h3 class="panel-title">Type: <code>AverageDemo.java</code><span>begin with the fraction-losing version</span></h3>
+          <div class="code-toolbar" aria-label="AverageDemo code controls">
+            <div class="code-switches">
+              <button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button>
+              <button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button>
+            </div>
+            <button type="button" class="copy-code" data-copy-code>Copy starter code</button>
+          </div>
+          <pre class="code-version" data-code-version="starter"><code>public class AverageDemo {
+  public static void main(String[] args) {
+    int totalPoints = 175;
+    int attempts = 2;
+
+    double average = totalPoints / attempts;
+    System.out.println("Average: " + average);
+  }
+}</code></pre>
+          <pre class="code-version" data-code-version="complete" hidden><code>public class AverageDemo {
+  public static void main(String[] args) {
+    int totalPoints = 175;
+    int attempts = 2;
+
+    double wrongAverage =
+        totalPoints / attempts;
+    double rightAverage =
+        (double) totalPoints / attempts;
+
+    System.out.println("Wrong: " + wrongAverage);
+    System.out.println("Right: " + rightAverage);
+    System.out.printf("Formatted: %.2f%n",
+        rightAverage);
+  }
+}</code></pre>
+          <p class="copy-status" data-copy-status aria-live="polite"></p>
+        </div>
+        <div class="console"><strong>Expected output</strong>Wrong: 87.0
+Right: 87.5
+Formatted: 87.50</div>
+      </div>
+
+      <div class="reasoning-panel">
+        <h3 class="panel-title">Trace the types before the values<span>operation happens first</span></h3>
+        <ol class="reasoning">
+          <li><code>totalPoints</code> is <code>int</code>; <code>attempts</code> is <code>int</code>.</li>
+          <li><code>175 / 2</code> therefore uses integer division and becomes <code>87</code>.</li>
+          <li>Assignment converts <code>87</code> to <code>87.0</code>. The discarded <code>0.5</code> cannot return.</li>
+          <li><code>(double) totalPoints</code> becomes <code>175.0</code> before division.</li>
+          <li>One <code>double</code> operand makes the operation floating-point: <code>175.0 / 2 = 87.5</code>.</li>
+        </ol>
+        <table class="trace-table">
+          <thead><tr><th>Expression</th><th>Operation type</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td><code>175 / 2</code></td><td><code>int</code></td><td><code>87</code></td></tr>
+            <tr><td><code>(double) 175 / 2</code></td><td><code>double</code></td><td><code>87.5</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept"><h3>Explain: choose a type by meaning</h3><p>Use <code>int</code> for whole-number counts and <code>double</code> for measurements or results that may contain a fraction. A decimal literal such as <code>2.0</code> is a <code>double</code>.</p></div>
+      <div class="concept"><h3>Explain: conversion and formatting</h3><p>A cast requests an explicit conversion. Cast <em>before</em> the operation that needs a fraction. <code>printf("%.2f", value)</code> rounds the displayed text; it does not change the stored value.</p></div>
+    </div>
+
+    <div class="mistake"><strong>Common repair that is still wrong:</strong> <code>(double) (totalPoints / attempts)</code>. The parentheses force integer division first; the late cast changes only <code>87</code> into <code>87.0</code>.</div>
+    <div class="transfer"><strong>Transfer check:</strong> Why does <code>double area = (1 / 2) * base * height;</code> produce zero? Repair it. <span class="answer"><strong>Answer:</strong> <code>1 / 2</code> is integer zero; use <code>0.5 * base * height</code> or <code>(double) 1 / 2 * base * height</code>.</span></div>
+
+    <footer class="page-footer"><span>Deck reference: <a href="../slides/index.html#slide-14">choosing a type</a> / <a href="../slides/index.html#slide-15">floating-point I/O</a> / <a href="../slides/index.html#slide-16">casts</a></span><span>Module 3 / Page 3 of 6</span></footer>
+  </article>
+
+  <article class="page" id="module-4">
+    <header class="page-header">
+      <div>
+        <p class="kicker">ICS 108 / Chapter 2 / Text input</p>
+        <h1>Read a number, a full name, and a grade</h1>
+        <p class="subtitle">Model the input buffer to explain the empty-line bug instead of memorizing an unexplained extra call.</p>
+      </div>
+      <div class="meta">Target time<strong>5 minutes</strong>Page 4 of 6</div>
+    </header>
+
+    <div class="module-title">
+      <h2>4. <code>Scanner</code>, <code>String</code>, and <code>char</code></h2>
+      <span class="source-ref">Source sections 2.16 and 2.17</span>
+    </div>
+
+    <div class="problem-card">
+      <div class="learning-outcome">
+        <h3>Students will learn</h3>
+        <p>Choose <code>Scanner</code> methods for numbers, full lines, and characters, then repair the leftover-newline bug.</p>
+      </div>
+      <div class="problem-statement">
+        <strong class="problem-label">Problem</strong>
+        <p>Read age <code>19</code>, full name <code>Betty Sue McKay</code>, and grade <code>A</code>. A first attempt uses <code>nextInt()</code> followed immediately by <code>nextLine()</code>, so the name appears empty. Explain the input state and fix it.</p>
+      </div>
+    </div>
+
+    <div class="cue-grid">
+      <div class="cue"><strong>Ask before typing</strong><p>"After <code>nextInt()</code> reads 19, what character is still waiting in the input buffer?"</p></div>
+      <div class="cue"><strong>Expected prediction</strong><p>The newline from pressing Enter remains; the next <code>nextLine()</code> consumes that empty remainder.</p></div>
+    </div>
+
+    <div class="two-column">
+      <div>
+        <div class="code-panel code-workbench" data-code-workbench>
+          <h3 class="panel-title">Type: <code>StudentInput.java</code><span>start with the newline bug</span></h3>
+          <div class="code-toolbar" aria-label="StudentInput code controls">
+            <div class="code-switches">
+              <button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button>
+              <button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button>
+            </div>
+            <button type="button" class="copy-code" data-copy-code>Copy starter code</button>
+          </div>
+          <pre class="code-version" data-code-version="starter"><code>import java.util.Scanner;
+
+public class StudentInput {
+  public static void main(String[] args) {
+    Scanner scnr = new Scanner(System.in);
+
+    System.out.print("Age: ");
+    int age = scnr.nextInt();
+
+    System.out.print("Full name: ");
+    String fullName = scnr.nextLine();
+
+    System.out.print("Grade: ");
+    char grade = scnr.next().charAt(0);
+
+    System.out.println("Saved: " + fullName +
+        ", age " + age + ", grade " + grade);
+  }
+}</code></pre>
+          <pre class="code-version" data-code-version="complete" hidden><code>import java.util.Scanner;
+
+public class StudentInput {
+  public static void main(String[] args) {
+    Scanner scnr = new Scanner(System.in);
+
+    System.out.print("Age: ");
+    int age = scnr.nextInt();
+    scnr.nextLine(); // discard newline
+
+    System.out.print("Full name: ");
+    String fullName = scnr.nextLine();
+
+    System.out.print("Grade: ");
+    char grade = scnr.next().charAt(0);
+
+    System.out.println("Saved: " + fullName +
+        ", age " + age + ", grade " + grade);
+  }
+}</code></pre>
+          <p class="copy-status" data-copy-status aria-live="polite"></p>
+        </div>
+        <div class="console"><strong>Run with this input</strong>Age: 19
+Full name: Betty Sue McKay
+Grade: A
+Saved: Betty Sue McKay, age 19, grade A</div>
+      </div>
+
+      <div class="trace-panel">
+        <h3 class="panel-title">Trace the input buffer<span><code>\n</code> means newline</span></h3>
+        <table class="trace-table">
+          <thead><tr><th>Operation</th><th>Returned value</th><th>What remains next</th></tr></thead>
+          <tbody>
+            <tr><td>start</td><td>-</td><td><code>19\nBetty...\nA\n</code></td></tr>
+            <tr><td><code>nextInt()</code></td><td><code>19</code></td><td><code>\nBetty...\nA\n</code></td></tr>
+            <tr><td>discard <code>nextLine()</code></td><td><code>""</code></td><td><code>Betty...\nA\n</code></td></tr>
+            <tr><td><code>nextLine()</code></td><td>full name</td><td><code>A\n</code></td></tr>
+            <tr><td><code>next().charAt(0)</code></td><td><code>'A'</code></td><td><code>\n</code></td></tr>
+          </tbody>
+        </table>
+        <ol class="reasoning">
+          <li>Choose a method based on the shape of the required input.</li>
+          <li>Token methods stop at whitespace; line methods stop at newline.</li>
+          <li>Consume a pending newline only when switching from token input to line input.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept"><h3>Explain: one token versus one line</h3><p><code>next()</code> skips leading whitespace and reads one token. <code>nextLine()</code> reads the remaining characters up to the newline, including spaces inside a full name.</p></div>
+      <div class="concept"><h3>Explain: <code>String</code> versus <code>char</code></h3><p>A <code>String</code> is a sequence of characters written with double quotes. A <code>char</code> stores one character written with single quotes. <code>charAt(0)</code> selects the first character of a token.</p></div>
+    </div>
+
+    <div class="mistake"><strong>Break it deliberately:</strong> comment out the discard call. The name becomes empty, then <code>next()</code> reads <code>Betty</code> and the grade becomes <code>'B'</code>. Restore the call, rebuild, and rerun the exact same input.</div>
+    <div class="transfer"><strong>Transfer check:</strong> If the input is <code>Ali Alotaibi</code>, what does <code>next()</code> return and what does <code>nextLine()</code> return when each starts at the beginning of the line? <span class="answer"><strong>Answer:</strong> <code>"Ali"</code> and <code>"Ali Alotaibi"</code>.</span></div>
+
+    <footer class="page-footer"><span>Deck reference: <a href="../slides/index.html#slide-20">char and String</a> / <a href="../slides/index.html#slide-21">Scanner input</a></span><span>Module 4 / Page 4 of 6</span></footer>
+  </article>
+
+  <article class="page" id="module-5">
+    <header class="page-header">
+      <div>
+        <p class="kicker">ICS 108 / Chapter 2 / Debugging</p>
+        <h1>Diagnose a circle calculation</h1>
+        <p class="subtitle">Use an expected range, a focused test, and an operator trace to repair a program that runs but gives the wrong answer.</p>
+      </div>
+      <div class="meta">Target time<strong>6 minutes</strong>Page 5 of 6</div>
+    </header>
+
+    <div class="module-title">
+      <h2>5. Methodical debugging and <code>Math</code></h2>
+      <span class="source-ref">Source sections 2.4, 2.10, and 2.22</span>
+    </div>
+
+    <div class="problem-card">
+      <div class="learning-outcome">
+        <h3>Students will learn</h3>
+        <p>Use a prediction, focused test, and operator trace to diagnose a logic error involving <code>Math</code>.</p>
+      </div>
+      <div class="problem-statement">
+        <strong class="problem-label">Problem</strong>
+        <p>A circle has circumference <code>10.0</code> and 12 equal sectors. The radius should be near <code>1.59</code>, but <code>circumference / 2 * Math.PI</code> produces <code>15.71</code>. Diagnose the cause, then calculate radius, area, and degrees per sector.</p>
+      </div>
+    </div>
+
+    <div class="cue-grid">
+      <div class="cue"><strong>Ask before editing</strong><p>"The program compiled and finished. What kind of error is this, and what single intermediate value would test your hypothesis?"</p></div>
+      <div class="cue"><strong>Expected prediction</strong><p>The full denominator should be about <code>6.28</code>; radius should be between 1 and 2.</p></div>
+    </div>
+
+    <div class="two-column">
+      <div>
+        <div class="code-panel code-workbench" data-code-workbench>
+          <h3 class="panel-title">Type: <code>CircleDebug.java</code><span>start with the grouping bug</span></h3>
+          <div class="code-toolbar" aria-label="CircleDebug code controls">
+            <div class="code-switches">
+              <button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button>
+              <button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button>
+            </div>
+            <button type="button" class="copy-code" data-copy-code>Copy starter code</button>
+          </div>
+          <pre class="code-version" data-code-version="starter"><code>public class CircleDebug {
+  public static void main(String[] args) {
+    double circumference = 10.0;
+    int sectorCount = 12;
+
+    double radius = circumference / 2 * Math.PI;
+    double area = Math.PI * Math.pow(radius, 2);
+    int degreesPerSector = 360 / sectorCount;
+
+    System.out.printf("Radius: %.2f%n", radius);
+    System.out.printf("Area: %.2f%n", area);
+    System.out.println("Degrees per sector: " +
+        degreesPerSector);
+  }
+}</code></pre>
+          <pre class="code-version" data-code-version="complete" hidden><code>public class CircleDebug {
+  public static void main(String[] args) {
+    double circumference = 10.0;
+    int sectorCount = 12;
+
+    double radius =
+        circumference / (2 * Math.PI);
+    double area =
+        Math.PI * Math.pow(radius, 2);
+    int degreesPerSector = 360 / sectorCount;
+
+    System.out.printf("Radius: %.2f%n", radius);
+    System.out.printf("Area: %.2f%n", area);
+    System.out.println("Degrees per sector: " +
+        degreesPerSector);
+  }
+}</code></pre>
+          <p class="copy-status" data-copy-status aria-live="polite"></p>
+        </div>
+        <div class="console"><strong>Expected output</strong>Radius: 1.59
+Area: 7.96
+Degrees per sector: 30</div>
+      </div>
+
+      <div class="reasoning-panel">
+        <h3 class="panel-title">Debugging walkthrough<span>one testable cause at a time</span></h3>
+        <ol class="reasoning">
+          <li><strong>Observe:</strong> wrong radius <code>15.71</code>; no compilation or runtime failure.</li>
+          <li><strong>Predict:</strong> <code>/</code> and <code>*</code> have equal precedence and run left to right.</li>
+          <li><strong>Test:</strong> print <code>2 * Math.PI</code>; the denominator is <code>6.28319</code>.</li>
+          <li><strong>Trace bug:</strong> <code>10.0 / 2 * PI</code> becomes <code>5.0 * PI</code>.</li>
+          <li><strong>Fix:</strong> group the complete denominator: <code>10.0 / (2 * PI)</code>.</li>
+          <li><strong>Verify:</strong> rerun the same input and compare with the predicted range.</li>
+        </ol>
+        <span class="mini-code">System.out.printf("Denominator: %.5f%n",
+    2 * Math.PI);
+// Denominator: 6.28319</span>
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept"><h3>Explain: method call</h3><p><code>Math.pow(radius, 2)</code> passes two argument values to a method and evaluates to the returned square. <code>Math.PI</code> is a case-sensitive library constant.</p></div>
+      <div class="concept"><h3>Explain: debugging loop</h3><p>Repeat: observe, predict one cause, devise a focused test, keep or reject the prediction, fix, and rerun the same input. Avoid random edits that hide the evidence.</p></div>
+    </div>
+
+    <table class="error-table" aria-label="Three kinds of errors">
+      <thead><tr><th>Type</th><th>Deliberate edit</th><th>Stable observation and recovery</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Compile-time</strong></td><td><code>Math.Pi</code></td><td>Case-sensitive name is not found. Restore <code>Math.PI</code>; exact IDE wording may vary.</td></tr>
+        <tr><td><strong>Runtime</strong></td><td><code>sectorCount = 0</code></td><td>Integer <code>360 / 0</code> reports <code>ArithmeticException: / by zero</code>. Restore 12 or guard the divisor.</td></tr>
+        <tr><td><strong>Logic</strong></td><td><code>circumference / 2 * Math.PI</code></td><td>Program finishes with radius 15.71. Restore denominator parentheses and retest 10.0.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="transfer"><strong>Transfer check:</strong> Set circumference to <code>10 * Math.PI</code> and sectors to <code>8</code>. <span class="answer"><strong>Answer:</strong> radius <code>5.00</code>, area <code>78.54</code>, and 45 degrees per sector.</span></div>
+    <div class="recovery"><strong>Recovery routine:</strong> undo only the deliberate edit, return to the last successful version, rebuild, and rerun the same input. Remove diagnostic prints after the explanation.</div>
+
+    <footer class="page-footer"><span>Deck reference: <a href="../slides/index.html#slide-10">precedence</a> / <a href="../slides/index.html#slide-18">Math methods</a> / <a href="../slides/index.html#slide-22">debugging</a></span><span>Module 5 / Page 5 of 6</span></footer>
+  </article>
+
+  <article class="page" id="module-6">
+    <header class="page-header">
+      <div>
+        <p class="kicker">ICS 108 / Chapter 2 / Integrated example</p>
+        <h1>Prevent overflow in HealthData</h1>
+        <p class="subtitle">Plan the quantities and their ranges before writing a complete age-to-heartbeats estimate.</p>
+      </div>
+      <div class="meta">Target time<strong>7 minutes</strong>Page 6 of 6</div>
+    </header>
+
+    <div class="module-title">
+      <h2>6. Constants, <code>long</code>, and intermediate values</h2>
+      <span class="source-ref">Source sections 2.6, 2.9, 2.12, and 2.18-2.19</span>
+    </div>
+
+    <div class="problem-card">
+      <div class="learning-outcome">
+        <h3>Students will learn</h3>
+        <p>Estimate numeric ranges, choose <code>int</code> or <code>long</code>, and convert before multiplication to prevent overflow.</p>
+      </div>
+      <div class="problem-statement">
+        <strong class="problem-label">Problem</strong>
+        <p>Using the simplified assumptions 365 days/year, one extra day per four complete years, 1,440 minutes/day, and 72 beats/minute, estimate lifetime days, minutes, and heartbeats for age <code>80</code>. Choose types that keep every intermediate result valid.</p>
+      </div>
+    </div>
+
+    <div class="cue-grid">
+      <div class="cue"><strong>Ask before typing</strong><p>"Which result might exceed the maximum <code>int</code>, 2,147,483,647? Does a <code>long</code> destination protect an earlier <code>int</code> multiplication?"</p></div>
+      <div class="cue"><strong>Expected design</strong><p>Keep age and days as <code>int</code>; force minutes and heartbeats to be calculated as <code>long</code>.</p></div>
+    </div>
+
+    <div class="two-column">
+      <div>
+        <div class="code-panel code-workbench" data-code-workbench>
+          <h3 class="panel-title">Type: <code>HealthData.java</code><span>start with overflowing <code>int</code> results</span></h3>
+          <div class="code-toolbar" aria-label="HealthData code controls">
+            <div class="code-switches">
+              <button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button>
+              <button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button>
+            </div>
+            <button type="button" class="copy-code" data-copy-code>Copy starter code</button>
+          </div>
+          <pre class="code-version" data-code-version="starter"><code>import java.util.Scanner;
+
+public class HealthData {
+  public static void main(String[] args) {
+    final int DAYS_PER_YEAR = 365;
+    final int MINUTES_PER_DAY = 24 * 60;
+    final int BEATS_PER_MINUTE = 72;
+
+    Scanner scnr = new Scanner(System.in);
+    int ageYears = scnr.nextInt();
+
+    int ageDays = ageYears * DAYS_PER_YEAR
+        + ageYears / 4;
+    int ageMinutes = ageDays * MINUTES_PER_DAY;
+    int heartbeats = ageMinutes * BEATS_PER_MINUTE;
+
+    System.out.println("Days: " + ageDays);
+    System.out.println("Minutes: " + ageMinutes);
+    System.out.println("Heartbeats: " + heartbeats);
+  }
+}</code></pre>
+          <pre class="code-version" data-code-version="complete" hidden><code>import java.util.Scanner;
+
+public class HealthData {
+  public static void main(String[] args) {
+    final int DAYS_PER_YEAR = 365;
+    final int MINUTES_PER_DAY = 24 * 60;
+    final int BEATS_PER_MINUTE = 72;
+
+    Scanner scnr = new Scanner(System.in);
+    int ageYears = scnr.nextInt();
+
+    int ageDays = ageYears * DAYS_PER_YEAR
+        + ageYears / 4;
+    long ageMinutes =
+        (long) ageDays * MINUTES_PER_DAY;
+    long heartbeats =
+        ageMinutes * BEATS_PER_MINUTE;
+
+    System.out.println("Days: " + ageDays);
+    System.out.println("Minutes: " + ageMinutes);
+    System.out.println("Heartbeats: " + heartbeats);
+  }
+}</code></pre>
+          <p class="copy-status" data-copy-status aria-live="polite"></p>
+        </div>
+        <div class="console"><strong>Input and expected output</strong>80
+Days: 29220
+Minutes: 42076800
+Heartbeats: 3029529600</div>
+      </div>
+
+      <div class="reasoning-panel">
+        <h3 class="panel-title">Build and check one quantity at a time<span>incremental development</span></h3>
+        <ol class="reasoning">
+          <li><strong>Days:</strong> <code>80 * 365 + 80 / 4 = 29220</code>.</li>
+          <li><strong>Minutes:</strong> <code>29220 * 1440 = 42076800</code>.</li>
+          <li><strong>Heartbeats:</strong> <code>42076800 * 72 = 3029529600</code>.</li>
+          <li><strong>Range check:</strong> 3,029,529,600 is greater than <code>Integer.MAX_VALUE</code>.</li>
+          <li><strong>Type the operation:</strong> cast <code>ageDays</code> before multiplying so the product is computed as <code>long</code>.</li>
+          <li><strong>Retest:</strong> try a small age and a larger boundary-revealing age.</li>
+        </ol>
+        <table class="trace-table">
+          <thead><tr><th>Quantity</th><th>Meaning</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td><code>ageYears</code></td><td>small whole count</td><td><code>int</code></td></tr>
+            <tr><td><code>ageDays</code></td><td>whole count within range</td><td><code>int</code></td></tr>
+            <tr><td><code>ageMinutes</code></td><td>large whole count</td><td><code>long</code></td></tr>
+            <tr><td><code>heartbeats</code></td><td>larger whole count</td><td><code>long</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept"><h3>Explain: named constants</h3><p><code>final</code> prevents reassignment. Uppercase underscore names expose assumptions and remove unexplained repeated numbers. This leap-day rule is an estimate, not an exact calendar calculation.</p></div>
+      <div class="concept"><h3>Explain: overflow and early conversion</h3><p>Integer overflow wraps instead of normally throwing an exception. A destination type cannot repair a product that already overflowed. Convert an operand before the risky operation.</p></div>
+    </div>
+
+    <div class="mistake"><strong>Break it deliberately:</strong><span class="mini-code">int ageMinutesInt = ageDays * MINUTES_PER_DAY;
+int heartbeatsInt = ageMinutesInt * BEATS_PER_MINUTE;</span>For age 80, the heartbeat result wraps to <code>-1265437696</code>. A negative lifetime count exposes the logic error.</div>
+
+    <div class="transfer"><strong>Transfer checks:</strong> Age 19 produces <code>6939</code> days, <code>9992160</code> minutes, and <code>719435520</code> heartbeats, so a small test can hide the bug. The first whole age whose estimate exceeds <code>int</code> is 57.</div>
+
+    <h2>Final instructor checklist</h2>
+    <ul class="checklist">
+      <li>State the exact problem and required output first.</li>
+      <li>Ask for a prediction before every run.</li>
+      <li>Trace values or operand types in execution order.</li>
+      <li>Run one small change at a time.</li>
+      <li>Use the same input before and after a repair.</li>
+      <li>Keep compiler and Console evidence visible.</li>
+      <li>Name the governing concept after the evidence.</li>
+      <li>End with the transfer check, not another lecture recap.</li>
+    </ul>
+
+    <footer class="page-footer"><span><a href="../slides/index.html#slide-23">Deck: complete HealthData example</a> / <a href="../resources/index.html#source-section-2-6">Source access for section 2.6</a></span><span>Module 6 / Page 6 of 6</span></footer>
+  </article>
+  <script>
+    (() => {
+      const fallbackCopy = (text) => {
+        const field = document.createElement("textarea");
+        field.value = text;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.inset = "-9999px auto auto -9999px";
+        document.body.appendChild(field);
+        field.select();
+        const copied = document.execCommand("copy");
+        field.remove();
+        if (!copied) throw new Error("Copy command was not accepted.");
+      };
+
+      const copyText = async (text) => {
+        if (window.isSecureContext && navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return;
+          } catch (error) {
+            fallbackCopy(text);
+            return;
+          }
+        }
+        fallbackCopy(text);
+      };
+
+      document.querySelectorAll("[data-code-workbench]").forEach((workbench) => {
+        const switches = [...workbench.querySelectorAll("[data-code-switch]")];
+        const versions = [...workbench.querySelectorAll("[data-code-version]")];
+        const copyButton = workbench.querySelector("[data-copy-code]");
+        const status = workbench.querySelector("[data-copy-status]");
+        let activeVersion = "starter";
+        let feedbackTimer;
+
+        const showVersion = (version) => {
+          activeVersion = version;
+          switches.forEach((button) => {
+            button.setAttribute("aria-pressed", String(button.dataset.codeSwitch === version));
+          });
+          versions.forEach((block) => {
+            block.hidden = block.dataset.codeVersion !== version;
+          });
+          copyButton.textContent = `Copy ${version} code`;
+          status.textContent = "";
+        };
+
+        switches.forEach((button) => {
+          button.addEventListener("click", () => showVersion(button.dataset.codeSwitch));
+        });
+
+        copyButton.addEventListener("click", async () => {
+          const code = workbench.querySelector(`[data-code-version="${activeVersion}"] code`);
+          try {
+            await copyText(code.textContent.trim());
+            copyButton.textContent = `Copied ${activeVersion}`;
+            status.textContent = `${activeVersion[0].toUpperCase() + activeVersion.slice(1)} code copied to clipboard.`;
+          } catch (error) {
+            status.textContent = "Copy failed. Select the code and copy it manually.";
+          }
+          window.clearTimeout(feedbackTimer);
+          feedbackTimer = window.setTimeout(() => {
+            copyButton.textContent = `Copy ${activeVersion} code`;
+          }, 1800);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

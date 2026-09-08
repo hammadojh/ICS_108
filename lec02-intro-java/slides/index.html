@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ICS 108 lecture: programming foundations in Java, from algorithms to a complete input-process-output program.">
+  <title>ICS 108 — Programming Foundations in Java</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23090909'/%3E%3Cpath d='M16 18h32M16 32h22M16 46h32' stroke='%238ec5ff' stroke-width='6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <div class="deck-shell">
+      <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+
+      <div class="stage" id="stage">
+        <section class="slide cover is-active" data-title="Programming foundations in Java" aria-hidden="false">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><strong>Lecture overview</strong>
+          </nav>
+          <div class="cover-layout">
+            <div>
+              <p class="eyebrow">Programming fundamentals</p>
+              <h1>Programming<br>foundations<br>in Java</h1>
+              <p class="subtitle">From why programming matters to a complete Java program</p>
+            </div>
+            <div class="cover-code" aria-label="Input, process, output diagram">
+              <span>INPUT</span>
+              <b>→</b>
+              <span>PROCESS</span>
+              <b>→</b>
+              <span>OUTPUT</span>
+            </div>
+          </div>
+          <footer class="slide-footer"><span>ICS 108</span><span>30-minute lecture</span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Why become a programmer?" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 1 · Why programming</span><strong>Hook</strong>
+          </nav>
+          <div class="hook-layout">
+            <div>
+              <p class="part-label">Part 1 · Why programming</p>
+              <h2>Why become a programmer?</h2>
+              <p class="hook-question">Every day, you make choices inside software that someone else designed.</p>
+            </div>
+            <div class="hook-shift" data-step="1">
+              <p>Programming lets you move from</p>
+              <div class="shift-row"><span>using a system</span><b>→</b><strong>building the system</strong></div>
+              <p class="linking">You turn a precise idea into instructions a computer can execute.</p>
+            </div>
+          </div>
+          <footer class="slide-footer"><span>Opening question: What would you like software to do better?</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Lecture goals" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 1 · Why programming</span><strong>Goals</strong>
+          </nav>
+          <div class="content-stack goals-layout">
+            <header>
+              <h2>Lecture goals</h2>
+              <p class="lead">By the end of today, you will be able to:</p>
+            </header>
+            <ul class="goals-list">
+              <li data-step="1">distinguish a <strong>program</strong>, a <strong>programming language</strong>, and an <strong>algorithm</strong>;</li>
+              <li data-step="2">describe how C and C++ influenced Java;</li>
+              <li data-step="3">use a Java variable, read keyboard input, and print output;</li>
+              <li data-step="4">use comments and whitespace to make code readable;</li>
+              <li data-step="5">distinguish syntax, logic, and runtime errors from warnings;</li>
+              <li data-step="6">explain how an IDE supports the write–run–debug workflow.</li>
+            </ul>
+          </div>
+          <footer class="slide-footer"><span>We finish by building the married-couple names program.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Examples of programs used today" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 1 · Why programming</span><strong>Program examples</strong>
+          </nav>
+          <div class="content-stack examples-layout">
+            <header>
+              <h2>Examples of programs used today</h2>
+              <p class="lead">A program receives information, follows instructions, and produces a useful result.</p>
+            </header>
+            <div class="program-grid" aria-label="Six categories of useful programs">
+              <article class="program-example" data-step="1">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 36 18 9l9 15 13-4-8 19-13-8Z"/></svg>
+                <h3>Navigation</h3><p>Finds a route from live location and map data.</p>
+              </article>
+              <article class="program-example" data-step="2">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 9h34v25H23l-10 7v-7H7Z"/></svg>
+                <h3>Messaging</h3><p>Delivers text, images, and calls across networks.</p>
+              </article>
+              <article class="program-example" data-step="3">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="10" width="36" height="28" rx="2"/><path d="m20 18 12 6-12 7Z"/></svg>
+                <h3>Streaming</h3><p>Sends audio or video while it is being played.</p>
+              </article>
+              <article class="program-example" data-step="4">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="12" width="36" height="25" rx="3"/><path d="M6 19h36M12 30h9"/></svg>
+                <h3>Payments</h3><p>Checks, records, and protects transactions.</p>
+              </article>
+              <article class="program-example" data-step="5">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 12a8 8 0 0 1 14-3 8 8 0 0 1 5 13 8 8 0 0 1-4 14H16a8 8 0 0 1-4-14 8 8 0 0 1 4-10Z"/><path d="M18 24h12M24 18v12"/></svg>
+                <h3>AI tools</h3><p>Find patterns to generate, classify, or recommend.</p>
+              </article>
+              <article class="program-example" data-step="6">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5 40 11v12c0 10-6 17-16 21C14 40 8 33 8 23V11Z"/><path d="m16 24 5 5 11-12"/></svg>
+                <h3>Safety systems</h3><p>Monitor conditions and react when risk is detected.</p>
+              </article>
+            </div>
+            <p class="linking">These programs feel modern, but the languages used to build them evolved over decades.</p>
+          </div>
+          <footer class="slide-footer"><span>Think: What are the input, process, and output of a navigation app?</span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="A brief history from C to Java" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 2 · Program foundations</span><strong>§1.3 Language history</strong>
+          </nav>
+          <div class="content-stack history-layout">
+            <header>
+              <p class="part-label">Part 2 · Program foundations</p>
+              <h2>A brief history from C to Java</h2>
+            </header>
+            <div class="timeline" aria-label="Timeline from C to Java">
+              <article data-step="1"><time>1978</time><h3>C</h3><p>Kernighan and Ritchie’s book helped C become a dominant systems language.</p></article>
+              <article data-step="2"><time>1985</time><h3>C++</h3><p>Stroustrup extended C with object-oriented programming. “++” suggests an improvement.</p></article>
+              <article data-step="3"><time>1991 → 1995</time><h3>Java</h3><p>James Gosling’s team at Sun began Java in 1991; its first public release came in 1995.</p></article>
+            </div>
+            <div class="java-note" data-step="4">
+              <p>Java kept familiar C/C++-style syntax and used a virtual machine to help the same program run on different systems.</p>
+              <p><strong>Java and JavaScript are different languages.</strong></p>
+            </div>
+            <p class="linking">A language gives us the notation. A program is one specific solution written in that notation.</p>
+          </div>
+          <footer class="slide-footer"><span>Selected history from §1.3</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Program vs. programming language" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 2 · Program foundations</span><strong>§1.6 Programs</strong>
+          </nav>
+          <div class="content-stack comparison-layout">
+            <header><h2>Program vs. programming language</h2></header>
+            <div class="definition-columns">
+              <div data-step="1">
+                <p class="term">Program</p>
+                <p>A specific sequence of instructions that tells a computer how to perform a task.</p>
+                <p class="example-line"><strong>Example:</strong> a program that calculates weekly pay.</p>
+              </div>
+              <div data-step="2">
+                <p class="term">Programming language</p>
+                <p>A defined vocabulary and grammar used to write programs.</p>
+                <p class="example-line"><strong>Examples:</strong> Java, Python, and C++.</p>
+              </div>
+            </div>
+            <p class="relationship" data-step="3"><strong>Relationship:</strong> Java is the language; <code>Salary.java</code> is one program written in Java.</p>
+            <p class="linking">Before writing that program, we first decide the exact steps it should perform.</p>
+          </div>
+          <footer class="slide-footer"><span>Check: Is “Java” a program or a programming language?</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="What is an algorithm?" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 2 · Program foundations</span><strong>§1.6 Algorithms</strong>
+          </nav>
+          <div class="content-stack algorithm-layout">
+            <header>
+              <h2>What is an algorithm?</h2>
+              <p class="lead">An <strong>algorithm</strong> is a precise sequence of steps that solves a problem.</p>
+            </header>
+            <div class="concept-flow" data-step="1" aria-label="Problem to execution flow">
+              <span>Problem</span><b>→</b><span>Algorithm</span><b>→</b><span>Java program</span><b>→</b><span>Execution</span>
+            </div>
+            <div class="demo-box triangle-demo" data-step="2">
+              <div>
+                <p class="demo-label">Example · Area of a triangle</p>
+                <svg viewBox="0 0 240 150" role="img" aria-label="Triangle with base 8 and height 5">
+                  <path d="M25 125h190L135 20Z"/><path class="height-line" d="M135 20v105"/>
+                  <text x="107" y="145">base = 8</text><text x="142" y="78">height = 5</text>
+                </svg>
+              </div>
+              <ol>
+                <li><strong>Input:</strong> base = 8, height = 5</li>
+                <li><strong>Process:</strong> area = 0.5 × base × height</li>
+                <li><strong>Output:</strong> area = 20</li>
+              </ol>
+            </div>
+            <p class="linking">Java needs places to store the input and intermediate results. Those places are variables.</p>
+          </div>
+          <footer class="slide-footer"><span>An algorithm is language-independent; code expresses it in a language.</span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Variables in Java" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 3 · Java basics</span><strong>§1.7 Variables</strong>
+          </nav>
+          <div class="content-stack variables-layout">
+            <header>
+              <p class="part-label">Part 3 · Java basics</p>
+              <h2>Variables in Java</h2>
+              <p class="lead">A <strong>variable</strong> is a named place in memory that stores a value that may change.</p>
+            </header>
+            <div class="demo-box variable-demo">
+              <div class="code-steps">
+                <p data-step="1"><code><span class="kw">int</span> wage;</code><span><strong>Declare:</strong> create an integer variable named <code>wage</code>.</span></p>
+                <p data-step="2"><code>wage = <span class="num">20</span>;</code><span><strong>Assign:</strong> store <code>20</code> in that variable.</span></p>
+                <p data-step="3"><code>wage * 40 * 52</code><span><strong>Use:</strong> read the stored value in a calculation.</span></p>
+              </div>
+              <div class="memory-view" data-step="2" aria-label="Memory cell wage contains 20">
+                <span>wage</span><strong>20</strong>
+              </div>
+            </div>
+            <p class="note-line" data-step="3"><code>=</code> means <strong>assignment</strong>: put the value on the right into the variable on the left.</p>
+            <p class="linking">A variable can receive a fixed value from the code, or it can receive a value typed by the user.</p>
+          </div>
+          <footer class="slide-footer"><span>Type → name → stored value</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Input in Java" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 3 · Java basics</span><strong>§1.7 Input</strong>
+          </nav>
+          <div class="content-stack input-layout">
+            <header>
+              <h2>Input in Java</h2>
+              <p class="lead">Input lets a program receive data while it is running. Java can read keyboard input with a <code>Scanner</code>.</p>
+            </header>
+            <div class="demo-box input-demo">
+              <pre aria-label="Java Scanner input example"><code><span data-step="1"><span class="kw">import</span> java.util.Scanner;</span>
+
+<span data-step="2">Scanner scnr = <span class="kw">new</span> Scanner(System.in);</span>
+
+<span data-step="3"><span class="kw">int</span> wage;</span>
+<span data-step="4">wage = scnr.nextInt();</span></code></pre>
+              <ol>
+                <li data-step="1">Make the <code>Scanner</code> class available.</li>
+                <li data-step="2">Connect a scanner named <code>scnr</code> to keyboard input.</li>
+                <li data-step="3">Declare the variable that will store the input.</li>
+                <li data-step="4"><code>nextInt()</code> reads one integer and assigns it to <code>wage</code>.</li>
+              </ol>
+            </div>
+            <div class="data-flow" data-step="4"><span>User types <strong>20</strong></span><b>→</b><span><code>nextInt()</code></span><b>→</b><span><code>wage</code> stores <strong>20</strong></span></div>
+            <p class="linking">Once the program stores a value, it can calculate with it and display a result.</p>
+          </div>
+          <footer class="slide-footer"><span><code>nextInt()</code> reads an integer; <code>nextLine()</code> reads a line of text.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Output in Java" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 3 · Java basics</span><strong>§1.7 Output</strong>
+          </nav>
+          <div class="content-stack output-layout">
+            <header>
+              <h2>Output in Java</h2>
+              <p class="lead">Output communicates a result to the user.</p>
+            </header>
+            <div class="demo-box output-demo">
+              <div class="output-code">
+                <p data-step="1"><code>System.out.print(<span class="str">"Salary is "</span>);</code><span>prints text and stays on the same line</span></p>
+                <p data-step="2"><code>System.out.println(wage);</code><span>prints the variable’s value, then starts a new line</span></p>
+                <p data-step="3"><code>System.out.println(<span class="str">"Wage is: "</span> + wage);</code><span><code>+</code> joins text and a value</span></p>
+              </div>
+              <div class="console-preview" aria-label="Console output">
+                <span>Console</span>
+                <pre data-step="1">Salary is <b data-step="2">20</b>
+<span data-step="3">Wage is: 20</span></pre>
+              </div>
+            </div>
+            <p class="note-line" data-step="3">Text inside quotes is a <strong>string literal</strong>. A variable name without quotes prints its stored value.</p>
+            <p class="linking">We can now connect input, calculation, and output in one complete program.</p>
+          </div>
+          <footer class="slide-footer"><span><code>print</code>: same line · <code>println</code>: add newline</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Complete input–process–output example" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 3 · Java basics</span><strong>§1.7 Complete example</strong>
+          </nav>
+          <div class="content-stack salary-layout">
+            <header>
+              <h2>Complete input–process–output example</h2>
+              <p class="lead">Goal: read an hourly wage and estimate annual salary using 40 hours × 52 weeks.</p>
+            </header>
+            <div class="demo-box salary-demo">
+              <pre><code><span class="kw">import</span> java.util.Scanner;
+
+<span class="kw">public class</span> Salary {
+  <span class="kw">public static void</span> main(String[] args) {
+    Scanner scnr = <span class="kw">new</span> Scanner(System.in);
+    <span class="kw">int</span> wage;
+
+    wage = scnr.nextInt();             <span class="comment">// input</span>
+    <span class="kw">int</span> salary = wage * 40 * 52;    <span class="comment">// process</span>
+    System.out.println(<span class="str">"Salary is "</span> + salary); <span class="comment">// output</span>
+  }
+}</code></pre>
+              <div class="run-panel">
+                <label for="salaryInput">Hourly wage</label>
+                <div class="run-row"><input id="salaryInput" type="number" value="20" min="0" step="1"><button id="runSalary" type="button">Run program</button></div>
+                <div class="run-trace" aria-live="polite">
+                  <p><span>Input</span><strong id="salaryMemory">wage = 20</strong></p>
+                  <p><span>Process</span><strong id="salaryFormula">20 × 40 × 52</strong></p>
+                  <p><span>Output</span><strong id="salaryOutput">Salary is 41600</strong></p>
+                </div>
+              </div>
+            </div>
+            <p class="linking">The computer ignores explanations written as comments, but those comments help a human follow the program.</p>
+          </div>
+          <footer class="slide-footer"><span>Try another whole-number wage.</span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Comments in Java" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 4 · Writing and fixing Java</span><strong>§1.8 Comments</strong>
+          </nav>
+          <div class="content-stack comments-layout">
+            <header>
+              <p class="part-label">Part 4 · Writing and fixing Java</p>
+              <h2>Comments in Java</h2>
+              <p class="lead">A <strong>comment</strong> explains code to people. The Java compiler ignores it.</p>
+            </header>
+            <ul class="plain-list">
+              <li data-step="1"><code>//</code> starts a single-line comment.</li>
+              <li data-step="2"><code>/*</code> and <code>*/</code> surround a block comment.</li>
+              <li data-step="3">Useful comments explain <strong>purpose</strong> or a non-obvious decision.</li>
+            </ul>
+            <div class="demo-box comment-demo" data-step="3">
+              <pre><code><span class="comment">// Convert an hourly wage to an annual estimate.</span>
+<span class="kw">int</span> salary = wage * 40 * 52;
+
+<span class="comment">/* This estimate assumes
+   40 hours for 52 weeks. */</span></code></pre>
+              <p>The comments explain the assumption; the code performs the calculation.</p>
+            </div>
+            <p class="linking">Comments add explanation. Whitespace adds visual structure.</p>
+          </div>
+          <footer class="slide-footer"><span>Comments are for readers, not for execution.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Whitespace in Java" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 4 · Writing and fixing Java</span><strong>§1.8 Whitespace</strong>
+          </nav>
+          <div class="content-stack whitespace-layout">
+            <header>
+              <h2>Whitespace in Java</h2>
+              <p class="lead"><strong>Whitespace</strong> means spaces, tabs, and newlines. Java ignores most whitespace between code elements.</p>
+            </header>
+            <div class="demo-box whitespace-demo">
+              <div data-step="1"><p class="demo-label">Hard to read</p><pre><code><span class="kw">if</span>(wage&gt;0){salary=wage*40*52;
+System.out.println(salary);}</code></pre></div>
+              <div data-step="2"><p class="demo-label">Same meaning, clearer structure</p><pre><code><span class="kw">if</span> (wage &gt; 0) {
+  salary = wage * 40 * 52;
+  System.out.println(salary);
+}</code></pre></div>
+            </div>
+            <ul class="plain-list compact">
+              <li data-step="2">Indent code inside braces and use newlines to separate steps.</li>
+              <li data-step="3">Whitespace <strong>inside a string</strong> is output, so it is not ignored: <code>"Salary is "</code>.</li>
+            </ul>
+            <p class="linking">Readable formatting helps us notice mistakes—but we still need to understand the types of mistakes Java reports.</p>
+          </div>
+          <footer class="slide-footer"><span>Whitespace usually changes readability, not behavior.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Errors and warnings in Java" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 4 · Writing and fixing Java</span><strong>§1.10 Errors and warnings</strong>
+          </nav>
+          <div class="content-stack errors-layout">
+            <header><h2>Errors and warnings in Java</h2></header>
+            <div class="error-types">
+              <article data-step="1"><h3>Syntax error</h3><p>Breaks Java’s grammar. The compiler normally stops and reports an error.</p><code>int wage</code></article>
+              <article data-step="2"><h3>Logic error</h3><p>The program runs, but the algorithm or calculation produces the wrong result.</p><code>wage * 40 * 50</code></article>
+              <article data-step="3"><h3>Runtime error</h3><p>The program compiles, then fails while it is executing.</p><code>10 / 0</code></article>
+              <article data-step="4"><h3>Warning</h3><p>The compiler sees a possible problem. It usually still creates the executable program.</p><code>javac -Xlint File.java</code></article>
+            </div>
+            <div class="debug-guidance" data-step="5">
+              <p><strong>Practical workflow:</strong> compile and run after a few statements, fix the first compiler error, then compile again.</p>
+              <p>Do not ignore warnings; investigate why they appear.</p>
+            </div>
+          </div>
+          <footer class="slide-footer"><span>A reported line may be near the cause, not exactly at it.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Demo: Find and fix the errors" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 4 · Writing and fixing Java</span><strong>§1.10 Error demo</strong>
+          </nav>
+          <div class="content-stack error-demo-layout">
+            <header>
+              <h2>Demo: Find and fix the errors</h2>
+              <p class="lead">Select each highlighted line. Classify the problem before reading the fix.</p>
+            </header>
+            <div class="demo-box error-hunt">
+              <div class="code-lines" aria-label="Java code with three errors">
+                <button class="error-line" type="button" data-kind="Syntax error" data-fix="Add the missing semicolon: int wage;">
+                  <span>1</span><code><span class="kw">int</span> wage</code>
+                </button>
+                <p><span>2</span><code>wage = 20;</code></p>
+                <button class="error-line" type="button" data-kind="Syntax error" data-fix="Close the string: System.out.println(&quot;Salary is &quot;);">
+                  <span>3</span><code>System.out.println(<span class="str">"Salary is</span>);</code>
+                </button>
+                <button class="error-line" type="button" data-kind="Logic error" data-fix="Use 52 weeks: wage * 40 * 52">
+                  <span>4</span><code>System.out.println(wage * 40 * 50);</code>
+                </button>
+              </div>
+              <div class="error-explanation" id="errorExplanation" aria-live="polite">
+                <span>Choose a highlighted line</span>
+                <h3>What kind of problem is it?</h3>
+                <p>Decide whether the line violates Java syntax or produces the wrong calculation.</p>
+              </div>
+            </div>
+            <p class="linking">An IDE puts the editor, compiler messages, and output in one place, which makes this cycle faster.</p>
+          </div>
+          <footer class="slide-footer"><span>Syntax problems prevent compilation; logic problems may hide in valid code.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Integrated development environments (IDEs)" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 4 · Writing and fixing Java</span><strong>§1.12 IDEs</strong>
+          </nav>
+          <div class="content-stack ide-layout">
+            <header>
+              <h2>Integrated development environments (IDEs)</h2>
+              <p class="lead">An <strong>IDE</strong> is software that integrates the tools needed to develop programs.</p>
+            </header>
+            <div class="ide-content">
+              <ul class="plain-list">
+                <li data-step="1"><strong>Editor:</strong> write code with syntax highlighting and automatic indentation.</li>
+                <li data-step="2"><strong>Build tools:</strong> compile and run with a command or shortcut.</li>
+                <li data-step="3"><strong>Console:</strong> display program input, output, and compiler messages.</li>
+                <li data-step="4"><strong>Debugger:</strong> pause execution and inspect values.</li>
+              </ul>
+              <div class="ide-wireframe" data-step="1" aria-label="Simplified IDE layout">
+                <div class="ide-tabs">Salary.java</div>
+                <div class="ide-files">Files<br><strong>Salary.java</strong></div>
+                <pre class="ide-editor"><code><span class="kw">int</span> wage;
+wage = scnr.nextInt();
+System.out.println(wage);</code></pre>
+                <div class="ide-console">Console<br><strong>20</strong></div>
+              </div>
+            </div>
+            <div class="ide-flow" data-step="5"><span>Write</span><b>→</b><span>Compile</span><b>→</b><span>Run</span><b>→</b><span>Debug</span><b>↺</b></div>
+            <p class="note-line" data-step="5">Examples include IntelliJ IDEA, Eclipse, and VS Code with Java tools.</p>
+          </div>
+          <footer class="slide-footer"><span>An IDE supports programming; it does not replace understanding the code.</span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Married-couple names: problem and algorithm" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 5 · Applied example</span><strong>§1.11 Married-couple names</strong>
+          </nav>
+          <div class="content-stack names-plan-layout">
+            <header>
+              <p class="part-label">Part 5 · Applied example</p>
+              <h2>Married-couple names: problem and algorithm</h2>
+              <p class="lead">Given <strong>Pat Smith</strong> and <strong>Kelly Jones</strong>, display five possible married-couple names, with Pat listed first.</p>
+            </header>
+            <ol class="algorithm-steps">
+              <li data-step="1"><span>1</span><p>Read four strings: Pat’s first and last name, then Kelly’s first and last name.</p></li>
+              <li data-step="2"><span>2</span><p>Print both original full names.</p></li>
+              <li data-step="3"><span>3</span><p>Print both first names followed by Smith, then by Jones.</p></li>
+              <li data-step="4"><span>4</span><p>Print the hyphenated options Smith-Jones and Jones-Smith.</p></li>
+            </ol>
+            <p class="linking">Now we translate that algorithm into Java input, string combination, and output.</p>
+          </div>
+          <footer class="slide-footer"><span>Inputs → combination rules → five output lines</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Demo: Married-couple names" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 5 · Applied example</span><strong>§1.11 Complete demo</strong>
+          </nav>
+          <div class="content-stack names-demo-layout">
+            <header>
+              <h2>Demo: Married-couple names</h2>
+              <p class="lead">Each name is text, so the Java program reads it with <code>nextLine()</code>.</p>
+            </header>
+            <div class="demo-box names-demo">
+              <form id="namesForm">
+                <fieldset><legend>Person 1</legend><label>First name<input id="firstName1" value="Pat" autocomplete="off"></label><label>Last name<input id="lastName1" value="Smith" autocomplete="off"></label></fieldset>
+                <fieldset><legend>Person 2</legend><label>First name<input id="firstName2" value="Kelly" autocomplete="off"></label><label>Last name<input id="lastName2" value="Jones" autocomplete="off"></label></fieldset>
+                <button type="submit">Run program</button>
+                <pre class="names-code"><code>firstName1 = scnr.nextLine();
+lastName1  = scnr.nextLine();
+firstName2 = scnr.nextLine();
+lastName2  = scnr.nextLine();</code></pre>
+              </form>
+              <div class="names-output">
+                <p class="demo-label">Console output</p>
+                <ol id="nameOutputs" aria-live="polite">
+                  <li>Pat Smith and Kelly Jones</li>
+                  <li>Pat and Kelly Smith</li>
+                  <li>Pat and Kelly Jones</li>
+                  <li>Pat and Kelly Smith-Jones</li>
+                  <li>Pat and Kelly Jones-Smith</li>
+                </ol>
+              </div>
+            </div>
+            <p class="linking">This small program uses the complete pattern: variables store input, an algorithm combines values, and output presents the result.</p>
+          </div>
+          <footer class="slide-footer"><span>Change the names, then run again.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Check your understanding" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><span>Part 5 · Applied example</span><strong>Quiz</strong>
+          </nav>
+          <div class="content-stack quiz-layout">
+            <header>
+              <h2>Check your understanding</h2>
+              <p class="lead">Answer each question. Feedback appears immediately.</p>
+            </header>
+            <ol class="choice-quiz">
+              <li data-correct="language"><p>1. Java is a…</p><div><button type="button" data-value="program">program</button><button type="button" data-value="language">programming language</button><output></output></div></li>
+              <li data-correct="assign"><p>2. Which statement reads an integer into <code>numCars</code>?</p><div><button type="button" data-value="assign"><code>numCars = scnr.nextInt();</code></button><button type="button" data-value="wrong"><code>scnr = numCars.nextInt();</code></button><output></output></div></li>
+              <li data-correct="compiler"><p>3. Java comments are ignored by the…</p><div><button type="button" data-value="user">user</button><button type="button" data-value="compiler">compiler</button><output></output></div></li>
+              <li data-correct="warning"><p>4. A warning normally…</p><div><button type="button" data-value="warning">allows compilation, but should be investigated</button><button type="button" data-value="stop">always stops compilation</button><output></output></div></li>
+              <li data-correct="integrated"><p>5. IDE stands for…</p><div><button type="button" data-value="integrated">integrated development environment</button><button type="button" data-value="internet">internet design editor</button><output></output></div></li>
+            </ol>
+          </div>
+          <footer class="slide-footer"><span>Explain one answer to a partner.</span><span></span></footer>
+        </section>
+
+        <section class="slide closing" data-title="From idea to working program" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location">
+            <span>ICS 108</span><span>Chapter 1</span><strong>Lecture summary</strong>
+          </nav>
+          <div class="closing-layout">
+            <div>
+              <p class="eyebrow">From idea to working program</p>
+              <h2>Problem → algorithm → Java → result</h2>
+              <p class="closing-summary">You now have the vocabulary and basic Java tools to read a small program, trace its data, and explain what happens.</p>
+            </div>
+            <div class="next-steps">
+              <p><strong>Next:</strong> write, compile, and run your own Java program in an IDE.</p>
+              <p>Continue with the assigned Chapter 1 reading through your course’s zyBooks or Blackboard link.</p>
+              <small>Selected material from Chapter 1, §§1.3 and 1.6–1.12, pp. 15–90.</small>
+            </div>
+          </div>
+          <footer class="slide-footer"><span>ICS 108</span><span>Questions?</span></footer>
+        </section>
+      </div>
+
+      <div class="deck-controls" aria-label="Presentation controls">
+        <button id="prevButton" type="button" aria-label="Previous step or slide">←</button>
+        <span id="slideTitle" aria-live="polite">Programming foundations in Java</span>
+        <span id="slideCounter">01 / 20</span>
+        <button id="nextButton" type="button" aria-label="Next step or slide">→</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

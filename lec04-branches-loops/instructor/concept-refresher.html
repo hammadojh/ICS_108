@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Expandable pre-lecture refresher for ICS 108 Lecture 4 Java branches, while loops, for loops, and composed control flow.">
+  <meta name="theme-color" content="#111820">
+  <title>ICS 108 Lecture 4 — Instructor Concept Refresher</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111820'/%3E%3Cpath d='M17 14v17c0 10 8 18 18 18h12M17 31h30M41 25l6 6-6 6M41 43l6 6-6 6' fill='none' stroke='%238ec5ff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: oklch(24% 0.018 250);
+      --ink-soft: oklch(43% 0.022 250);
+      --paper: oklch(98% 0.008 85);
+      --canvas: oklch(93% 0.012 245);
+      --line: oklch(82% 0.018 245);
+      --line-strong: oklch(66% 0.045 245);
+      --blue: oklch(51% 0.145 250);
+      --blue-dark: oklch(38% 0.11 250);
+      --blue-pale: oklch(95% 0.026 245);
+      --warm: oklch(95% 0.025 78);
+      --stage: oklch(18% 0.025 250);
+      --stage-soft: oklch(72% 0.035 245);
+      --code-bg: oklch(22% 0.025 250);
+      --code-ink: oklch(94% 0.012 245);
+      --focus: oklch(70% 0.15 245);
+      --accent: var(--blue);
+      --accent-dark: var(--blue-dark);
+      --accent-pale: var(--blue-pale);
+      --green: var(--blue-dark);
+      --green-pale: var(--blue-pale);
+      --code: var(--code-bg);
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+      --space-8: 4rem;
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 1rem; background: var(--canvas); }
+    body { margin: 0; color: var(--ink); background: var(--canvas); font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif; font-size: 1rem; line-height: 1.6; font-kerning: normal; text-rendering: optimizeLegibility; }
+    h1, h2, h3, p, ul, ol, table, pre { margin-top: 0; }
+    p, ul, ol { max-width: var(--measure); }
+    h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+    h1 { max-width: 13ch; margin-bottom: 1.5rem; font-size: clamp(2.7rem, 8vw, 5.5rem); line-height: 0.98; letter-spacing: -0.05em; }
+    h2 { margin-bottom: 0.75rem; font-size: clamp(1.8rem, 4vw, 2.7rem); line-height: 1.08; letter-spacing: -0.035em; }
+    h3 { margin-bottom: 0.5rem; font-size: 1.2rem; line-height: 1.25; }
+    a { color: var(--accent-dark); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.13em; }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-variant-ligatures: none; }
+    code { padding: 0.08em 0.28em; background: var(--blue-pale); color: var(--blue-dark); font-size: 0.92em; }
+    pre { overflow-x: auto; margin-bottom: 1rem; padding: 1.5rem; background: var(--code-bg); color: var(--code-ink); font-size: 0.88rem; line-height: 1.6; tab-size: 2; }
+    pre code { padding: 0; background: transparent; color: inherit; }
+
+    .skip-link { position: fixed; z-index: 30; top: 0.5rem; left: 0.5rem; transform: translateY(-180%); padding: 0.65rem 0.9rem; background: var(--paper); color: var(--ink); }
+    .skip-link:focus { transform: none; }
+    .masthead { padding: clamp(2rem, 7vw, 6rem) max(1.25rem, env(safe-area-inset-left)) clamp(3rem, 8vw, 6.5rem); background: var(--stage); color: var(--paper); }
+    .masthead-inner { width: min(1180px, 100%); margin: 0 auto; }
+    .breadcrumb, .eyebrow, .concept-number, .source-ref, .reading-label { font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; }
+    .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; color: var(--stage-soft); }
+    .breadcrumb a { color: inherit; }
+    .breadcrumb span + span::before { content: "/"; margin-right: 0.5rem; }
+    .eyebrow { margin-bottom: 0.75rem; color: oklch(80% 0.1 245); }
+    .chapter-abstract { display: grid; gap: 1rem; max-width: 900px; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid oklch(39% 0.035 250); }
+    .chapter-abstract .reading-label { color: oklch(80% 0.1 245); }
+    .chapter-abstract p { margin-bottom: 0; color: oklch(91% 0.012 245); font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: clamp(1.18rem, 2.5vw, 1.55rem); line-height: 1.5; }
+    .reading-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+    .reading-controls button { min-height: 44px; padding: 0.65rem 1rem; border: 1px solid oklch(52% 0.04 245); border-radius: 0; background: transparent; color: var(--paper); font: inherit; font-weight: 700; cursor: pointer; }
+    .reading-controls button:hover { background: oklch(26% 0.035 250); }
+    #readingStatus { color: var(--stage-soft); font-size: 0.86rem; }
+
+    .reading-layout { display: grid; grid-template-columns: minmax(14rem, 0.28fr) minmax(0, 0.72fr); gap: clamp(2rem, 6vw, 5rem); width: min(1180px, calc(100% - 2.5rem)); margin: 0 auto; padding: 3rem 0 5rem; }
+    .reading-map { position: sticky; top: 1rem; align-self: start; min-width: 0; }
+    .reading-map h2 { margin-bottom: 1rem; font: 800 0.72rem/1.2 "Avenir Next", sans-serif; letter-spacing: 0.11em; text-transform: uppercase; }
+    .reading-map ol { display: grid; margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+    .reading-map a { display: grid; grid-template-columns: 2rem 1fr; min-height: 44px; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid var(--line); color: var(--ink-soft); text-decoration: none; }
+    .reading-map a:hover { color: var(--blue-dark); }
+    .map-number { color: var(--blue); font: 700 0.76rem "SFMono-Regular", monospace; }
+    .map-links { display: grid; gap: 0.45rem; margin-top: 1.2rem; font-size: 0.86rem; }
+
+    .reading-main { min-width: 0; }
+    .reading-note { margin-bottom: 3rem; padding: 1.2rem 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .reading-note p:last-child { margin-bottom: 0; }
+    .mental-model { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 4rem; }
+    .model-term { padding-top: 0.8rem; border-top: 4px solid var(--blue); }
+    .model-term strong { display: block; margin-bottom: 0.3rem; }
+    .model-term span { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.45; }
+
+    .concept { margin-bottom: 0; padding: 3rem 0; border-top: 1px solid var(--line-strong); scroll-margin-top: 1rem; }
+    .concept:first-of-type { border-top-width: 3px; }
+    .concept-header { display: grid; grid-template-columns: 3.2rem 1fr; gap: 1rem; margin-bottom: 1.2rem; }
+    .concept-number { padding-top: 0.6rem; color: var(--blue); font-family: "SFMono-Regular", monospace; }
+    .source-ref { margin-bottom: 0.4rem; color: var(--ink-soft); }
+    .concept-abstract { margin-bottom: 1rem; color: var(--ink-soft); font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: 1.18rem; line-height: 1.55; }
+    .key-rule { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; margin: 1rem 0; padding: 1rem 1.5rem; background: var(--blue-pale); }
+    .key-rule strong { color: var(--blue-dark); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .key-rule p { margin-bottom: 0; font-weight: 650; }
+
+    details { margin-top: 0.75rem; border-top: 1px solid var(--line); background: var(--paper); }
+    summary { position: relative; min-height: 56px; display: flex; align-items: center; padding: 0.75rem 3.2rem 0.75rem 1rem; color: var(--blue-dark); font-weight: 750; cursor: pointer; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--blue); font: 400 1.5rem "Avenir Next", sans-serif; }
+    details[open] summary::after { content: "−"; }
+    .details-body { padding: 0.2rem 1rem 1.2rem; min-width: 0; }
+    .details-body > *:last-child { margin-bottom: 0; }
+    .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .details-grid > div { min-width: 0; }
+    .details-grid h3 { margin-top: 0.5rem; }
+    .teaching-line { margin: 1rem 0; padding: 0.85rem 1rem; background: var(--warm); }
+    .teaching-line strong { color: var(--blue-dark); }
+    .teaching-line p { margin-bottom: 0; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--blue-pale); color: var(--blue-dark); }
+    .trace-list { margin: 0; padding-left: 1.25rem; }
+    .trace-list li + li { margin-top: 0.45rem; }
+    .warning { padding: 0.85rem 1rem; background: var(--warm); color: var(--blue-dark); }
+
+    @media (max-width: 900px) {
+      .reading-layout { grid-template-columns: 1fr; }
+      .reading-map { position: static; }
+      .reading-map ol { grid-template-columns: 1fr 1fr; column-gap: 1rem; }
+      .mental-model { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .reading-layout { width: min(100% - 1.5rem, 1180px); padding-top: 2rem; }
+      .reading-map ol, .mental-model, .details-grid { grid-template-columns: 1fr; }
+      .concept-header { grid-template-columns: 1fr; gap: 0; }
+      .key-rule { grid-template-columns: 1fr; gap: 0.35rem; }
+      pre { font-size: 0.76rem; }
+      .compare-table { display: block; overflow-x: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; } }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      html, body { background: white; font-size: 10pt; }
+      .masthead { padding: 0 0 10mm; background: white; color: var(--ink); }
+      .masthead h1 { font-size: 34pt; }
+      .breadcrumb, .reading-controls, .reading-map { display: none; }
+      .chapter-abstract p { color: var(--ink); }
+      .reading-layout { display: block; width: auto; padding: 8mm 0 0; }
+      .concept { margin-bottom: 12mm; break-before: page; }
+      details { break-inside: avoid; }
+      details:not([open]) > .details-body { display: block; }
+      summary::after { display: none; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to concepts</a>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <nav class="breadcrumb" aria-label="Resource location"><span>ICS 108</span><span>Lecture 4</span><span>Instructor concept refresher</span></nav>
+      <p class="eyebrow">Three-minute overview · twenty-five-minute depth</p>
+      <h1>Control flow is state plus questions.</h1>
+      <section class="chapter-abstract" aria-labelledby="chapter-abstract-label"><span class="reading-label" id="chapter-abstract-label">Lecture abstract</span><p>Branches and loops use Boolean conditions to control execution. A branch asks once at a decision point and selects a path. A loop asks again after every iteration and repeats while its condition remains true. Correctness therefore depends on four connected ideas: the condition must express the intended rule, the structure must match the relationship among actions, the state must change predictably, and repetition must have a reachable exit. Teach students to trace condition, path, state, and exit together.</p></section>
+      <div class="reading-controls" aria-label="Expandable detail controls"><button id="openAll" type="button">Open all details</button><button id="closeAll" type="button">Close all details</button><span id="readingStatus" role="status" aria-live="polite">All concept abstracts are ready.</span></div>
+    </div>
+  </header>
+
+  <div class="reading-layout">
+    <aside class="reading-map" aria-label="Concept map"><h2>Concept map</h2><ol><li><a href="#concept-1"><span class="map-number">01</span><span>One control model</span></a></li><li><a href="#concept-2"><span class="map-number">02</span><span>Branch selection</span></a></li><li><a href="#concept-3"><span class="map-number">03</span><span>Boolean boundaries</span></a></li><li><a href="#concept-4"><span class="map-number">04</span><span>Loop execution</span></a></li><li><a href="#concept-5"><span class="map-number">05</span><span>Progress & termination</span></a></li><li><a href="#concept-6"><span class="map-number">06</span><span>Sentinels & running state</span></a></li><li><a href="#concept-7"><span class="map-number">07</span><span>For loops & boundaries</span></a></li><li><a href="#concept-8"><span class="map-number">08</span><span>Composition</span></a></li><li><a href="#concept-9"><span class="map-number">09</span><span>Nesting & scope</span></a></li><li><a href="#concept-10"><span class="map-number">10</span><span>Debugging evidence</span></a></li></ol><div class="map-links"><a href="../slides/index.html">Open lecture slides</a><a href="walkthroughs.html">Open IDE walkthroughs</a><a href="../examples/README.md">Open runnable examples</a></div></aside>
+
+    <main class="reading-main" id="main-content">
+      <section class="reading-note"><h2>How to use this refresher</h2><p>Read the visible abstracts and key rules for a fast pre-lecture review. Expand only the concepts where you want an execution trace, proof, edge case, or teaching line. The sequence follows the lecture, but each concept stands alone.</p></section>
+
+      <section aria-labelledby="unifying-model"><h2 id="unifying-model">The unifying mental model</h2><div class="mental-model"><div class="model-term"><strong>Condition</strong><span>Which yes/no question controls execution?</span></div><div class="model-term"><strong>Path</strong><span>Which statements execute for this result?</span></div><div class="model-term"><strong>State</strong><span>Which values change during that path?</span></div><div class="model-term"><strong>Exit</strong><span>What fact lets execution continue afterward?</span></div></div></section>
+
+      <section class="concept" id="concept-1">
+        <header class="concept-header"><span class="concept-number">01</span><div><p class="source-ref">§§3.1, 4.1 · Control flow</p><h2>Branches select; loops select and return</h2><p class="concept-abstract">Normal execution moves statement by statement. Both branches and loops interrupt that straight line with a Boolean question. A branch follows one path and then continues. A loop follows its true path back to the same question, creating possible repetition.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p><code>if</code> checks once each time execution reaches it. <code>while</code> checks before every possible iteration.</p></div>
+        <details id="branch-loop-shape"><summary>Expand the two execution shapes</summary><div class="details-body"><div class="details-grid"><div><h3>Branch</h3><pre><code>if (condition) {
+   body;
+}
+after;</code></pre><ol class="trace-list"><li>Evaluate the condition.</li><li>Run or skip the body.</li><li>Continue at <code>after</code>.</li></ol></div><div><h3>Loop</h3><pre><code>while (condition) {
+   body;
+   update;
+}
+after;</code></pre><ol class="trace-list"><li>Evaluate the condition.</li><li>If true, complete the body and update.</li><li>Return to the condition; false continues at <code>after</code>.</li></ol></div></div><p>Once a loop iteration begins, Java completes the body before checking the condition again—even if some statement midway changes the controlling state.</p><div class="teaching-line"><strong>Useful teaching line</strong><p>“A branch rejoins the program. A loop returns to its question.”</p></div></div></details>
+      </section>
+
+      <section class="concept" id="concept-2">
+        <header class="concept-header"><span class="concept-number">02</span><div><p class="source-ref">§§3.1, 3.3–3.4 · Branch forms</p><h2>Branch structure expresses the relationship among cases</h2><p class="concept-abstract"><code>if</code> makes one action conditional. <code>if-else</code> selects exactly one of two alternatives. An <code>else if</code> chain is an ordered search: the first true condition wins and every remaining branch is skipped.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>Order is semantic. Put specific or high thresholds before broader ones, and use separate <code>if</code>s only when several actions may independently occur.</p></div>
+        <details id="first-true"><summary>Expand first-true reasoning</summary><div class="details-body"><pre><code>if (score &gt;= 90) grade = "A";
+else if (score &gt;= 80) grade = "B";
+else if (score &gt;= 70) grade = "C";
+else grade = "Below C";</code></pre><p>For 83, the 90 test is false and the 80 test is true. Java stores B and skips the rest. The path reaching the B test already proves <code>score &lt; 90</code>, so the test describes the remaining lower boundary only.</p><table class="compare-table"><thead><tr><th>Order</th><th>Result for 95</th></tr></thead><tbody><tr><td>90, 80, 70, 60</td><td>A — intended</td></tr><tr><td>60, 70, 80, 90</td><td>D or better — later grades hidden</td></tr></tbody></table><div class="teaching-line"><strong>Useful teaching line</strong><p>“Every failed condition adds a fact to the path that continues.”</p></div></div></details>
+        <details id="exclusive-independent"><summary>Expand one chain versus independent decisions</summary><div class="details-body"><div class="details-grid"><div><h3>One category</h3><pre><code>if (score &gt;= 90) grade = "A";
+else if (score &gt;= 80) grade = "B";</code></pre><p>At most one category wins.</p></div><div><h3>Several actions</h3><pre><code>if (hasID) allowEntry();
+if (hasCoupon) applyDiscount();</code></pre><p>Both actions may happen.</p></div></div></div></details>
+      </section>
+
+      <section class="concept" id="concept-3">
+        <header class="concept-header"><span class="concept-number">03</span><div><p class="source-ref">§§3.2, 3.4–3.5 · Comparisons and logic</p><h2>Boolean expressions draw the boundaries</h2><p class="concept-abstract">Relational and equality operators produce Booleans. Inclusive operators keep their boundary value; exclusive operators reject it. <code>&amp;&amp;</code> requires both conditions, <code>||</code> accepts either, and <code>!</code> reverses a Boolean.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>Translate the English rule first. “13 through 19” becomes <code>age &gt;= 13 &amp;&amp; age &lt;= 19</code>.</p></div>
+        <details id="range-boundaries"><summary>Expand range translation and tests</summary><div class="details-body"><table class="compare-table"><thead><tr><th>Phrase</th><th>Condition</th><th>Evidence</th></tr></thead><tbody><tr><td>at least 13</td><td><code>age &gt;= 13</code></td><td>12 F, 13 T</td></tr><tr><td>less than 20</td><td><code>age &lt; 20</code></td><td>19 T, 20 F</td></tr><tr><td>13 through 19</td><td><code>age &gt;= 13 &amp;&amp; age &lt;= 19</code></td><td>12 F, 13 T, 19 T, 20 F</td></tr></tbody></table><p>Java cannot read <code>13 &lt;= age &lt;= 19</code>; each comparison must be complete. One equals assigns; two equals compare. For an <code>int</code>, <code>if (age = 19)</code> fails to compile because the condition is not Boolean.</p></div></details>
+        <details id="logic-composition"><summary>Expand AND, OR, NOT, and grouping</summary><div class="details-body"><pre><code>boolean morning = hour &gt;= 8 &amp;&amp; hour &lt; 12;
+boolean afternoon = hour &gt;= 13 &amp;&amp; hour &lt; 17;
+boolean officeOpen = morning || afternoon;
+
+if (!officeOpen) {
+   System.out.println("Closed");
+}</code></pre><p>AND narrows within each interval; OR broadens across alternative intervals. Name complex decisions and parenthesize logical groups when the visual grouping helps the reader.</p></div></details>
+      </section>
+
+      <section class="concept" id="concept-4">
+        <header class="concept-header"><span class="concept-number">04</span><div><p class="source-ref">§§4.1–4.2 · While loops</p><h2>A pre-check loop may execute zero or many times</h2><p class="concept-abstract">A <code>while</code> loop evaluates its condition before entering the body and again after every completed iteration. Each body execution is one iteration. The final false condition check is part of the execution trace even though it does not create an iteration.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>Trace state at every condition check: true enters the complete body; false exits immediately.</p></div>
+        <details id="while-trace"><summary>Expand a complete while-loop trace</summary><div class="details-body"><pre><code>int count = 0;
+while (count &lt; 3) {
+   System.out.print(count + " ");
+   count++;
+}</code></pre><table class="compare-table"><thead><tr><th>State at check</th><th>Condition</th><th>Action</th></tr></thead><tbody><tr><td>count = 0</td><td>true</td><td>print 0; update to 1</td></tr><tr><td>count = 1</td><td>true</td><td>print 1; update to 2</td></tr><tr><td>count = 2</td><td>true</td><td>print 2; update to 3</td></tr><tr><td>count = 3</td><td>false</td><td>exit</td></tr></tbody></table><p>Output is <code>0 1 2</code>. The false check at 3 proves why no fourth iteration occurs. If <code>count</code> began at 3, the body would execute zero times.</p><div class="teaching-line"><strong>Useful teaching line</strong><p>“Trace checks and iterations separately: a check can occur without a body execution.”</p></div></div></details>
+      </section>
+
+      <section class="concept" id="concept-5">
+        <header class="concept-header"><span class="concept-number">05</span><div><p class="source-ref">§4.2 · Loop progress</p><h2>Termination is a claim about changing state</h2><p class="concept-abstract">A loop stops only when a later condition becomes false. Correct termination therefore requires a controlling state, a progress step that changes it in the needed direction, and a reachable boundary that makes the condition false.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>For every loop, identify the state, direction, boundary, and reason that repeated updates must reach the exit.</p></div>
+        <details id="termination-proof"><summary>Expand a small termination proof</summary><div class="details-body"><pre><code>int count = 0;
+while (count &lt; 3) {
+   System.out.println(count);
+   count++;
+}</code></pre><ol class="trace-list"><li><strong>State:</strong> <code>count</code> controls the condition.</li><li><strong>Direction:</strong> every iteration increases it by exactly 1.</li><li><strong>Boundary:</strong> the condition becomes false when count reaches 3.</li><li><strong>Conclusion:</strong> starting at 0, three updates produce 3, so the next check exits.</li></ol><p>Remove <code>count++</code> and the body repeats forever because the condition keeps seeing <code>0 &lt; 3</code>. A wrong-direction update such as <code>count--</code> also moves away from the exit.</p></div></details>
+        <details id="infinite-loop-recovery"><summary>Expand safe recovery from an infinite loop</summary><div class="details-body"><p>Stop the running program in the IDE. Do not start editing while it is still producing output. Reconstruct the controlling state and ask whether the body changes it. Restore a known intended update, rebuild, and rerun the same small input that exposed the issue.</p><div class="teaching-line"><strong>Useful teaching line</strong><p>“A condition describes the exit; progress makes the exit reachable.”</p></div></div></details>
+      </section>
+
+      <section class="concept" id="concept-6">
+        <header class="concept-header"><span class="concept-number">06</span><div><p class="source-ref">§4.3 · Sentinel loops, counters, accumulators</p><h2>Unknown input counts need an explicit stopping signal</h2><p class="concept-abstract">A sentinel is a special input value that ends repetition. It controls the loop but is not part of the data. Accumulators combine processed values; counters record how many values were processed.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>Use the pattern read → test → process → read again. The repeated read is the progress step.</p></div>
+        <details id="sentinel-pattern"><summary>Expand the sentinel pattern and trace</summary><div class="details-body"><pre><code>int total = 0;
+int count = 0;
+int value = input.nextInt();
+
+while (value != 0) {
+   total += value;
+   count++;
+   value = input.nextInt();
+}</code></pre><p>For <code>5 7 2 0</code>, the body processes 5, 7, and 2. It exits when the next check sees 0, producing total 14 and count 3. The sentinel is not added and not counted. If the first value is 0, the body does not run.</p><p>Before computing an average, branch on <code>count &gt; 0</code>; a valid run can contain zero data values.</p></div></details>
+        <details id="running-state"><summary>Expand counter, accumulator, and derived result</summary><div class="details-body"><table class="compare-table"><thead><tr><th>Role</th><th>Typical update</th><th>Meaning</th></tr></thead><tbody><tr><td>Counter</td><td><code>count++</code></td><td>One more valid item was processed.</td></tr><tr><td>Accumulator</td><td><code>total += value</code></td><td>Fold the current item into a running sum.</td></tr><tr><td>Derived result</td><td><code>total / (double) count</code></td><td>Compute after the set is complete.</td></tr></tbody></table></div></details>
+      </section>
+
+      <section class="concept" id="concept-7">
+        <header class="concept-header"><span class="concept-number">07</span><div><p class="source-ref">§4.4 · For loops</p><h2>A for loop exposes a known counting rule</h2><p class="concept-abstract">A <code>for</code> loop places initialization, continuation condition, and update together. It is the natural default when the number of iterations or the index range is known before the loop starts.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>Execution order is initialize once → test → body → update → test again. Use <code>while</code> when repetition is controlled by an event or sentinel instead of a known count.</p></div>
+        <details id="for-trace"><summary>Expand execution order and off-by-one reasoning</summary><div class="details-body"><pre><code>for (int i = 0; i &lt; 5; i++) {
+   System.out.print(i + " ");
+}</code></pre><p>The body receives 0, 1, 2, 3, and 4: five iterations. The update then produces 5, and <code>5 &lt; 5</code> is false. The first exit value does not enter the body.</p><table class="compare-table"><thead><tr><th>Intended values</th><th>Condition</th><th>Count</th></tr></thead><tbody><tr><td>indices 0 through 4</td><td><code>i &lt; 5</code></td><td>5</td></tr><tr><td>human counts 1 through 5</td><td><code>i &lt;= 5</code></td><td>5</td></tr></tbody></table><p>Diagnose off-by-one errors by naming the start, first body value, last body value, and first exit value before changing the operator.</p></div></details>
+        <details id="loop-choice"><summary>Expand the while-versus-for choice</summary><div class="details-body"><div class="details-grid"><div><h3>Prefer <code>for</code></h3><p>Process exactly 10 scores; visit every character; repeat once per row.</p></div><div><h3>Prefer <code>while</code></h3><p>Read until 0; retry while invalid; continue until an external state changes.</p></div></div><p>The forms are mechanically interchangeable in many cases. The teaching goal is readable intent, not proving that only one syntax can work.</p></div></details>
+      </section>
+
+      <section class="concept" id="concept-8">
+        <header class="concept-header"><span class="concept-number">08</span><div><p class="source-ref">§§3.5, 4.4, 4.6 · Composed control flow</p><h2>Loops provide coverage; branches classify each item</h2><p class="concept-abstract">Useful programs often repeat one local decision. The outer loop determines which item is current. A branch inside the body decides how that item affects counters, accumulators, output, or other state.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>Read nesting from outside in: “for every item, make this decision.” Track the current item separately from the state that persists across iterations.</p></div>
+        <details id="score-composition"><summary>Expand a score-report composition</summary><div class="details-body"><pre><code>int total = 0;
+int passed = 0;
+
+for (int i = 0; i &lt; scoreCount; i++) {
+   int score = input.nextInt();
+   total += score;
+   if (score &gt;= 60) {
+      passed++;
+   }
+}
+
+double average = total / (double) scoreCount;</code></pre><p>The loop guarantees that every score is processed. The branch classifies the current score. <code>total</code> and <code>passed</code> persist because they are declared outside the body. The average is computed after the set is complete.</p><p>A useful invariant is: after each iteration, <code>passed</code> equals the number of passing scores among the scores processed so far.</p></div></details>
+        <details id="string-loop"><summary>Expand string iteration with a branch</summary><div class="details-body"><pre><code>for (int i = 0; i &lt; word.length(); i++) {
+   char letter = word.charAt(i);
+   if (letter == 'a' || letter == 'e') {
+      vowelCount++;
+   }
+}</code></pre><p>A string of length N has valid indices 0 through N - 1. Therefore the condition is <code>i &lt; word.length()</code>. Using <code>&lt;=</code> attempts <code>charAt(length)</code> and fails at runtime.</p></div></details>
+      </section>
+
+      <section class="concept" id="concept-9">
+        <header class="concept-header"><span class="concept-number">09</span><div><p class="source-ref">§§4.7, 4.10 · Nested loops and scope</p><h2>Nesting multiplies work; scope limits names</h2><p class="concept-abstract">A nested loop runs its inner loop fully for every outer iteration. Variables declared in a block are visible only within that block. Together, these rules determine both how often code runs and which state survives afterward.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>Trace the inner variable fastest. Declare a value outside the loop only when its result must persist after an iteration or after the loop.</p></div>
+        <details id="nested-loop"><summary>Expand the nested-loop trace</summary><div class="details-body"><pre><code>for (int row = 1; row &lt;= 2; row++) {
+   for (int col = 1; col &lt;= 3; col++) {
+      System.out.print(row + "," + col + " ");
+   }
+}</code></pre><p>The pairs are 1,1; 1,2; 1,3; 2,1; 2,2; 2,3. Two outer iterations times three inner iterations produce six executions of the inner body. The inner counter restarts for every outer iteration because its initialization runs each time execution reaches the inner <code>for</code>.</p></div></details>
+        <details id="scope"><summary>Expand loop-variable scope</summary><div class="details-body"><pre><code>int total = 0;
+
+for (int i = 0; i &lt; 3; i++) {
+   int score = input.nextInt();
+   total += score;
+}
+
+System.out.println(total);
+// i and score are not visible here</code></pre><p><code>total</code> survives because it is declared outside. The index <code>i</code> is scoped to the loop. <code>score</code> is block-local and is recreated during each iteration. Small scope reduces accidental reuse; wider scope is justified only by a wider need.</p></div></details>
+      </section>
+
+      <section class="concept" id="concept-10">
+        <header class="concept-header"><span class="concept-number">10</span><div><p class="source-ref">§§3.8, 4.2, 4.4 · Testing and recovery</p><h2>Debug with predicted paths and state transitions</h2><p class="concept-abstract">Control-flow bugs often compile. Evidence comes from boundary inputs, small traces, and invariants. For branches, find the first unexpected condition result. For loops, find the first check or update where observed state differs from the prediction.</p></div></header>
+        <div class="key-rule"><strong>Key rule</strong><p>State the rule → choose boundary or small-count inputs → predict every check → run → compare at the first mismatch.</p></div>
+        <details id="error-types"><summary>Expand compile-time, runtime, and logic-error recovery</summary><div class="details-body"><table class="compare-table"><thead><tr><th>Error kind</th><th>Example</th><th>Recovery evidence</th></tr></thead><tbody><tr><td>Compile time</td><td><code>if (age = 19)</code> does not produce Boolean.</td><td>Restore the intended comparison; rebuild.</td></tr><tr><td>Runtime</td><td><code>charAt(length)</code> is outside valid string indices.</td><td>Restore <code>i &lt; length</code>; rerun the same word.</td></tr><tr><td>Logic</td><td>A broad branch wins early or <code>i &lt;= n</code> runs once too often.</td><td>Trace boundary cases and the first exit value.</td></tr><tr><td>Non-termination</td><td>A <code>while</code> body never updates controlling state.</td><td>Stop execution, restore progress, rerun the same input.</td></tr></tbody></table><p>Do not promise exact IDE wording. Teach a repeatable recovery loop: stop if needed, restore the last known intended line, rebuild, and rerun the same evidence-producing input.</p></div></details>
+        <details id="minimum-suite"><summary>Expand the minimum test suite</summary><div class="details-body"><ul class="trace-list"><li><strong>Branch threshold:</strong> just below and at the boundary, such as 59/60 or 79/80.</li><li><strong>Counting loop:</strong> N = 0, N = 1, and one ordinary value.</li><li><strong>Sentinel loop:</strong> sentinel first, one data value then sentinel, several values then sentinel.</li><li><strong>String loop:</strong> empty if allowed, one character, and a word where the last character matters.</li><li><strong>Integrated report:</strong> all pass, all fail, and values on both sides of 60.</li></ul><div class="teaching-line"><strong>Useful teaching line</strong><p>“A boundary is where the behavior changes; that is where our evidence must be strongest.”</p></div></div></details>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const details = Array.from(document.querySelectorAll("details"));
+    const status = document.getElementById("readingStatus");
+
+    function setAll(open) {
+      details.forEach((item) => { item.open = open; });
+      status.textContent = open ? `Opened ${details.length} detail sections.` : `Closed ${details.length} detail sections. Abstracts and key rules remain visible.`;
+    }
+
+    document.getElementById("openAll").addEventListener("click", () => setAll(true));
+    document.getElementById("closeAll").addEventListener("click", () => setAll(false));
+
+    function openHashTarget() {
+      if (!window.location.hash) return;
+      const target = document.querySelector(window.location.hash);
+      if (!target) return;
+      if (target.matches("details")) target.open = true;
+      const containingDetail = target.closest("details");
+      if (containingDetail) containingDetail.open = true;
+      if (target.matches(".concept")) {
+        const firstDetail = target.querySelector("details");
+        if (firstDetail) firstDetail.open = true;
+      }
+      requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+    }
+
+    window.addEventListener("hashchange", openHashTarget);
+    openHashTarget();
+
+    let printState = [];
+    window.addEventListener("beforeprint", () => {
+      printState = details.map((item) => item.open);
+      details.forEach((item) => { item.open = true; });
+    });
+    window.addEventListener("afterprint", () => {
+      details.forEach((item, index) => { item.open = printState[index] ?? false; });
+    });
+  </script>
+</body>
+</html>

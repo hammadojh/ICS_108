@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Expandable instructor refresher for ICS 108 Chapter 2 concepts: Java values, variables, expressions, types, input, overflow, and debugging.">
+  <meta name="theme-color" content="#111820">
+  <title>ICS 108 Chapter 2 — Instructor Concept Refresher</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111820'/%3E%3Cpath d='M14 16h36M14 32h28M14 48h36' stroke='%238ec5ff' stroke-width='6'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: oklch(24% 0.018 250);
+      --ink-soft: oklch(43% 0.022 250);
+      --paper: oklch(98% 0.008 85);
+      --canvas: oklch(93% 0.012 245);
+      --line: oklch(82% 0.018 245);
+      --line-strong: oklch(66% 0.045 245);
+      --blue: oklch(51% 0.145 250);
+      --blue-dark: oklch(38% 0.11 250);
+      --blue-pale: oklch(95% 0.026 245);
+      --warm: oklch(95% 0.025 78);
+      --stage: oklch(18% 0.025 250);
+      --stage-soft: oklch(72% 0.035 245);
+      --code-bg: oklch(22% 0.025 250);
+      --code-ink: oklch(94% 0.012 245);
+      --focus: oklch(70% 0.15 245);
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+      --space-8: 4rem;
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 1rem;
+      background: var(--canvas);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: var(--blue-dark); text-underline-offset: 0.18em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+
+    a:focus-visible,
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    code,
+    pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-variant-ligatures: none;
+    }
+
+    code {
+      padding: 0.08em 0.28em;
+      background: var(--blue-pale);
+      color: var(--blue-dark);
+      font-size: 0.92em;
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 0;
+      padding: var(--space-5);
+      background: var(--code-bg);
+      color: var(--code-ink);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+
+    pre code { padding: 0; background: transparent; color: inherit; }
+    h1, h2, h3, p, ul, ol, table { margin-top: 0; }
+    p, ul, ol { max-width: var(--measure); }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-weight: 700;
+    }
+
+    h1 {
+      max-width: 13ch;
+      margin-bottom: var(--space-5);
+      font-size: clamp(2.7rem, 8vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+
+    h2 {
+      margin-bottom: var(--space-3);
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    h3 {
+      margin-bottom: var(--space-2);
+      font-size: 1.2rem;
+      line-height: 1.25;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 10;
+      top: var(--space-3);
+      left: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      transform: translateY(-180%);
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .masthead {
+      padding: clamp(2rem, 7vw, 6rem) max(1.25rem, env(safe-area-inset-left)) clamp(3rem, 8vw, 6.5rem);
+      background: var(--stage);
+      color: var(--paper);
+    }
+
+    .masthead-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .breadcrumb,
+    .eyebrow,
+    .concept-number,
+    .source-ref,
+    .reading-label {
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-7);
+      color: var(--stage-soft);
+    }
+
+    .breadcrumb span + span::before { content: "/"; margin-right: var(--space-2); }
+    .masthead .eyebrow { margin-bottom: var(--space-3); color: oklch(80% 0.1 245); }
+
+    .chapter-abstract {
+      display: grid;
+      gap: var(--space-4);
+      max-width: 900px;
+      margin-top: var(--space-7);
+      padding-top: var(--space-5);
+      border-top: 1px solid oklch(39% 0.035 250);
+    }
+
+    .chapter-abstract .reading-label { color: oklch(80% 0.1 245); }
+
+    .chapter-abstract p {
+      margin-bottom: 0;
+      color: oklch(91% 0.012 245);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: clamp(1.18rem, 2.5vw, 1.55rem);
+      line-height: 1.5;
+    }
+
+    .reading-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+    }
+
+    .reading-controls button {
+      min-height: 44px;
+      padding: 0.65rem 1rem;
+      border: 1px solid oklch(52% 0.04 245);
+      border-radius: 0;
+      background: transparent;
+      color: var(--paper);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .reading-controls button:hover { background: oklch(26% 0.035 250); }
+    .reading-controls button:active { background: oklch(31% 0.045 250); }
+    #readingStatus { color: var(--stage-soft); font-size: 0.88rem; }
+
+    .reading-layout {
+      display: grid;
+      gap: var(--space-7);
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: var(--space-7) 0 var(--space-8);
+    }
+
+    .reading-map {
+      min-width: 0;
+      align-self: start;
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .reading-map h2 {
+      margin-bottom: var(--space-3);
+      font-family: inherit;
+      font-size: 0.78rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .reading-map ol {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-2) var(--space-4);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .reading-map a {
+      display: block;
+      min-height: 44px;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+
+    .reading-map a:hover { color: var(--blue-dark); }
+    .map-number { display: inline-block; width: 1.7rem; color: var(--blue); font-weight: 700; }
+
+    .reading-note {
+      margin-bottom: var(--space-7);
+      padding: var(--space-5) 0;
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .reading-main,
+    .details-body,
+    .details-grid > * { min-width: 0; }
+
+    .reading-note p:last-child { margin-bottom: 0; }
+
+    .mental-model {
+      display: grid;
+      gap: var(--space-5);
+      margin: var(--space-6) 0 var(--space-8);
+    }
+
+    .model-term {
+      padding-top: var(--space-3);
+      border-top: 4px solid var(--blue);
+    }
+
+    .model-term strong {
+      display: block;
+      margin-bottom: var(--space-2);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 1.55rem;
+    }
+
+    .model-term p { margin-bottom: 0; color: var(--ink-soft); }
+
+    .concept {
+      padding: var(--space-7) 0;
+      border-top: 1px solid var(--line-strong);
+      scroll-margin-top: var(--space-4);
+    }
+
+    .concept:first-of-type { border-top-width: 3px; }
+
+    .concept-heading {
+      display: grid;
+      gap: var(--space-2);
+      margin-bottom: var(--space-5);
+    }
+
+    .concept-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-2) var(--space-4);
+    }
+
+    .concept-number { color: var(--blue); }
+    .source-ref { color: var(--ink-soft); font-weight: 600; }
+
+    .concept-abstract {
+      max-width: 72ch;
+      margin-bottom: var(--space-5);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 1.18rem;
+      line-height: 1.62;
+    }
+
+    .core-rule {
+      display: grid;
+      gap: var(--space-2);
+      max-width: 78ch;
+      margin-bottom: var(--space-5);
+      padding: var(--space-4) var(--space-5);
+      background: var(--blue-pale);
+    }
+
+    .core-rule .reading-label { color: var(--blue-dark); }
+    .core-rule p { margin-bottom: 0; font-weight: 650; }
+
+    details {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    details + details { border-top: 0; }
+
+    summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 1.5rem;
+      grid-template-areas:
+        "title icon"
+        "meta icon";
+      align-items: center;
+      gap: var(--space-1) var(--space-4);
+      min-height: 56px;
+      padding: var(--space-3) var(--space-4);
+      color: var(--blue-dark);
+      font-weight: 750;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    summary > span { grid-area: title; }
+    summary > small { grid-area: meta; }
+    summary::after { content: "+"; grid-area: icon; justify-self: end; font-size: 1.45rem; font-weight: 400; line-height: 1; }
+    details[open] summary::after { content: "−"; }
+    summary:hover { background: var(--blue-pale); }
+    summary small { color: var(--ink-soft); font-weight: 500; }
+
+    .details-body {
+      display: grid;
+      gap: var(--space-6);
+      padding: var(--space-5) var(--space-4) var(--space-6);
+      border-top: 1px solid var(--line);
+    }
+
+    .details-grid {
+      display: grid;
+      gap: var(--space-6);
+    }
+
+    .details-body p:last-child,
+    .details-body ul:last-child,
+    .details-body ol:last-child { margin-bottom: 0; }
+
+    .trace-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    .trace-table th,
+    .trace-table td {
+      padding: var(--space-3);
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .trace-table th {
+      color: var(--blue-dark);
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .trace-table code { white-space: nowrap; }
+
+    @media (max-width: 679px) {
+      .trace-table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+    }
+
+    .misconception,
+    .teaching-language {
+      padding: var(--space-4) var(--space-5);
+      background: var(--warm);
+    }
+
+    .misconception strong,
+    .teaching-language strong {
+      display: block;
+      margin-bottom: var(--space-1);
+      color: var(--blue-dark);
+    }
+
+    .concept-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3) var(--space-5);
+      margin-top: var(--space-5);
+      font-size: 0.9rem;
+    }
+
+    .debug-loop {
+      display: grid;
+      gap: var(--space-2);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: debug-step;
+    }
+
+    .debug-loop li {
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: var(--space-3);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--line);
+      counter-increment: debug-step;
+    }
+
+    .debug-loop li::before {
+      content: counter(debug-step);
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .readiness {
+      margin-top: var(--space-7);
+      padding: var(--space-7) 0 0;
+      border-top: 3px solid var(--ink);
+    }
+
+    .readiness ol { padding-left: 1.4rem; }
+    .readiness li { margin-bottom: var(--space-3); padding-left: var(--space-2); }
+
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding: var(--space-5) max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom));
+      background: var(--stage);
+      color: var(--stage-soft);
+      font-size: 0.86rem;
+    }
+
+    .page-footer a { color: var(--paper); }
+
+    @media (min-width: 680px) {
+      .chapter-abstract { grid-template-columns: 9rem 1fr; }
+      .mental-model { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .details-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .reading-map ol { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      summary {
+        grid-template-columns: minmax(0, 1fr) auto 1.5rem;
+        grid-template-areas: "title meta icon";
+        gap: var(--space-4);
+      }
+    }
+
+    @media (min-width: 980px) {
+      .reading-layout { grid-template-columns: 220px minmax(0, 1fr); gap: var(--space-8); }
+      .reading-map { position: sticky; top: var(--space-5); border-bottom: 0; }
+      .reading-map ol { grid-template-columns: 1fr; }
+      .reading-map a { padding: 0.65rem 0; }
+      .reading-note { grid-column: 2; }
+      .reading-main { grid-column: 2; }
+    }
+
+    @media (pointer: coarse) {
+      .reading-controls button,
+      summary,
+      .reading-map a { min-height: 48px; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 16mm 15mm; }
+      html, body { background: white; }
+      body { color: #192027; font-size: 10pt; line-height: 1.45; }
+      .skip-link, .reading-controls, .reading-map, .concept-links, .page-footer { display: none !important; }
+      .masthead { padding: 0 0 10mm; background: white; color: #192027; }
+      .masthead .eyebrow, .chapter-abstract .reading-label { color: #0d4d7f; }
+      .breadcrumb, .chapter-abstract p { color: #34414b; }
+      h1 { max-width: none; font-size: 30pt; }
+      .reading-layout { display: block; width: auto; margin: 0; padding: 8mm 0 0; }
+      .reading-note { margin-bottom: 8mm; }
+      .mental-model { grid-template-columns: repeat(3, 1fr); gap: 6mm; margin: 6mm 0 10mm; }
+      .concept { break-inside: avoid-page; padding: 8mm 0; }
+      h2 { font-size: 20pt; }
+      .concept-abstract { font-size: 11pt; }
+      .core-rule { padding: 3mm 4mm; }
+      details { break-inside: avoid-page; }
+      details > * { display: block !important; }
+      summary { min-height: 0; padding: 3mm 0; }
+      summary::after { display: none; }
+      .details-body { padding: 4mm 0 5mm; }
+      pre { white-space: pre-wrap; font-size: 8.4pt; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to the concept refresher</a>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <nav class="breadcrumb" aria-label="Document location">
+        <span>ICS 108</span><span>Chapter 2</span><span>Instructor preparation</span>
+      </nav>
+      <p class="eyebrow">Pre-lecture concept refresher</p>
+      <h1>Values, types, and state</h1>
+
+      <div class="chapter-abstract">
+        <span class="reading-label">Chapter abstract</span>
+        <p>A Java program moves through a sequence of states. Variables hold the current values, expressions produce new values, and data types determine which values are possible and how operators behave. Most mistakes in this chapter become explainable once you trace the value, its type, and the moment it is stored.</p>
+      </div>
+
+      <div class="reading-controls" aria-label="Detail controls">
+        <button id="expandAll" type="button">Open all details</button>
+        <button id="collapseAll" type="button">Close all details</button>
+        <span id="readingStatus" role="status" aria-live="polite">Core summaries are visible; details are closed.</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="reading-layout">
+    <nav class="reading-map" aria-label="Concept map">
+      <h2>Concept map</h2>
+      <ol>
+        <li><a href="#state"><span class="map-number">01</span>State</a></li>
+        <li><a href="#expressions"><span class="map-number">02</span>Expressions</a></li>
+        <li><a href="#division"><span class="map-number">03</span>Division</a></li>
+        <li><a href="#types"><span class="map-number">04</span>Types</a></li>
+        <li><a href="#constants"><span class="map-number">05</span>Constants</a></li>
+        <li><a href="#text-input"><span class="map-number">06</span>Text input</a></li>
+        <li><a href="#overflow"><span class="map-number">07</span>Overflow</a></li>
+        <li><a href="#debugging"><span class="map-number">08</span>Debugging</a></li>
+      </ol>
+    </nav>
+
+    <main id="main-content" class="reading-main" tabindex="-1">
+      <aside class="reading-note">
+        <p class="reading-label">How to use this document</p>
+        <p>Read the chapter abstract, the concept abstracts, and the blue “keep in mind” rules for a fast refresh. Open a detail section only when you want the execution trace, edge case, worked example, or teaching language behind that summary.</p>
+      </aside>
+
+      <section aria-labelledby="mental-model-title">
+        <p class="eyebrow">The 90-second model</p>
+        <h2 id="mental-model-title">Ask three questions about every line</h2>
+        <div class="mental-model">
+          <div class="model-term"><strong>Meaning</strong><p>What real quantity does this value represent: a count, measurement, character, name, or estimate?</p></div>
+          <div class="model-term"><strong>Type</strong><p>What values can be represented, and what behavior will the operator use for these operands?</p></div>
+          <div class="model-term"><strong>State</strong><p>What value is stored now, and which statement will read or replace it next?</p></div>
+        </div>
+      </section>
+
+      <section class="concept" id="state" aria-labelledby="state-title">
+        <div class="concept-heading">
+          <div class="concept-meta"><span class="concept-number">Concept 01</span><span class="source-ref">Source §§2.1–2.3, 2.5</span></div>
+          <h2 id="state-title">Variables and assignment describe changing state</h2>
+        </div>
+        <p class="concept-abstract">A variable is a named storage location with one current value. A declaration introduces its type and name; initialization gives its first value. An assignment is an action: Java evaluates the expression on the right, then stores the resulting value in the single variable on the left.</p>
+        <div class="core-rule"><span class="reading-label">Keep in mind</span><p>Read <code>numPeople = numPeople + 3;</code> as “read the old value, calculate the new value, then overwrite the variable.” It is not a statement of mathematical equality.</p></div>
+
+        <details id="state-details">
+          <summary><span>Expand the state model</span><small>trace, copies, identifiers, and common errors</small></summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>Execution is sequential</h3>
+                <p>Each statement observes the state left by the statement before it. Compound assignment such as <code>numPeople += 3;</code> is a concise read–calculate–store operation.</p>
+                <table class="trace-table">
+                  <thead><tr><th>Statement</th><th>Current count</th><th>Saved count</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>int numPeople = 5;</code></td><td>5</td><td>—</td></tr>
+                    <tr><td><code>int firstCount = numPeople;</code></td><td>5</td><td>5</td></tr>
+                    <tr><td><code>numPeople += 3;</code></td><td>8</td><td>5</td></tr>
+                    <tr><td><code>numPeople -= 2;</code></td><td>6</td><td>5</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <h3>Primitive assignment copies a value</h3>
+                <p>When one <code>int</code> variable is assigned to another, the current numeric value is copied. No live connection remains between the two variables.</p>
+                <h3>Names and initialization matter</h3>
+                <ul>
+                  <li>Identifiers may contain letters, digits, underscores, and dollar signs, but cannot start with a digit.</li>
+                  <li>Java names are case-sensitive; reserved words cannot be identifiers.</li>
+                  <li>Lower camel case communicates ordinary variable names.</li>
+                  <li>A local variable must be assigned before its value is read.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="misconception"><strong>Common confusion</strong><code>numPeople + 3 = numPeople;</code> is invalid because the left side must identify one assignable storage location, not a calculated expression.</div>
+            <div class="teaching-language"><strong>Useful teaching sentence</strong>“The right side is a question Java answers; the left side is the one place where Java stores the answer.”</div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="../slides/index.html#slide-4">Review slides 4–8</a><a href="walkthroughs.html#module-1">Open walkthrough 1</a></div>
+      </section>
+
+      <section class="concept" id="expressions" aria-labelledby="expressions-title">
+        <div class="concept-heading">
+          <div class="concept-meta"><span class="concept-number">Concept 02</span><span class="source-ref">Source §2.4</span></div>
+          <h2 id="expressions-title">Expressions produce one value</h2>
+        </div>
+        <p class="concept-abstract">An expression combines literals, variables, operators, and method calls and evaluates to one value. Parentheses express intentional grouping. Without parentheses, Java follows its precedence rules; operators at the same precedence level evaluate from left to right.</p>
+        <div class="core-rule"><span class="reading-label">Keep in mind</span><p>For this chapter: parentheses first, then unary minus, then <code>* / %</code>, then <code>+ -</code>. Precedence determines the shape of the calculation before any assignment occurs.</p></div>
+
+        <details id="expressions-details">
+          <summary><span>Expand expression evaluation</span><small>precedence, associativity, grouping, and a circle trace</small></summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>Precedence is not importance</h3>
+                <p>Precedence is a parsing rule that tells Java which operation belongs together first. It does not mean multiplication is conceptually more important than addition.</p>
+                <ol>
+                  <li>Evaluate the innermost parentheses.</li>
+                  <li>Apply higher-precedence operators.</li>
+                  <li>For equal precedence, move left to right.</li>
+                  <li>Use the resulting value in the surrounding expression.</li>
+                </ol>
+              </div>
+              <div>
+                <h3>Why the circle formula fails</h3>
+                <pre><code>double radius = circumference / 2 * Math.PI;</code></pre>
+                <p>Because <code>/</code> and <code>*</code> have equal precedence, <code>10.0 / 2 * Math.PI</code> becomes <code>5.0 * Math.PI</code>, or about <code>15.71</code>. The intended formula needs the complete denominator grouped:</p>
+                <pre><code>double radius = circumference / (2 * Math.PI);</code></pre>
+              </div>
+            </div>
+            <div class="misconception"><strong>Common confusion</strong>Reading a familiar mathematical formula from memory can hide the grouping Java actually performs. Trace the operators in execution order.</div>
+            <div class="teaching-language"><strong>Useful teaching sentence</strong>“Parentheses are not decoration; they make the intended sub-calculation explicit.”</div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="../slides/index.html#slide-9">Review slides 9–10</a><a href="walkthroughs.html#module-5">Open the circle walkthrough</a></div>
+      </section>
+
+      <section class="concept" id="division" aria-labelledby="division-title">
+        <div class="concept-heading">
+          <div class="concept-meta"><span class="concept-number">Concept 03</span><span class="source-ref">Source §§2.11–2.12</span></div>
+          <h2 id="division-title">Division behavior comes from the operands</h2>
+        </div>
+        <p class="concept-abstract">When both operands are integers, Java performs integer division and discards the fractional part; for positive values, <code>7 / 2</code> is <code>3</code>. Modulo, written <code>%</code>, returns the remainder. Together, quotient and remainder decompose totals into complete groups and what remains.</p>
+        <div class="core-rule"><span class="reading-label">Keep in mind</span><p><code>/</code> answers “how many complete groups?” and <code>%</code> answers “what remains?” Use the remainder before decomposing the next smaller unit.</p></div>
+
+        <details id="division-details">
+          <summary><span>Expand quotient and remainder</span><small>7,325-second trace, edge cases, and the one-half trap</small></summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>Decompose from the largest unit</h3>
+                <table class="trace-table">
+                  <thead><tr><th>Question</th><th>Expression</th><th>Result</th></tr></thead>
+                  <tbody>
+                    <tr><td>Complete hours</td><td><code>7325 / 3600</code></td><td>2</td></tr>
+                    <tr><td>Seconds after hours</td><td><code>7325 % 3600</code></td><td>125</td></tr>
+                    <tr><td>Complete minutes</td><td><code>125 / 60</code></td><td>2</td></tr>
+                    <tr><td>Remaining seconds</td><td><code>125 % 60</code></td><td>5</td></tr>
+                  </tbody>
+                </table>
+                <p>The final result is <code>2:2:5</code>. Calculating <code>7325 / 60</code> instead gives total minutes, not minutes remaining after the hours.</p>
+              </div>
+              <div>
+                <h3>Important boundaries</h3>
+                <ul>
+                  <li>Integer division truncates toward zero.</li>
+                  <li>Integer division by zero throws <code>ArithmeticException</code>.</li>
+                  <li>Floating-point division by zero produces <code>Infinity</code> or <code>NaN</code>.</li>
+                  <li><code>(1 / 2)</code> becomes integer zero before it participates in a wider expression.</li>
+                </ul>
+                <pre><code>// zero is produced first
+double area = (1 / 2) * base * height;
+
+// preserve the fraction
+double area = 0.5 * base * height;</code></pre>
+              </div>
+            </div>
+            <div class="teaching-language"><strong>Useful teaching sentence</strong>“Before dividing, identify the type of each operand—not the type of the destination variable.”</div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="../slides/index.html#slide-11">Review slides 11–13</a><a href="walkthroughs.html#module-2">Open walkthrough 2</a></div>
+      </section>
+
+      <section class="concept" id="types" aria-labelledby="types-title">
+        <div class="concept-heading">
+          <div class="concept-meta"><span class="concept-number">Concept 04</span><span class="source-ref">Source §§2.7, 2.12</span></div>
+          <h2 id="types-title">Choose a numeric type from meaning and range</h2>
+        </div>
+        <p class="concept-abstract"><code>int</code> models whole-number counts within its range, <code>long</code> models larger whole-number counts, and <code>double</code> models measurements or calculations that may contain a fraction. A cast changes the type of a value; it must occur before the operation whose behavior needs to change.</p>
+        <div class="core-rule"><span class="reading-label">Keep in mind</span><p>A <code>double</code> variable on the left does not force floating-point division on the right. Java evaluates the right side first using the operand types it already has.</p></div>
+
+        <details id="types-details">
+          <summary><span>Expand numeric types and conversion</span><small>early casts, late casts, formatting, and precision</small></summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>The average example</h3>
+                <pre><code>int totalPoints = 175;
+int attempts = 2;
+
+double wrong = totalPoints / attempts;          // 87.0
+double late  = (double) (totalPoints / attempts); // 87.0
+double right = (double) totalPoints / attempts; // 87.5</code></pre>
+                <p>In the first two expressions, <code>175 / 2</code> becomes integer <code>87</code> before conversion. In the last expression, one operand becomes <code>175.0</code> before division, so the operation is floating-point.</p>
+              </div>
+              <div>
+                <h3>Conversion and presentation differ</h3>
+                <ul>
+                  <li>An implicit conversion from <code>int</code> to <code>double</code> preserves the integer value.</li>
+                  <li>An explicit cast to <code>int</code> truncates the fractional part.</li>
+                  <li><code>printf("%.2f", value)</code> rounds the displayed text, not the stored value.</li>
+                  <li>Floating-point values are approximations; they are not always suitable for exact currency calculations.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="misconception"><strong>Common confusion</strong>Casting the completed quotient is too late. A conversion can change a value’s type, but it cannot reconstruct a fraction already discarded by integer division.</div>
+            <div class="teaching-language"><strong>Useful teaching sentence</strong>“Change an operand before the operation, not the answer after the operation.”</div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="../slides/index.html#slide-14">Review slides 14–16</a><a href="walkthroughs.html#module-3">Open walkthrough 3</a></div>
+      </section>
+
+      <section class="concept" id="constants" aria-labelledby="constants-title">
+        <div class="concept-heading">
+          <div class="concept-meta"><span class="concept-number">Concept 05</span><span class="source-ref">Source §§2.9–2.10</span></div>
+          <h2 id="constants-title">Constants communicate assumptions; methods package calculations</h2>
+        </div>
+        <p class="concept-abstract">A constant variable is initialized once and cannot be reassigned. The <code>final</code> keyword lets the compiler protect an assumption, while an uppercase underscore name explains its meaning. A method call supplies argument values and evaluates to the method’s returned value.</p>
+        <div class="core-rule"><span class="reading-label">Keep in mind</span><p>Use named constants for values that carry meaning or repeat. Use a method when Java already provides the calculation, and check the required number and order of arguments.</p></div>
+
+        <details id="constants-details">
+          <summary><span>Expand constants and <code>Math</code></span><small>syntax, method anatomy, and circle calculations</small></summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>Named assumptions</h3>
+                <pre><code>final int DAYS_PER_YEAR = 365;
+final int MINUTES_PER_DAY = 24 * 60;
+final int BEATS_PER_MINUTE = 72;</code></pre>
+                <p>The names reveal the model. They also centralize changes and prevent accidental reassignment after initialization.</p>
+              </div>
+              <div>
+                <h3>Method and constant members</h3>
+                <ul>
+                  <li><code>Math.sqrt(49.0)</code> returns <code>7.0</code>.</li>
+                  <li><code>Math.pow(radius, 2)</code> returns the square of <code>radius</code>.</li>
+                  <li><code>Math.abs(-99.5)</code> returns <code>99.5</code>.</li>
+                  <li><code>Math.PI</code> is a case-sensitive library constant.</li>
+                </ul>
+                <p>The <code>Math</code> class requires no import. Method names, argument count, argument order, and capitalization must match the API.</p>
+              </div>
+            </div>
+            <div class="misconception"><strong>Common confusion</strong><code>Math.Pi</code> does not name the same member as <code>Math.PI</code>. Java is case-sensitive.</div>
+            <div class="teaching-language"><strong>Useful teaching sentence</strong>“A constant names a stable fact in our model; a method turns input values into a returned value.”</div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="../slides/index.html#slide-17">Review slides 17–18</a><a href="walkthroughs.html#module-5">Open the circle walkthrough</a></div>
+      </section>
+
+      <section class="concept" id="text-input" aria-labelledby="text-input-title">
+        <div class="concept-heading">
+          <div class="concept-meta"><span class="concept-number">Concept 06</span><span class="source-ref">Source §§2.16–2.17</span></div>
+          <h2 id="text-input-title">Text types and input methods model different boundaries</h2>
+        </div>
+        <p class="concept-abstract">A <code>char</code> stores one character literal written in single quotes; a <code>String</code> represents a sequence of characters written in double quotes. <code>Scanner</code> token methods stop at whitespace, while <code>nextLine()</code> reads through the end of the current line.</p>
+        <div class="core-rule"><span class="reading-label">Keep in mind</span><p>Choose the input method from the shape of the required value, then account for what that method leaves unread in the input buffer.</p></div>
+
+        <details id="text-input-details">
+          <summary><span>Expand the input-buffer model</span><small>tokens, lines, characters, and the pending newline</small></summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>Match method to value</h3>
+                <table class="trace-table">
+                  <thead><tr><th>Required value</th><th>Method</th><th>Boundary</th></tr></thead>
+                  <tbody>
+                    <tr><td>integer</td><td><code>nextInt()</code></td><td>numeric token</td></tr>
+                    <tr><td>decimal</td><td><code>nextDouble()</code></td><td>numeric token</td></tr>
+                    <tr><td>one word</td><td><code>next()</code></td><td>whitespace</td></tr>
+                    <tr><td>full line</td><td><code>nextLine()</code></td><td>newline</td></tr>
+                    <tr><td>one character</td><td><code>next().charAt(0)</code></td><td>first character of a token</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <h3>Why the name becomes empty</h3>
+                <p>After the user enters <code>19</code> and presses Enter, <code>nextInt()</code> returns <code>19</code> but leaves the newline. An immediate <code>nextLine()</code> reads the empty remainder before that newline.</p>
+                <pre><code>int age = scnr.nextInt();
+scnr.nextLine();       // discard pending newline
+String name = scnr.nextLine();
+char grade = scnr.next().charAt(0);</code></pre>
+              </div>
+            </div>
+            <div class="misconception"><strong>Common confusion</strong>The extra <code>nextLine()</code> is not a ritual that belongs after every numeric read. It is needed specifically when a pending newline would otherwise be consumed by a following line read.</div>
+            <div class="teaching-language"><strong>Useful teaching sentence</strong>“A Scanner method returns one value and leaves the rest of the input waiting.”</div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="../slides/index.html#slide-20">Review slides 20–21</a><a href="walkthroughs.html#module-4">Open walkthrough 4</a></div>
+      </section>
+
+      <section class="concept" id="overflow" aria-labelledby="overflow-title">
+        <div class="concept-heading">
+          <div class="concept-meta"><span class="concept-number">Concept 07</span><span class="source-ref">Source §§2.18–2.19</span></div>
+          <h2 id="overflow-title">Range applies to intermediate results too</h2>
+        </div>
+        <p class="concept-abstract">An <code>int</code> is a 32-bit signed whole number with a maximum of 2,147,483,647; a <code>long</code> provides a much larger 64-bit range. Overflow occurs when an operation produces a value outside the selected type’s range. It usually wraps to an incorrect value instead of stopping the program.</p>
+        <div class="core-rule"><span class="reading-label">Keep in mind</span><p>A wide destination does not protect a narrow calculation. Convert an operand before a multiplication that may overflow.</p></div>
+
+        <details id="overflow-details">
+          <summary><span>Expand range and overflow</span><small>HealthData trace, early conversion, and boundary tests</small></summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>The risky calculation</h3>
+                <pre><code>int ageDays = 29220;
+int ageMinutesInt = ageDays * 1440;
+
+// both operands are int; overflow happens first
+long wrong = ageMinutesInt * 72;
+
+// one long operand makes the product long
+long right = (long) ageMinutesInt * 72;</code></pre>
+                <p>In HealthData, age 80 produces <code>3,029,529,600</code> estimated heartbeats, which exceeds <code>Integer.MAX_VALUE</code>. Converting when minutes are calculated keeps that value—and the later heartbeat multiplication—in <code>long</code>.</p>
+              </div>
+              <div>
+                <h3>Tests should expose the boundary</h3>
+                <ul>
+                  <li>Age 19 remains within <code>int</code>, so it can hide the defect.</li>
+                  <li>Age 57 is the first whole age whose heartbeat estimate in this simplified model exceeds <code>int</code>.</li>
+                  <li>Age 80 makes the broken <code>int</code> result negative, a strong clue that range—not the real-world quantity—is wrong.</li>
+                </ul>
+                <p>Range reasoning belongs before implementation: estimate the largest plausible magnitude, then choose the type.</p>
+              </div>
+            </div>
+            <div class="misconception"><strong>Common confusion</strong><code>long result = intValue * intValue;</code> can still overflow because the two <code>int</code> operands determine the multiplication type before assignment to <code>long</code>.</div>
+            <div class="teaching-language"><strong>Useful teaching sentence</strong>“The operation needs enough range at the moment it runs—not only after the result is stored.”</div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="../slides/index.html#slide-19">Review slide 19</a><a href="walkthroughs.html#module-6">Open walkthrough 6</a></div>
+      </section>
+
+      <section class="concept" id="debugging" aria-labelledby="debugging-title">
+        <div class="concept-heading">
+          <div class="concept-meta"><span class="concept-number">Concept 08</span><span class="source-ref">Source §§2.6, 2.22</span></div>
+          <h2 id="debugging-title">Debugging turns a wrong result into a testable explanation</h2>
+        </div>
+        <p class="concept-abstract">A compile-time error prevents a successful build, a runtime error interrupts execution, and a logic error allows the program to finish with the wrong result. Methodical debugging observes the evidence, predicts one cause, designs a focused test, and uses the result to keep or reject that explanation.</p>
+        <div class="core-rule"><span class="reading-label">Keep in mind</span><p>Change one relevant thing, rerun the same input, and compare against a predicted value or range. Random edits destroy the evidence you need.</p></div>
+
+        <details id="debugging-details">
+          <summary><span>Expand the debugging method</span><small>error categories, focused tests, and integration</small></summary>
+          <div class="details-body">
+            <div class="details-grid">
+              <div>
+                <h3>The loop</h3>
+                <ol class="debug-loop">
+                  <li><span><strong>Observe.</strong> State the actual output and the expected output precisely.</span></li>
+                  <li><span><strong>Predict.</strong> Name one possible cause grounded in the code.</span></li>
+                  <li><span><strong>Test.</strong> Print one intermediate value, isolate one expression, or substitute one known value.</span></li>
+                  <li><span><strong>Decide.</strong> Keep or reject the prediction based on the evidence.</span></li>
+                  <li><span><strong>Fix and verify.</strong> Make the smallest repair and rerun the original input.</span></li>
+                </ol>
+              </div>
+              <div>
+                <h3>Error categories in this chapter</h3>
+                <table class="trace-table">
+                  <thead><tr><th>Category</th><th>Example</th><th>Evidence</th></tr></thead>
+                  <tbody>
+                    <tr><td>Compile-time</td><td><code>Math.Pi</code></td><td>name is not found</td></tr>
+                    <tr><td>Runtime</td><td><code>360 / 0</code></td><td><code>ArithmeticException</code></td></tr>
+                    <tr><td>Logic</td><td>wrong circle grouping</td><td>program finishes with 15.71</td></tr>
+                  </tbody>
+                </table>
+                <p>HealthData integrates the chapter: input provides a value; variables record state; constants name assumptions; expressions transform units; types protect range; and output supplies evidence for verification.</p>
+              </div>
+            </div>
+            <div class="teaching-language"><strong>Useful teaching sentence</strong>“A bug is not a reason to guess; it is a claim about the program that we can test.”</div>
+          </div>
+        </details>
+        <div class="concept-links"><a href="../slides/index.html#slide-22">Review slides 22–23</a><a href="walkthroughs.html#module-5">Open the debugging walkthrough</a></div>
+      </section>
+
+      <section class="readiness" aria-labelledby="readiness-title">
+        <p class="eyebrow">Before entering the room</p>
+        <h2 id="readiness-title">Lecture-ready self-check</h2>
+        <ol>
+          <li>Can you trace the bus example without treating assignment as equality?</li>
+          <li>Can you explain <code>7 / 2</code> and <code>17 % 5</code> using operand types?</li>
+          <li>Can you show why a cast after division is too late?</li>
+          <li>Can you derive <code>2:2:5</code> from 7,325 seconds?</li>
+          <li>Can you describe exactly what remains after <code>nextInt()</code>?</li>
+          <li>Can you explain why assigning an <code>int</code> product to <code>long</code> may still overflow?</li>
+          <li>Can you distinguish compile-time, runtime, and logic evidence?</li>
+          <li>Can you state one focused test for the incorrect circle radius?</li>
+        </ol>
+        <details id="readiness-answers">
+          <summary><span>Reveal the shortest answers</span><small>use only as a final check</small></summary>
+          <div class="details-body">
+            <ol>
+              <li>Evaluate the right side from the current state, then overwrite the one variable on the left.</li>
+              <li>Both operands are <code>int</code>: the quotient is 3 and the remainder is 2.</li>
+              <li>The fractional part is discarded before the late cast; cast an operand before division.</li>
+              <li>Two hours, 125 seconds remain; two minutes, five seconds remain.</li>
+              <li>The newline produced by Enter remains after the numeric token.</li>
+              <li>The multiplication runs as <code>int</code> before assignment; convert an operand first.</li>
+              <li>Build failure, interrupted execution, and completed execution with a wrong result.</li>
+              <li>Print <code>2 * Math.PI</code>, then trace the original operators left to right.</li>
+            </ol>
+          </div>
+        </details>
+      </section>
+    </main>
+  </div>
+
+  <footer class="page-footer">
+    <span>ICS 108 · Chapter 2 · Instructor concept refresher</span>
+    <span><a href="../slides/index.html#slide-1">Lecture deck</a> · <a href="walkthroughs.html">Problem-solving walkthroughs</a> · <a href="../resources/index.html">Source access</a></span>
+  </footer>
+
+  <script>
+    const detailSections = [...document.querySelectorAll("details")];
+    const status = document.getElementById("readingStatus");
+
+    function updateStatus() {
+      const openCount = detailSections.filter((item) => item.open).length;
+      if (openCount === 0) {
+        status.textContent = "Core summaries are visible; details are closed.";
+      } else if (openCount === detailSections.length) {
+        status.textContent = "All detailed sections are open.";
+      } else {
+        status.textContent = `${openCount} of ${detailSections.length} detailed sections open.`;
+      }
+    }
+
+    document.getElementById("expandAll").addEventListener("click", () => {
+      detailSections.forEach((item) => { item.open = true; });
+      updateStatus();
+    });
+
+    document.getElementById("collapseAll").addEventListener("click", () => {
+      detailSections.forEach((item) => { item.open = false; });
+      updateStatus();
+      document.getElementById("main-content").focus({ preventScroll: true });
+    });
+
+    detailSections.forEach((item) => item.addEventListener("toggle", updateStatus));
+
+    function openHashedDetail() {
+      if (!location.hash) return;
+      const target = document.querySelector(location.hash);
+      if (target?.tagName === "DETAILS") target.open = true;
+    }
+
+    window.addEventListener("hashchange", openHashedDetail);
+    openHashedDetail();
+
+    let printState = [];
+    window.addEventListener("beforeprint", () => {
+      printState = detailSections.map((item) => item.open);
+      detailSections.forEach((item) => { item.open = true; });
+    });
+
+    window.addEventListener("afterprint", () => {
+      detailSections.forEach((item, index) => { item.open = printState[index]; });
+      updateStatus();
+    });
+  </script>
+</body>
+</html>

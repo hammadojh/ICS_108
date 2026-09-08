@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Self-contained ICS 108 Lecture 4 instructor walkthroughs for Java branches, while loops, for loops, and composed control flow.">
+  <title>ICS 108 Lecture 4 — Instructor IDE Walkthroughs</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23ffffff'/%3E%3Cpath d='M17 14v17c0 10 8 18 18 18h12M17 31h30M41 25l6 6-6 6M41 43l6 6-6 6' fill='none' stroke='%231769aa' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #15181b;
+      --muted: #596169;
+      --line: #c8d0d7;
+      --blue: #1769aa;
+      --blue-dark: #0d4d7f;
+      --soft: #eef5fb;
+      --soft-warm: #f7f4ed;
+      --paper: #ffffff;
+      --code: #f6f8fa;
+      --danger: #a13b35;
+      --success: #226b42;
+      --canvas: #e5e8eb;
+      --accent: var(--blue);
+      --accent-dark: var(--blue-dark);
+      --accent-pale: var(--soft);
+      --blue-pale: var(--soft);
+      --green: var(--success);
+      --green-pale: #eef7f1;
+      --code-ink: var(--ink);
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--canvas); scroll-behavior: smooth; scroll-padding-top: 1rem; }
+    body { width: min(1120px, calc(100% - 2rem)); margin: 2rem auto; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.58; font-kerning: normal; text-rendering: optimizeLegibility; }
+    h1, h2, h3, p, ul, ol, pre, table { margin-top: 0; }
+    h1 { max-width: 22ch; margin-bottom: 0.5rem; font-size: clamp(2rem, 3.5vw, 2.65rem); line-height: 1.06; letter-spacing: -0.035em; }
+    h2 { margin: 0 0 0.45rem; color: var(--blue-dark); font-size: 1.45rem; line-height: 1.18; letter-spacing: -0.015em; }
+    h3 { margin-bottom: 0.35rem; font-size: 1rem; line-height: 1.3; }
+    p { margin-bottom: 0.7rem; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-variant-ligatures: none; }
+    code { color: var(--accent-dark); font-size: 0.92em; }
+    pre { overflow-x: auto; margin-bottom: 0; padding: 1rem 1.1rem; background: var(--code); color: var(--code-ink); font-size: 0.82rem; line-height: 1.5; tab-size: 3; }
+    pre code { color: inherit; }
+    a { color: var(--accent-dark); text-underline-offset: 0.18em; }
+    a:focus-visible, summary:focus-visible, button:focus-visible { outline: 3px solid color-mix(in srgb, var(--blue) 55%, white); outline-offset: 3px; }
+
+    .skip-link { position: fixed; z-index: 20; top: 0.5rem; left: 0.5rem; transform: translateY(-180%); padding: 0.65rem 0.9rem; background: var(--paper); color: var(--ink); }
+    .skip-link:focus { transform: none; }
+    .screen-nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-bottom: 1rem; padding: 0.75rem 1rem; border-top: 3px solid var(--blue); background: var(--paper); }
+    .screen-nav strong { margin-right: auto; }
+    .screen-nav a { min-height: 44px; display: inline-flex; align-items: center; }
+
+    .page { position: relative; margin-bottom: 2rem; padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 6vw, 4.5rem) clamp(3rem, 6vw, 4.5rem); background: var(--paper); box-shadow: 0 8px 30px rgba(18, 31, 43, 0.12); break-after: page; }
+    .page:last-of-type { margin-bottom: 0; }
+    .page-header { display: grid; grid-template-columns: 1fr auto; gap: 2rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 3px solid var(--blue); }
+    .kicker { margin-bottom: 0.5rem; color: var(--blue); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; }
+    .subtitle { max-width: 66ch; margin-bottom: 0; color: var(--muted); }
+    .meta { min-width: 8.5rem; color: var(--muted); text-align: right; font-size: 0.77rem; line-height: 1.45; }
+    .meta strong { display: block; color: var(--ink); font-size: 0.95rem; }
+
+    .problem-card { margin: 1rem 0 1.5rem; border: 0; border-left: 5px solid var(--blue); background: var(--soft); }
+    .learning-outcome { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; padding: 0.75rem 1.5rem; border-bottom: 1px solid color-mix(in srgb, var(--blue) 22%, var(--line)); background: var(--soft-warm); }
+    .learning-outcome strong { color: var(--accent-dark); }
+    .learning-outcome span { font-weight: 650; }
+    .problem { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; padding: 1rem 1.5rem; }
+    .problem strong { color: var(--accent-dark); }
+    .problem p { margin-bottom: 0; }
+
+    .walkthrough-grid { display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 1.25rem; align-items: start; }
+    .cue-column, .demo-column { display: grid; gap: 0.9rem; min-width: 0; }
+    .cue { padding: 0.8rem 0.9rem; border: 1px solid var(--line); background: var(--paper); }
+    .cue.ask { border-top: 3px solid var(--blue); background: var(--soft); }
+    .cue.answer { border-top: 3px solid var(--success); background: var(--green-pale); }
+    .cue.error { border-top: 3px solid var(--danger); background: #fbefee; }
+    .cue p:last-child, .cue ul:last-child, .cue ol:last-child { margin-bottom: 0; }
+    .cue ul, .cue ol { margin: 0; padding-left: 1.15rem; }
+    .cue li + li { margin-top: 0.25rem; }
+    .label { display: block; margin-bottom: 0.35rem; color: var(--muted); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+    .ask .label { color: var(--blue); }
+    .answer .label { color: var(--green); }
+    .error .label { color: var(--danger); }
+
+    .demo-sequence { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; padding: 0; list-style: none; counter-reset: live-step; }
+    .demo-sequence li { padding: 0.6rem 0.7rem; border: 1px solid var(--line); border-right: 0; counter-increment: live-step; color: var(--muted); font-size: 0.78rem; font-weight: 700; }
+    .demo-sequence li:last-child { border-right: 1px solid var(--line); }
+    .demo-sequence li::before { content: counter(live-step) ". "; color: var(--blue); }
+    .code-panel { border: 1px solid var(--line); }
+    .panel-head { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0.75rem; background: var(--soft); color: var(--muted); font-size: 0.72rem; font-weight: 700; }
+    .code-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.5rem 0.65rem; border-bottom: 1px solid var(--line); background: #fafbfc; }
+    .code-switches { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); background: var(--paper); }
+    .code-switch, .copy-code { min-height: 40px; padding: 0.5rem 0.7rem; border: 1px solid transparent; border-radius: 0; color: var(--blue-dark); background: transparent; font: 700 0.72rem/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; cursor: pointer; }
+    .code-switch[aria-pressed="true"] { border-color: var(--blue); background: var(--blue); color: white; }
+    .copy-code { border-color: var(--blue); background: var(--paper); }
+    .copy-code:hover { background: var(--soft); }
+    .code-version[hidden] { display: none; }
+    .copy-status { min-height: 1.75rem; margin: 0; padding: 0.3rem 0.7rem; border-top: 1px solid var(--line); color: var(--green); background: var(--green-pale); font-size: 0.7rem; line-height: 1.4; }
+    .copy-status:empty { display: none; }
+    .console { background: #111820; }
+    .console .panel-head { background: #202b35; color: #b9c5ce; }
+    .console pre { padding: 0.8rem 1rem; background: transparent; color: #e7edf1; }
+
+    .trace { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .trace th, .trace td { padding: 0.45rem 0.55rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .trace th { background: var(--soft); color: var(--muted); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .trace td code { white-space: nowrap; }
+    .trace .winner { background: var(--green-pale); }
+
+    .concept { margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--blue); background: #fafbfc; }
+    .concept p { max-width: 82ch; }
+    .concept p:last-child { margin-bottom: 0; }
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .bottom-grid .cue { height: 100%; }
+    .bottom-grid .error { border: 0; border-left: 4px solid var(--danger); background: #fbefee; }
+    .bottom-grid .answer { border: 0; border-left: 4px solid var(--success); background: var(--green-pale); }
+    .answer-line { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--line); color: var(--green); font-weight: 650; }
+    .page-number { position: absolute; right: 1.2rem; bottom: 0.8rem; color: var(--muted); font: 0.7rem "SFMono-Regular", monospace; }
+
+    @media (max-width: 800px) {
+      body { width: min(100% - 1rem, 1180px); margin: 0.5rem auto; }
+      .page { min-width: 0; padding: 1.4rem 1.15rem 2.2rem; }
+      .page-header, .walkthrough-grid, .learning-outcome, .problem, .bottom-grid { grid-template-columns: 1fr; gap: 0.65rem; }
+      .walkthrough-grid,
+      .demo-column,
+      .demo-column > *,
+      .code-panel,
+      .code-panel pre { min-width: 0; max-width: 100%; }
+      .demo-column { grid-template-columns: minmax(0, 1fr); }
+      .panel-head { flex-wrap: wrap; }
+      .code-toolbar { align-items: stretch; flex-direction: column; }
+      .code-switches { display: grid; grid-template-columns: 1fr 1fr; }
+      .code-switch, .copy-code { min-height: 44px; }
+      .meta { text-align: left; }
+      .demo-sequence { grid-template-columns: 1fr; }
+      .demo-sequence li { border-right: 1px solid var(--line); border-bottom: 0; }
+      .demo-sequence li:last-child { border-bottom: 1px solid var(--line); }
+    }
+
+    @media print {
+      @page { size: A4; margin: 8mm; }
+      html, body { width: auto; margin: 0; background: white; font-size: 9pt; line-height: 1.48; }
+      .screen-nav, .skip-link, .code-toolbar, .copy-status { display: none !important; }
+      .code-version[data-code-version="starter"] { display: none !important; }
+      .code-version[data-code-version="complete"] { display: block !important; }
+      .page { min-height: calc(297mm - 16mm); margin: 0; padding: 8mm 9mm 9mm; box-shadow: none; }
+      .page-header { grid-template-columns: minmax(0, 1fr) auto; gap: 5mm; margin-bottom: 2.5mm; padding-bottom: 2.5mm; }
+      .meta { text-align: right; }
+      .learning-outcome,
+      .problem { grid-template-columns: 33mm minmax(0, 1fr); gap: 2.5mm; padding: 2mm 2.5mm; }
+      .walkthrough-grid { grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr); gap: 2.75mm; }
+      .bottom-grid { grid-template-columns: 1fr 1fr; gap: 2.5mm; }
+      .demo-sequence { grid-template-columns: repeat(3, 1fr); }
+      .demo-sequence li { border-right: 0; border-bottom: 1px solid var(--line); }
+      .demo-sequence li:last-child { border-right: 1px solid var(--line); }
+      h1 { font-size: 23.5pt; }
+      h2 { font-size: 12pt; }
+      pre { padding: 2.2mm 2.5mm; font-size: 6.9pt; line-height: 1.32; }
+      .problem-card { margin: 2mm 0; }
+      .cue-column, .demo-column { gap: 2mm; }
+      .cue { padding: 2mm 2.5mm; }
+      .demo-sequence li { min-height: 0; padding: 1.5mm 1.8mm; }
+      .panel-head { padding: 1.2mm 2mm; }
+      .trace th,
+      .trace td { padding: 1.2mm 1.6mm; }
+      .concept, .bottom-grid { margin-top: 2mm; padding-top: 2mm; }
+      .page.dense { padding: 6mm 8mm 7mm; }
+      .page.dense .page-header { gap: 3.5mm; margin-bottom: 1.5mm; padding-bottom: 2mm; }
+      .page.dense h1 { font-size: 22pt; }
+      .page.dense .problem-card { margin: 1.5mm 0; }
+      .page.dense .learning-outcome,
+      .page.dense .problem { padding: 1.8mm 2.5mm; }
+      .page.dense .walkthrough-grid { gap: 2.5mm; }
+      .page.dense .cue-column,
+      .page.dense .demo-column { gap: 1.6mm; }
+      .page.dense .cue { padding: 1.7mm 2.2mm; }
+      .page.dense .demo-sequence li { min-height: 0; padding: 1.4mm 1.8mm; }
+      .page.dense pre { padding: 1.9mm 2.2mm; font-size: 6.5pt; line-height: 1.26; }
+      .page.dense .panel-head { padding: 1.2mm 2mm; }
+      .page.dense .trace th,
+      .page.dense .trace td { padding: 1.2mm 1.6mm; }
+      .page.dense .concept,
+      .page.dense .bottom-grid { margin-top: 1.8mm; padding-top: 1.8mm; }
+      .page a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#module-1">Skip to first walkthrough</a>
+  <nav class="screen-nav" aria-label="Instructor resources"><strong>ICS 108 · Lecture 4 instructor set</strong><a href="../slides/index.html">Slides</a><a href="concept-refresher.html">Concept refresher</a><a href="../examples/README.md">Runnable examples</a></nav>
+
+  <main>
+    <article class="page" id="module-1">
+      <header class="page-header"><div><p class="kicker">Problem 1 · Ordered decisions</p><h1>Classify a score without hiding the best grade</h1><p class="subtitle">Use a descending <code>else if</code> chain to make the first-true rule visible.</p></div><p class="meta"><strong>5 minutes</strong>Demo file<br><code>GradeClassifier.java</code><br>Source §§3.1, 3.3–3.4</p></header>
+      <div class="problem-card"><div class="learning-outcome"><strong>Students will learn</strong><span>Trace an ordered <code>else if</code> chain and explain why specific thresholds must appear before broad ones.</span></div><div class="problem"><strong>Problem</strong><p>Read a score from 0–100 and print A, B, C, D, or F. The highest satisfied grade threshold must win.</p></div></div>
+      <div class="walkthrough-grid">
+        <div class="cue-column">
+          <section class="cue ask"><span class="label">Ask before typing</span><p>If <code>score</code> is 95 and the first test is <code>score &gt;= 60</code>, can a later A branch run?</p></section>
+          <section class="cue answer"><span class="label">Expected prediction</span><p>No. The first condition is true, so Java runs that body and skips every later branch.</p></section>
+          <section class="cue"><span class="label">Say while tracing</span><p>“A chain is an ordered search. False continues; the first true result ends the search.”</p></section>
+          <table class="trace"><thead><tr><th>Test for 83</th><th>Value</th><th>Action</th></tr></thead><tbody><tr><td><code>83 &gt;= 90</code></td><td>false</td><td>continue</td></tr><tr class="winner"><td><code>83 &gt;= 80</code></td><td>true</td><td>grade = B</td></tr><tr><td><code>83 &gt;= 70</code></td><td>not tested</td><td>skip</td></tr></tbody></table>
+        </div>
+        <div class="demo-column">
+          <ol class="demo-sequence"><li>Run the broad-first starter</li><li>Observe 95 → D or better</li><li>Switch to descending thresholds</li></ol>
+          <div class="code-panel code-workbench" data-code-workbench>
+            <div class="panel-head"><span>GradeClassifier.java</span><span>Starter exposes the ordering bug</span></div>
+            <div class="code-toolbar" aria-label="GradeClassifier code controls"><div class="code-switches"><button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button><button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button></div><button type="button" class="copy-code" data-copy-code>Copy starter code</button></div>
+            <pre class="code-version" data-code-version="starter"><code>import java.util.Scanner;
+
+public class GradeClassifier {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      System.out.print("Score: ");
+      int score = input.nextInt();
+      String grade;
+
+      // Logic bug: a broad test hides better grades.
+      if (score &gt;= 60) {
+         grade = "D or better";
+      }
+      else if (score &gt;= 90) {
+         grade = "A";
+      }
+      else {
+         grade = "F";
+      }
+
+      System.out.println("Grade: " + grade);
+   }
+}</code></pre>
+            <pre class="code-version" data-code-version="complete" hidden><code>import java.util.Scanner;
+
+public class GradeClassifier {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      System.out.print("Score: ");
+      int score = input.nextInt();
+      String grade;
+
+      if (score &gt;= 90) grade = "A";
+      else if (score &gt;= 80) grade = "B";
+      else if (score &gt;= 70) grade = "C";
+      else if (score &gt;= 60) grade = "D";
+      else grade = "F";
+
+      System.out.println("Grade: " + grade);
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+          <div class="console"><div class="panel-head"><span>Console · complete</span><span>input 83</span></div><pre>Score: 83
+Grade: B</pre></div>
+        </div>
+      </div>
+      <section class="concept"><h2>Explain after the evidence</h2><p>An <code>else if</code> chain is one mutually exclusive decision. Java tests top to bottom, executes the first true body, and skips the rest. Descending thresholds let each failed test establish an upper bound for the path that continues.</p></section>
+      <div class="bottom-grid"><section class="cue error"><span class="label">Logic error · recover</span><p>Keep the same input, reorder the thresholds from 90 down, rebuild, and rerun. The unchanged test makes the repair visible.</p></section><section class="cue answer"><span class="label">Transfer check</span><p>Predict 89, 90, 79, and 80.</p><p class="answer-line">Answer: B, A, C, B.</p></section></div>
+      <span class="page-number">1 / 6</span>
+    </article>
+
+    <article class="page" id="module-2">
+      <header class="page-header"><div><p class="kicker">Problem 2 · Closed range</p><h1>Detect a teen with two boundaries</h1><p class="subtitle">Translate “13 through 19” into two complete comparisons joined by AND.</p></div><p class="meta"><strong>5 minutes</strong>Demo file<br><code>TeenRange.java</code><br>Source §§3.2, 3.4–3.5</p></header>
+      <div class="problem-card"><div class="learning-outcome"><strong>Students will learn</strong><span>Write an inclusive range with <code>&amp;&amp;</code>, test both endpoints, and distinguish assignment from equality.</span></div><div class="problem"><strong>Problem</strong><p>Read an age and print whether it lies in the inclusive teen range from 13 through 19.</p></div></div>
+      <div class="walkthrough-grid">
+        <div class="cue-column">
+          <section class="cue ask"><span class="label">Ask before typing</span><p>For age 19, what does each comparison produce? Why is OR wrong?</p></section>
+          <section class="cue answer"><span class="label">Expected prediction</span><p><code>19 &gt;= 13</code> and <code>19 &lt;= 19</code> are both true. AND is required because both boundaries must hold.</p></section>
+          <section class="cue"><span class="label">Boundary evidence</span><p>Run 12, 13, 19, and 20. These cover just outside and exactly on both boundaries.</p></section>
+          <table class="trace"><thead><tr><th>Age</th><th>Lower</th><th>Upper</th><th>Result</th></tr></thead><tbody><tr><td>12</td><td>F</td><td>T</td><td>F</td></tr><tr class="winner"><td>13</td><td>T</td><td>T</td><td>T</td></tr><tr class="winner"><td>19</td><td>T</td><td>T</td><td>T</td></tr><tr><td>20</td><td>T</td><td>F</td><td>F</td></tr></tbody></table>
+        </div>
+        <div class="demo-column">
+          <ol class="demo-sequence"><li>Run the OR starter</li><li>Observe that almost every age passes</li><li>Replace OR with AND</li></ol>
+          <div class="code-panel code-workbench" data-code-workbench>
+            <div class="panel-head"><span>TeenRange.java</span><span>Starter exposes the logic bug</span></div>
+            <div class="code-toolbar" aria-label="TeenRange code controls"><div class="code-switches"><button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button><button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button></div><button type="button" class="copy-code" data-copy-code>Copy starter code</button></div>
+            <pre class="code-version" data-code-version="starter"><code>import java.util.Scanner;
+
+public class TeenRange {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      System.out.print("Age: ");
+      int age = input.nextInt();
+
+      // Logic bug: either boundary is too broad.
+      boolean isTeen = age &gt;= 13 || age &lt;= 19;
+
+      System.out.println("Teen: " + isTeen);
+   }
+}</code></pre>
+            <pre class="code-version" data-code-version="complete" hidden><code>import java.util.Scanner;
+
+public class TeenRange {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      System.out.print("Age: ");
+      int age = input.nextInt();
+
+      boolean isTeen = age &gt;= 13 &amp;&amp; age &lt;= 19;
+
+      System.out.println("Teen: " + isTeen);
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+          <div class="console"><div class="panel-head"><span>Console · complete</span><span>input 19</span></div><pre>Age: 19
+Teen: true</pre></div>
+        </div>
+      </div>
+      <section class="concept"><h2>Explain after the evidence</h2><p>Each comparison produces a Boolean. Inclusive operators keep their endpoint. AND narrows to the intersection of two requirements; OR broadens to either alternative. Java needs two complete comparisons rather than <code>13 &lt;= age &lt;= 19</code>.</p></section>
+      <div class="bottom-grid"><section class="cue error"><span class="label">Compile-time detour · recover</span><p>Briefly try <code>if (age = 19)</code>. One equals stores an <code>int</code>; two equals compare. Restore the range and rebuild.</p></section><section class="cue answer"><span class="label">Transfer check</span><p>Write a valid score range from 0 through 100.</p><p class="answer-line"><code>score &gt;= 0 &amp;&amp; score &lt;= 100</code></p></section></div>
+      <span class="page-number">2 / 6</span>
+    </article>
+
+    <article class="page dense" id="module-3">
+      <header class="page-header"><div><p class="kicker">Problem 3 · Unknown repetition count</p><h1>Total values until a sentinel appears</h1><p class="subtitle">Use a <code>while</code> loop when the number of valid inputs is not known in advance.</p></div><p class="meta"><strong>6 minutes</strong>Demo file<br><code>SentinelTotal.java</code><br>Source §§4.1–4.3</p></header>
+      <div class="problem-card"><div class="learning-outcome"><strong>Students will learn</strong><span>Trace a pre-check loop, identify its progress step, and keep the sentinel out of the accumulated data.</span></div><div class="problem"><strong>Problem</strong><p>Read positive values until the user enters 0. Print how many values were entered and their total.</p></div></div>
+      <div class="walkthrough-grid">
+        <div class="cue-column">
+          <section class="cue ask"><span class="label">Ask before running</span><p>For input <code>5 7 2 0</code>, which values enter the body? What happens if the body never reads the next value?</p></section>
+          <section class="cue answer"><span class="label">Expected prediction</span><p>Only 5, 7, and 2 enter. Without the second read, <code>value</code> remains 5 and the condition stays true forever.</p></section>
+          <section class="cue"><span class="label">Say while tracing</span><p>“Read once before the loop. Test. Process. Read again so the next test sees new state.”</p></section>
+          <table class="trace"><thead><tr><th>Check</th><th>Total</th><th>Count</th><th>Action</th></tr></thead><tbody><tr><td>5 != 0</td><td>5</td><td>1</td><td>read 7</td></tr><tr><td>7 != 0</td><td>12</td><td>2</td><td>read 2</td></tr><tr><td>2 != 0</td><td>14</td><td>3</td><td>read 0</td></tr><tr><td>0 != 0</td><td>14</td><td>3</td><td>exit</td></tr></tbody></table>
+        </div>
+        <div class="demo-column">
+          <ol class="demo-sequence"><li>Run starter with 5 7 2 0</li><li>Stop the infinite loop</li><li>Add the progress read</li></ol>
+          <div class="code-panel code-workbench" data-code-workbench>
+            <div class="panel-head"><span>SentinelTotal.java</span><span>Starter omits progress</span></div>
+            <div class="code-toolbar" aria-label="SentinelTotal code controls"><div class="code-switches"><button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button><button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button></div><button type="button" class="copy-code" data-copy-code>Copy starter code</button></div>
+            <pre class="code-version" data-code-version="starter"><code>import java.util.Scanner;
+
+public class SentinelTotal {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      int total = 0;
+      int count = 0;
+
+      System.out.print("Value (0 to stop): ");
+      int value = input.nextInt();
+
+      while (value != 0) {
+         total += value;
+         count++;
+         // BUG: value never changes.
+      }
+
+      System.out.println("Count: " + count);
+      System.out.println("Total: " + total);
+   }
+}</code></pre>
+            <pre class="code-version" data-code-version="complete" hidden><code>import java.util.Scanner;
+
+public class SentinelTotal {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      int total = 0;
+      int count = 0;
+
+      System.out.print("Value (0 to stop): ");
+      int value = input.nextInt();
+
+      while (value != 0) {
+         total += value;
+         count++;
+         System.out.print("Value (0 to stop): ");
+         value = input.nextInt();
+      }
+
+      System.out.println("Count: " + count);
+      System.out.println("Total: " + total);
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+          <div class="console"><div class="panel-head"><span>Console · complete</span><span>inputs 5, 7, 2, 0</span></div><pre>Value (0 to stop): 5
+Value (0 to stop): 7
+Value (0 to stop): 2
+Value (0 to stop): 0
+Count: 3
+Total: 14</pre></div>
+        </div>
+      </div>
+      <section class="concept"><h2>Explain after the evidence</h2><p>A <code>while</code> loop checks before every iteration, so it may run zero times. The sentinel controls repetition but is not data. Termination depends on progress: the body must change a value used by the condition so a later check can become false.</p></section>
+      <div class="bottom-grid"><section class="cue error"><span class="label">Infinite loop · recover</span><p>Stop execution in the IDE, restore the last known loop body, add the input update, rebuild, and rerun the same sequence.</p></section><section class="cue answer"><span class="label">Transfer check</span><p>What prints if the first input is 0?</p><p class="answer-line">Count 0, total 0; the body never runs.</p></section></div>
+      <span class="page-number">3 / 6</span>
+    </article>
+
+    <article class="page" id="module-4">
+      <header class="page-header"><div><p class="kicker">Problem 4 · Known repetition count</p><h1>Print a number series exactly N times</h1><p class="subtitle">Use a <code>for</code> loop and prove the first body value, last body value, and first exit value.</p></div><p class="meta"><strong>5 minutes</strong>Demo file<br><code>NumberSeries.java</code><br>Source §4.4</p></header>
+      <div class="problem-card"><div class="learning-outcome"><strong>Students will learn</strong><span>Trace the execution order of a <code>for</code> loop and diagnose an off-by-one boundary error.</span></div><div class="problem"><strong>Problem</strong><p>Read N and print the integers from 0 through N - 1, producing exactly N values.</p></div></div>
+      <div class="walkthrough-grid">
+        <div class="cue-column">
+          <section class="cue ask"><span class="label">Ask before running</span><p>For N = 4, which values enter the body with <code>i &lt;= n</code>? How many values is that?</p></section>
+          <section class="cue answer"><span class="label">Expected prediction</span><p>0, 1, 2, 3, and 4: five values. The intended final body value is 3, so the first exit value must be 4.</p></section>
+          <section class="cue"><span class="label">Execution order</span><p>Initialize once → test → body → update → test again. The update does not run before the first body.</p></section>
+          <table class="trace"><thead><tr><th>i at check</th><th><code>i &lt; 4</code></th><th>Action</th></tr></thead><tbody><tr><td>0</td><td>true</td><td>print 0</td></tr><tr><td>1</td><td>true</td><td>print 1</td></tr><tr><td>2</td><td>true</td><td>print 2</td></tr><tr><td>3</td><td>true</td><td>print 3</td></tr><tr><td>4</td><td>false</td><td>exit</td></tr></tbody></table>
+        </div>
+        <div class="demo-column">
+          <ol class="demo-sequence"><li>Run the inclusive starter</li><li>Count five outputs for N = 4</li><li>Change <code>&lt;=</code> to <code>&lt;</code></li></ol>
+          <div class="code-panel code-workbench" data-code-workbench>
+            <div class="panel-head"><span>NumberSeries.java</span><span>Starter has one extra iteration</span></div>
+            <div class="code-toolbar" aria-label="NumberSeries code controls"><div class="code-switches"><button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button><button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button></div><button type="button" class="copy-code" data-copy-code>Copy starter code</button></div>
+            <pre class="code-version" data-code-version="starter"><code>import java.util.Scanner;
+
+public class NumberSeries {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      System.out.print("How many values? ");
+      int n = input.nextInt();
+
+      // Logic bug: includes the first exit value.
+      for (int i = 0; i &lt;= n; i++) {
+         System.out.print(i + " ");
+      }
+      System.out.println();
+   }
+}</code></pre>
+            <pre class="code-version" data-code-version="complete" hidden><code>import java.util.Scanner;
+
+public class NumberSeries {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      System.out.print("How many values? ");
+      int n = input.nextInt();
+
+      for (int i = 0; i &lt; n; i++) {
+         System.out.print(i + " ");
+      }
+      System.out.println();
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+          <div class="console"><div class="panel-head"><span>Console · complete</span><span>input 4</span></div><pre>How many values? 4
+0 1 2 3</pre></div>
+        </div>
+      </div>
+      <section class="concept"><h2>Explain after the evidence</h2><p>A <code>for</code> loop groups initialization, continuation condition, and update. Use it when the number of iterations is known. The half-open range <code>0 &lt;= i &lt; n</code> contains exactly N integer indices and matches Java strings and arrays.</p></section>
+      <div class="bottom-grid"><section class="cue error"><span class="label">Off-by-one · recover</span><p>Do not flip operators randomly. Write the intended first body value, last body value, and first exit value; then choose the comparison.</p></section><section class="cue answer"><span class="label">Transfer check</span><p>How many body entries occur when N = 0?</p><p class="answer-line">Zero; <code>0 &lt; 0</code> is false initially.</p></section></div>
+      <span class="page-number">4 / 6</span>
+    </article>
+
+    <article class="page dense" id="module-5">
+      <header class="page-header"><div><p class="kicker">Problem 5 · Branch inside a loop</p><h1>Count vowels in a word</h1><p class="subtitle">Let the loop visit every character and the branch decide whether the counter changes.</p></div><p class="meta"><strong>6 minutes</strong>Demo file<br><code>VowelCounter.java</code><br>Source §§3.5, 4.6</p></header>
+      <div class="problem-card"><div class="learning-outcome"><strong>Students will learn</strong><span>Iterate over valid string indices, inspect each character, and update a counter only when a compound condition is true.</span></div><div class="problem"><strong>Problem</strong><p>Read one word and print how many lowercase vowels it contains.</p></div></div>
+      <div class="walkthrough-grid">
+        <div class="cue-column">
+          <section class="cue ask"><span class="label">Ask before typing</span><p>For <code>java</code>, what are the valid indices? Why would <code>i &lt;= word.length()</code> fail?</p></section>
+          <section class="cue answer"><span class="label">Expected prediction</span><p>Indices 0–3 are valid. Index 4 is the first exit value; calling <code>charAt(4)</code> causes a runtime error.</p></section>
+          <section class="cue"><span class="label">Say while tracing</span><p>“The loop guarantees coverage. The branch decides whether this character contributes to the count.”</p></section>
+          <table class="trace"><thead><tr><th>i</th><th>letter</th><th>vowel?</th><th>count</th></tr></thead><tbody><tr><td>0</td><td>j</td><td>false</td><td>0</td></tr><tr class="winner"><td>1</td><td>a</td><td>true</td><td>1</td></tr><tr><td>2</td><td>v</td><td>false</td><td>1</td></tr><tr class="winner"><td>3</td><td>a</td><td>true</td><td>2</td></tr></tbody></table>
+        </div>
+        <div class="demo-column">
+          <ol class="demo-sequence"><li>Run the inclusive-index starter</li><li>Observe failure at index length</li><li>Use the half-open boundary</li></ol>
+          <div class="code-panel code-workbench" data-code-workbench>
+            <div class="panel-head"><span>VowelCounter.java</span><span>Starter exposes an index error</span></div>
+            <div class="code-toolbar" aria-label="VowelCounter code controls"><div class="code-switches"><button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button><button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button></div><button type="button" class="copy-code" data-copy-code>Copy starter code</button></div>
+            <pre class="code-version" data-code-version="starter"><code>import java.util.Scanner;
+
+public class VowelCounter {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      System.out.print("Lowercase word: ");
+      String word = input.next();
+      int vowels = 0;
+
+      // Runtime bug: length is not a valid index.
+      for (int i = 0; i &lt;= word.length(); i++) {
+         char letter = word.charAt(i);
+         boolean isVowel = letter == 'a' || letter == 'e'
+               || letter == 'i' || letter == 'o'
+               || letter == 'u';
+         if (isVowel) vowels++;
+      }
+
+      System.out.println("Vowels: " + vowels);
+   }
+}</code></pre>
+            <pre class="code-version" data-code-version="complete" hidden><code>import java.util.Scanner;
+
+public class VowelCounter {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      System.out.print("Lowercase word: ");
+      String word = input.next();
+      int vowels = 0;
+
+      for (int i = 0; i &lt; word.length(); i++) {
+         char letter = word.charAt(i);
+         boolean isVowel = letter == 'a' || letter == 'e'
+               || letter == 'i' || letter == 'o'
+               || letter == 'u';
+         if (isVowel) vowels++;
+      }
+
+      System.out.println("Vowels: " + vowels);
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+          <div class="console"><div class="panel-head"><span>Console · complete</span><span>input java</span></div><pre>Lowercase word: java
+Vowels: 2</pre></div>
+        </div>
+      </div>
+      <section class="concept"><h2>Explain after the evidence</h2><p>For a string of length N, valid indices are 0 through N - 1. The loop condition therefore uses <code>i &lt; word.length()</code>. The branch is evaluated once per character, and the counter changes only for characters that satisfy the vowel policy.</p></section>
+      <div class="bottom-grid"><section class="cue error"><span class="label">Runtime error · recover</span><p>Read the failing index and the string length. Restore <code>&lt;</code>, rebuild, and rerun the same word to prove the boundary repair.</p></section><section class="cue answer"><span class="label">Transfer check</span><p>How would you support uppercase vowels?</p><p class="answer-line">Normalize with <code>word.toLowerCase()</code> before the loop.</p></section></div>
+      <span class="page-number">5 / 6</span>
+    </article>
+
+    <article class="page dense" id="module-6">
+      <header class="page-header"><div><p class="kicker">Problem 6 · Integrated control flow</p><h1>Build a score report</h1><p class="subtitle">Combine a fixed-count loop, a pass/fail branch, an accumulator, and counters.</p></div><p class="meta"><strong>7 minutes</strong>Demo file<br><code>ScoreReport.java</code><br>Source §§3.1, 4.4, 4.10</p></header>
+      <div class="problem-card"><div class="learning-outcome"><strong>Students will learn</strong><span>Decompose one program into coverage, classification, running state, and a result computed after the loop.</span></div><div class="problem"><strong>Problem</strong><p>Read three scores, then print the average and the numbers of passing and failing scores. A score of 60 passes.</p></div></div>
+      <div class="walkthrough-grid">
+        <div class="cue-column">
+          <section class="cue ask"><span class="label">Ask before typing</span><p>Which work repeats? Which decision happens inside each iteration? Which values must survive after the loop?</p></section>
+          <section class="cue answer"><span class="label">Expected prediction</span><p>Reading, totaling, and classifying repeat. The branch chooses pass or fail. <code>total</code>, <code>passed</code>, and <code>failed</code> must be declared outside.</p></section>
+          <section class="cue"><span class="label">Invariant to name</span><p>After every iteration, <code>passed + failed</code> equals the number of scores processed.</p></section>
+          <table class="trace"><thead><tr><th>Score</th><th>Total</th><th>Passed</th><th>Failed</th></tr></thead><tbody><tr><td>72</td><td>72</td><td>1</td><td>0</td></tr><tr><td>58</td><td>130</td><td>1</td><td>1</td></tr><tr><td>90</td><td>220</td><td>2</td><td>1</td></tr></tbody></table>
+        </div>
+        <div class="demo-column">
+          <ol class="demo-sequence"><li>Start with state variables</li><li>Add loop and inner branch</li><li>Compute average after exit</li></ol>
+          <div class="code-panel code-workbench" data-code-workbench>
+            <div class="panel-head"><span>ScoreReport.java</span><span>Starter has the program state</span></div>
+            <div class="code-toolbar" aria-label="ScoreReport code controls"><div class="code-switches"><button type="button" class="code-switch" data-code-switch="starter" aria-pressed="true">Starter</button><button type="button" class="code-switch" data-code-switch="complete" aria-pressed="false">Complete</button></div><button type="button" class="copy-code" data-copy-code>Copy starter code</button></div>
+            <pre class="code-version" data-code-version="starter"><code>import java.util.Scanner;
+
+public class ScoreReport {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      final int SCORE_COUNT = 3;
+      int total = 0;
+      int passed = 0;
+      int failed = 0;
+
+      // TODO: repeat SCORE_COUNT times.
+      // Read score, add to total, classify it.
+
+      double average = total / (double) SCORE_COUNT;
+      System.out.printf("Average: %.1f%n", average);
+      System.out.println("Passed: " + passed);
+      System.out.println("Failed: " + failed);
+   }
+}</code></pre>
+            <pre class="code-version" data-code-version="complete" hidden><code>import java.util.Scanner;
+
+public class ScoreReport {
+   public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      final int SCORE_COUNT = 3;
+      int total = 0;
+      int passed = 0;
+      int failed = 0;
+
+      for (int i = 0; i &lt; SCORE_COUNT; i++) {
+         System.out.print("Score " + (i + 1) + ": ");
+         int score = input.nextInt();
+         total += score;
+
+         if (score &gt;= 60) passed++;
+         else failed++;
+      }
+
+      double average = total / (double) SCORE_COUNT;
+      System.out.printf("Average: %.1f%n", average);
+      System.out.println("Passed: " + passed);
+      System.out.println("Failed: " + failed);
+   }
+}</code></pre>
+            <p class="copy-status" data-copy-status aria-live="polite"></p>
+          </div>
+          <div class="console"><div class="panel-head"><span>Console · complete</span><span>inputs 72, 58, 90</span></div><pre>Score 1: 72
+Score 2: 58
+Score 3: 90
+Average: 73.3
+Passed: 2
+Failed: 1</pre></div>
+        </div>
+      </div>
+      <section class="concept"><h2>Explain after the evidence</h2><p>The loop guarantees that every score is processed. The branch classifies one current score. The accumulator and counters preserve information across iterations because they are declared outside the body. The average is derived after the data set is complete.</p></section>
+      <div class="bottom-grid"><section class="cue error"><span class="label">Scope error · recover</span><p>Declare <code>total</code> inside the loop and observe that it cannot summarize earlier scores or be read afterward. Restore its outer scope and rebuild.</p></section><section class="cue answer"><span class="label">Transfer check</span><p>Which inputs test the pass boundary and extreme report states?</p><p class="answer-line">Use 59/60, then an all-pass set and an all-fail set.</p></section></div>
+      <span class="page-number">6 / 6</span>
+    </article>
+  </main>
+  <script>
+    (() => {
+      const fallbackCopy = (text) => {
+        const field = document.createElement("textarea");
+        field.value = text;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.inset = "-9999px auto auto -9999px";
+        document.body.appendChild(field);
+        field.select();
+        const copied = document.execCommand("copy");
+        field.remove();
+        if (!copied) throw new Error("Copy command was not accepted.");
+      };
+
+      const copyText = async (text) => {
+        if (window.isSecureContext && navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return;
+          } catch (error) {
+            fallbackCopy(text);
+            return;
+          }
+        }
+        fallbackCopy(text);
+      };
+
+      document.querySelectorAll("[data-code-workbench]").forEach((workbench) => {
+        const switches = [...workbench.querySelectorAll("[data-code-switch]")];
+        const versions = [...workbench.querySelectorAll("[data-code-version]")];
+        const copyButton = workbench.querySelector("[data-copy-code]");
+        const status = workbench.querySelector("[data-copy-status]");
+        let activeVersion = "starter";
+        let feedbackTimer;
+
+        const showVersion = (version) => {
+          activeVersion = version;
+          switches.forEach((button) => {
+            button.setAttribute("aria-pressed", String(button.dataset.codeSwitch === version));
+          });
+          versions.forEach((block) => {
+            block.hidden = block.dataset.codeVersion !== version;
+          });
+          copyButton.textContent = `Copy ${version} code`;
+          status.textContent = "";
+        };
+
+        switches.forEach((button) => {
+          button.addEventListener("click", () => showVersion(button.dataset.codeSwitch));
+        });
+
+        copyButton.addEventListener("click", async () => {
+          const code = workbench.querySelector(`[data-code-version="${activeVersion}"] code`);
+          try {
+            await copyText(code.textContent.trim());
+            copyButton.textContent = `Copied ${activeVersion}`;
+            status.textContent = `${activeVersion[0].toUpperCase() + activeVersion.slice(1)} code copied to clipboard.`;
+          } catch (error) {
+            status.textContent = "Copy failed. Select the code and copy it manually.";
+          }
+          window.clearTimeout(feedbackTimer);
+          feedbackTimer = window.setTimeout(() => {
+            copyButton.textContent = `Copy ${activeVersion} code`;
+          }, 1800);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

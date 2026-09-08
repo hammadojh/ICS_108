@@ -1,0 +1,7 @@
+.DS_Store
+.playwright-cli/
+output/
+tmp/
+*.class
+*.pdf
+private-source/

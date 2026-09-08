@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ICS 108 Chapter 2 lecture on Java variables, expressions, data types, strings, and debugging.">
+  <title>ICS 108 — Chapter 2: Variables, Expressions, and Data Types</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23090909'/%3E%3Cpath d='M14 17h36M14 32h24M14 47h36' stroke='%238ec5ff' stroke-width='6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <div class="deck-shell">
+      <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+      <div class="stage" id="stage">
+
+        <section class="slide cover is-active" data-title="Variables, expressions, and data types" aria-hidden="false">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><strong>Lecture overview</strong></nav>
+          <div class="cover-layout">
+            <div><p class="eyebrow">Java foundations</p><h1>Variables,<br>expressions,<br>and data types</h1><p class="subtitle">How Java stores values, calculates results, and represents numbers and text</p></div>
+            <div class="cover-trace" aria-label="Value transformation diagram"><span><small>INPUT</small>7</span><b>→</b><span><small>EXPRESSION</small>7 / 2</span><b>→</b><span><small>VALUE</small>3</span></div>
+          </div>
+          <footer class="slide-footer"><span>ICS 108</span><span>30-minute lecture</span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Why does Java say 7 / 2 is 3?" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 1 · Values and state</span><strong>Hook</strong></nav>
+          <div class="hook-layout">
+            <div><p class="part-label">Part 1 · Values and state</p><h2>Why does Java say <code>7 / 2</code> is <code>3</code>?</h2><p class="hook-question">The symbols look familiar. The result depends on the <strong>types</strong> of the values.</p></div>
+            <div class="demo-box prediction-demo"><pre><code><span class="kw">int</span> result = 7 / 2;
+System.out.println(result);</code></pre><p>Predict the output:</p><div class="prediction-buttons" data-predict="division-hook"><button type="button" data-value="3">3</button><button type="button" data-value="3.5">3.5</button></div><output id="divisionHookResult" aria-live="polite">Choose before we explain why.</output></div>
+          </div>
+          <footer class="slide-footer"><span>Today: values, types, expressions, and the mistakes between them.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Lecture goals" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 1 · Values and state</span><strong>Goals</strong></nav>
+          <div class="content-stack goals-layout">
+            <header><h2>Lecture goals</h2><p class="lead">By the end of today, you will be able to:</p></header>
+            <ul class="goals-list">
+              <li data-step="1">trace variable assignments and explain why <code>=</code> is not mathematical equality;</li>
+              <li data-step="2">declare well-named <code>int</code>, <code>double</code>, <code>char</code>, and <code>String</code> variables;</li>
+              <li data-step="3">evaluate arithmetic expressions using precedence, integer division, and modulo;</li>
+              <li data-step="4">choose a numeric type and perform a type conversion when needed;</li>
+              <li data-step="5">use constants and common <code>Math</code> methods;</li>
+              <li data-step="6">debug an incorrect result using a prediction-and-test process.</li>
+            </ul>
+          </div>
+          <footer class="slide-footer"><span>The lecture ends with a complete HealthData program.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Variables remember current state" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 1 · Values and state</span><strong>§2.1 Variables and assignments</strong></nav>
+          <div class="content-stack bus-layout">
+            <header><h2>Variables remember current state</h2><p class="lead">A <strong>variable</strong> is a named item that holds the program’s current value.</p></header>
+            <div class="demo-box bus-demo">
+              <div class="bus-visual"><svg viewBox="0 0 260 130" role="img" aria-label="A simple bus"><rect x="12" y="24" width="236" height="72" rx="10"/><path d="M35 96v13M222 96v13M55 40h50v34H55zM119 40h50v34h-50zM183 40h42v34h-42z"/><circle cx="54" cy="108" r="13"/><circle cx="210" cy="108" r="13"/></svg><div class="variable-cell"><span>numPeople</span><strong id="busValue">5</strong></div></div>
+              <div class="bus-controls"><p id="busAction">The bus starts with 5 people.</p><ol id="busSteps"><li class="is-current">Start: 5</li><li>3 get on</li><li>2 get off</li><li>4 get off</li><li>5 get on</li></ol><div><button id="busNext" type="button">Next event</button><button id="busReset" type="button">Reset</button></div></div>
+            </div>
+            <p class="linking">The value changes over time because each assignment replaces the previous state.</p>
+          </div>
+          <footer class="slide-footer"><span>Source activity: people on a bus, §2.1.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Assignment is an action" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 1 · Values and state</span><strong>§2.1 Assignment</strong></nav>
+          <div class="content-stack assignment-layout">
+            <header><h2>Assignment is an action</h2><p class="lead"><code>=</code> evaluates the right side, then stores that value in the variable on the left.</p></header>
+            <div class="assignment-trace">
+              <div class="trace-row" data-step="1"><code>x = 5;</code><span class="arrow">→</span><div class="memory-pair"><span>x<strong>5</strong></span><span>y<strong>?</strong></span></div><p>Store 5 in <code>x</code>.</p></div>
+              <div class="trace-row" data-step="2"><code>y = x;</code><span class="arrow">→</span><div class="memory-pair"><span>x<strong>5</strong></span><span>y<strong>5</strong></span></div><p>Read <code>x</code>; copy its current value into <code>y</code>.</p></div>
+              <div class="trace-row" data-step="3"><code>x = 3;</code><span class="arrow">→</span><div class="memory-pair"><span>x<strong>3</strong></span><span>y<strong>5</strong></span></div><p>Replace <code>x</code>. The earlier copy in <code>y</code> does not change.</p></div>
+            </div>
+            <p class="note-line" data-step="3">The left side must be one variable. <code>x + 1 = 3;</code> is not a valid assignment.</p>
+            <p class="linking">Before Java can store a value, the program must declare the variable and its type.</p>
+          </div>
+          <footer class="slide-footer"><span>Assignments only make sense in execution order.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Declaring and initializing int variables" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 1 · Values and state</span><strong>§2.2 Variables (int)</strong></nav>
+          <div class="content-stack declaration-layout">
+            <header><h2>Declaring and initializing <code>int</code> variables</h2><p class="lead"><code>int</code> stores whole numbers such as a count, age, or score.</p></header>
+            <div class="demo-box declaration-demo">
+              <div data-step="1"><p class="demo-label">Declare, then assign</p><pre><code><span class="kw">int</span> userAge;
+userAge = 23;</code></pre><p>Declaration creates a named integer location. Assignment stores the first value.</p></div>
+              <div data-step="2"><p class="demo-label">Declare and initialize</p><pre><code><span class="kw">int</span> maxScore = 100;</code></pre><p>Initialization gives the variable a starting value in the declaration.</p></div>
+            </div>
+            <ul class="plain-list compact"><li data-step="2">Declare a variable before reading or assigning it.</li><li data-step="3">Assign a local variable before using its value; otherwise Java reports a compiler error.</li><li data-step="4">The memory address exists, but its exact number is irrelevant to the programmer.</li></ul>
+            <p class="linking">The type describes the value; the identifier should describe the value’s purpose.</p>
+          </div>
+          <footer class="slide-footer"><span><code>int variableName = initialValue;</code></span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Identifiers in Java" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 1 · Values and state</span><strong>§2.3 Identifiers</strong></nav>
+          <div class="content-stack identifiers-layout">
+            <header><h2>Identifiers in Java</h2><p class="lead">An <strong>identifier</strong> is a programmer-created name for a variable, method, or other item.</p></header>
+            <div class="identifier-columns">
+              <div><h3>Required rules</h3><ul class="plain-list compact"><li data-step="1">Use letters, digits, <code>_</code>, or <code>$</code>.</li><li data-step="2">Do not start with a digit.</li><li data-step="3">Do not use a reserved word such as <code>int</code> or <code>class</code>.</li><li data-step="4">Capitalization matters: <code>numCars</code> and <code>NumCars</code> differ.</li></ul></div>
+              <div><h3>Java naming practice</h3><p>Use meaningful lower camel case for variables.</p><div class="name-examples"><span class="good">numStudents</span><span class="good">peopleOnBus</span><span class="bad">3rdPlace</span><span class="bad">very tall</span><span class="bad">int</span></div><p class="muted-text"><strong>Valid</strong> is not always <strong>clear</strong>. Prefer consistency and purpose.</p></div>
+            </div>
+            <p class="linking">Once a variable has a clear name, an assignment can update its current value.</p>
+          </div>
+          <footer class="slide-footer"><span>Course convention: lower camel case for variables.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Updating a variable" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 1 · Values and state</span><strong>§§2.1, 2.2, 2.5 Updates</strong></nav>
+          <div class="content-stack update-layout">
+            <header><h2>Updating a variable</h2><p class="lead">The same variable may appear on both sides because the right side is evaluated before the new value is stored.</p></header>
+            <div class="demo-box update-demo">
+              <div class="update-line" data-step="1"><code>numPeople = 10;</code><span>current value</span><strong>10</strong></div>
+              <div class="update-line" data-step="2"><code>numPeople = numPeople + 5;</code><span>read 10, calculate 15, overwrite</span><strong>15</strong></div>
+              <div class="update-line" data-step="3"><code>numPeople += 5;</code><span>compound shorthand for the same update</span><strong>20</strong></div>
+            </div>
+            <div class="compound-list" data-step="4"><code>+=</code><span>add</span><code>-=</code><span>subtract</span><code>*=</code><span>multiply</span><code>/=</code><span>divide</span><code>%=</code><span>remainder</span></div>
+            <p class="note-line" data-step="4">Use a compound operator only when the left-side variable is also the value being updated.</p>
+            <p class="linking">The calculation on an assignment’s right side is an expression.</p>
+          </div>
+          <footer class="slide-footer"><span><code>x += 1;</code> is shorthand for <code>x = x + 1;</code></span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Arithmetic expressions" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 2 · Expressions</span><strong>§2.4 Arithmetic expressions</strong></nav>
+          <div class="content-stack expression-layout">
+            <header><p class="part-label">Part 2 · Expressions</p><h2>Arithmetic expressions</h2><p class="lead">An <strong>expression</strong> combines values and operators and evaluates to one value.</p></header>
+            <div class="expression-anatomy" data-step="1"><code>result = <mark>2</mark> * (<em>x</em> + <mark>1</mark>);</code><div><span>literal</span><span>variable</span><span>operators</span><span>parentheses</span></div></div>
+            <div class="operator-row" data-step="2"><span><code>+</code> addition</span><span><code>-</code> subtraction / negation</span><span><code>*</code> multiplication</span><span><code>/</code> division</span><span><code>%</code> remainder</span></div>
+            <p class="relationship" data-step="3">If <code>x</code> is 4, then <code>2 * (x + 1)</code> evaluates to <code>10</code>; that value is assigned to <code>result</code>.</p>
+            <p class="linking">When an expression has several operators, Java follows precedence rules.</p>
+          </div>
+          <footer class="slide-footer"><span>Expressions are values in progress.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Operator precedence" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 2 · Expressions</span><strong>§2.4 Precedence</strong></nav>
+          <div class="content-stack precedence-layout">
+            <header><h2>Operator precedence</h2><p class="lead">Java evaluates parentheses first, then unary minus, then <code>* / %</code>, then <code>+ -</code>. Equal-precedence operators run left to right.</p></header>
+            <div class="demo-box precedence-demo">
+              <div><p class="demo-label">Given</p><pre><code>x = 4;
+w = 2;</code></pre></div>
+              <ol class="evaluation-trace"><li data-step="1"><code>3 * (x + 10 / w)</code></li><li data-step="2"><code>3 * (4 + <strong>5</strong>)</code><span><code>10 / 2</code> first</span></li><li data-step="3"><code>3 * <strong>9</strong></code><span>finish parentheses</span></li><li data-step="4"><code><strong>27</strong></code><span>multiply</span></li></ol>
+            </div>
+            <p class="note-line" data-step="4">Use extra parentheses when they make the intended order obvious: <code>3 * (x + (10 / w))</code>.</p>
+            <p class="linking">Division has the same precedence as multiplication—but its behavior also depends on operand types.</p>
+          </div>
+          <footer class="slide-footer"><span>Spacing improves reading; it does not change precedence.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Integer division and modulo" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 2 · Expressions</span><strong>§2.11 Integer division and modulo</strong></nav>
+          <div class="content-stack divmod-layout">
+            <header><h2>Integer division and modulo</h2><p class="lead">For non-negative integers, division gives the whole-number quotient and modulo gives the remainder.</p></header>
+            <div class="demo-box divmod-demo">
+              <div class="object-groups" aria-label="Seventeen objects grouped in fives"><div><i></i><i></i><i></i><i></i><i></i></div><div><i></i><i></i><i></i><i></i><i></i></div><div><i></i><i></i><i></i><i></i><i></i></div><div class="remainder"><i></i><i></i></div></div>
+              <div class="divmod-results"><p data-step="1"><code>17 / 5</code><strong>3</strong><span>complete groups</span></p><p data-step="2"><code>17 % 5</code><strong>2</strong><span>items left over</span></p></div>
+            </div>
+            <div class="rule-row" data-step="3"><span><strong>Integer operands:</strong> <code>7 / 2 → 3</code></span><span><strong>At least one double:</strong> <code>7 / 2.0 → 3.5</code></span></div>
+            <p class="note-line" data-step="4">For integer <code>/</code> or <code>%</code>, a divisor of zero causes a runtime error.</p>
+            <p class="linking">Together, quotient and remainder can split a total into meaningful units.</p>
+          </div>
+          <footer class="slide-footer"><span><code>/</code> answers “how many groups?” · <code>%</code> answers “what remains?”</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Demo: Convert seconds" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 2 · Expressions</span><strong>§2.11 Division/modulo demo</strong></nav>
+          <div class="content-stack seconds-layout">
+            <header><h2>Demo: Convert total seconds</h2><p class="lead">Goal: convert one total into hours, minutes, and remaining seconds.</p></header>
+            <div class="demo-box seconds-demo">
+              <pre><code><span class="kw">int</span> totalSeconds = <span id="secondsCodeValue">3672</span>;
+
+<span class="kw">int</span> hours = totalSeconds / 3600;
+<span class="kw">int</span> afterHours = totalSeconds % 3600;
+<span class="kw">int</span> minutes = afterHours / 60;
+<span class="kw">int</span> seconds = afterHours % 60;</code></pre>
+              <div class="run-panel"><label for="secondsInput">Total seconds</label><div class="run-row"><input id="secondsInput" type="number" min="0" step="1" value="3672"><button id="runSeconds" type="button">Convert</button></div><div class="conversion-output" aria-live="polite"><span id="hoursOutput">1 hour</span><b>:</b><span id="minutesOutput">1 minute</span><b>:</b><span id="secondsOutput">12 seconds</span></div><div class="conversion-trace" id="secondsTrace">3672 = (1 × 3600) + (1 × 60) + 12</div></div>
+            </div>
+            <p class="linking">The types determine whether division keeps or discards a fractional part.</p>
+          </div>
+          <footer class="slide-footer"><span>Try 59, 60, 3600, and 7325.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Common integer-division traps" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 2 · Expressions</span><strong>§§2.11-2.12 Common errors</strong></nav>
+          <div class="content-stack traps-layout">
+            <header><h2>Common integer-division traps</h2></header>
+            <div class="trap-columns">
+              <div data-step="1"><p class="term bad-text">Unexpected</p><pre><code><span class="kw">double</span> area = (1 / 2) * base * height;</code></pre><p><code>1 / 2</code> is integer division, so it becomes <code>0</code>. The area is always zero.</p></div>
+              <div data-step="2"><p class="term good-text">Intended</p><pre><code><span class="kw">double</span> area = (1.0 / 2.0) * base * height;</code></pre><p>A double operand causes floating-point division, so the factor is <code>0.5</code>.</p></div>
+            </div>
+            <div class="trap-columns compact-traps"><div data-step="3"><code>(double)(7 / 2)</code><strong>3.0</strong><span>too late: integer division already produced 3</span></div><div data-step="4"><code>(double) 7 / 2</code><strong>3.5</strong><span>cast an operand before division</span></div></div>
+            <p class="linking">To choose the correct operation, first choose a type that matches the kind of value.</p>
+          </div>
+          <footer class="slide-footer"><span>Cast before the operation whose behavior must change.</span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Choosing int or double" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 3 · Numeric types</span><strong>§2.7 int vs double</strong></nav>
+          <div class="content-stack types-layout">
+            <header><p class="part-label">Part 3 · Numeric types</p><h2>Choosing <code>int</code> or <code>double</code></h2><p class="lead">Choose the type from the meaning of the value—not from how you plan to display it.</p></header>
+            <div class="definition-columns"><div data-step="1"><p class="term"><code>int</code></p><p>Whole numbers for countable quantities.</p><ul class="plain-list compact"><li>42 cars</li><li>10 students</li><li>365 days</li></ul></div><div data-step="2"><p class="term"><code>double</code></p><p>Measurements or results that may contain a fraction.</p><ul class="plain-list compact"><li>98.6 degrees</li><li>400.5 miles</li><li>3.5 children per family on average</li></ul></div></div>
+            <p class="relationship" data-step="3"><strong>Money note:</strong> floating-point rounding can be unsuitable for exact currency. Introductory programs may store cents as integers.</p>
+            <p class="linking">A <code>double</code> has its own input method and can be formatted when printed.</p>
+          </div>
+          <footer class="slide-footer"><span>Count → usually <code>int</code> · Measurement → usually <code>double</code></span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Floating-point input and output" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 3 · Numeric types</span><strong>§2.7 Floating-point numbers</strong></nav>
+          <div class="content-stack double-layout">
+            <header><h2>Floating-point input and output</h2><p class="lead"><code>double</code> literals include a decimal point; <code>nextDouble()</code> reads a floating-point value.</p></header>
+            <div class="demo-box travel-demo"><pre><code><span class="kw">double</span> milesTravel;
+<span class="kw">double</span> hoursDrive;
+
+milesTravel = scnr.nextDouble();
+hoursDrive = milesTravel / 60.0;
+
+System.out.printf(<span class="str">"%.2f hours\n"</span>, hoursDrive);</code></pre><div class="console-preview"><span>Console</span><pre>Input: 400.5
+Raw value: 6.675
+Formatted: 6.68 hours</pre></div></div>
+            <ul class="plain-list compact"><li data-step="1">Write <code>0.5</code>, not <code>.5</code>, for easy reading.</li><li data-step="2"><code>printf("%.2f", value)</code> rounds displayed output to two decimal digits; the stored value does not change.</li><li data-step="3">Floating-point division by zero produces <code>Infinity</code> or <code>NaN</code> in Java rather than an integer divide-by-zero exception.</li></ul>
+            <p class="linking">When an expression mixes <code>int</code> and <code>double</code>, Java may convert a value automatically.</p>
+          </div>
+          <footer class="slide-footer"><span><code>nextInt()</code> for int · <code>nextDouble()</code> for double</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Type conversions and casts" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 3 · Numeric types</span><strong>§2.12 Type conversions</strong></nav>
+          <div class="content-stack conversion-layout">
+            <header><h2>Type conversions and casts</h2><p class="lead">A <strong>type conversion</strong> changes a value from one data type to another.</p></header>
+            <div class="conversion-flow" data-step="1"><span><code>int numBirths = 316;</code></span><b>→</b><span><code>0.504 * numBirths</code></span><b>→</b><span><code>0.504 * 316.0</code></span><b>→</b><strong>159.264</strong></div>
+            <div class="conversion-rules"><div data-step="2"><h3>Implicit conversion</h3><p>Java safely converts <code>int</code> to <code>double</code> when a floating-point operation requires it.</p></div><div data-step="3"><h3>Explicit cast</h3><p><code>(double) total / count</code> requests floating-point division. <code>(int) 9.8</code> truncates to <code>9</code>.</p></div></div>
+            <div class="demo-box average-demo" data-step="4"><pre><code><span class="comment">// 175 / 2 becomes 87 first</span>
+<span class="kw">double</span> wrong = (double) ((90 + 85) / 2); <span>→ 87.0</span>
+
+<span class="comment">// Cast before division</span>
+<span class="kw">double</span> right = (double) (90 + 85) / 2; <span>→ 87.5</span></code></pre></div>
+            <p class="linking">Types control allowed values; constants control whether a value may change.</p>
+          </div>
+          <footer class="slide-footer"><span>Automatic when safe · explicit when precision may change</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Constant variables" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 3 · Numeric types</span><strong>§2.9 Constant variables</strong></nav>
+          <div class="content-stack constants-layout">
+            <header><h2>Constant variables</h2><p class="lead">A <strong>constant variable</strong> is initialized once and cannot be assigned a new value.</p></header>
+            <div class="demo-box constants-demo"><pre><code><span class="kw">final double</span> SPEED_OF_SOUND = 761.207;
+<span class="kw">final double</span> SECONDS_PER_HOUR = 3600.0;
+
+timeInHours = secondsBetween / SECONDS_PER_HOUR;
+distanceMiles = SPEED_OF_SOUND * timeInHours;</code></pre><div><p><strong><code>final</code></strong> lets the compiler reject accidental changes.</p><p><strong>UPPER_SNAKE_CASE</strong> makes constants easy to recognize.</p><p>Names explain what a number means and reduce repeated “magic numbers.”</p></div></div>
+            <p class="note-line" data-step="1"><code>SPEED_OF_SOUND = 800.0;</code> would be a compiler error after the constant is initialized.</p>
+            <p class="linking">Constants provide meaningful values; Java’s <code>Math</code> class provides reusable calculations.</p>
+          </div>
+          <footer class="slide-footer"><span><code>final type NAME = value;</code></span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Using Math methods" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 3 · Numeric types</span><strong>§2.10 Math methods</strong></nav>
+          <div class="content-stack math-layout">
+            <header><h2>Using <code>Math</code> methods</h2><p class="lead">A <strong>method call</strong> sends argument values to a method and evaluates to its returned value.</p></header>
+            <div class="method-flow" data-step="1"><span class="method-input">49.0<br><small>argument</small></span><b>→</b><span class="method-box">Math.sqrt</span><b>→</b><span class="method-output">7.0<br><small>returned value</small></span></div>
+            <div class="method-examples"><p data-step="2"><code>Math.sqrt(9.0)</code><strong>3.0</strong><span>square root</span></p><p data-step="3"><code>Math.pow(6.0, 2.0)</code><strong>36.0</strong><span>power</span></p><p data-step="4"><code>Math.abs(-99.5)</code><strong>99.5</strong><span>absolute value</span></p></div>
+            <p class="note-line" data-step="4">The number and order of arguments must match the method: <code>sqrt</code> takes one; <code>pow</code> takes two.</p>
+            <p class="linking">Even a correct expression can fail if its result exceeds the selected type’s range.</p>
+          </div>
+          <footer class="slide-footer"><span>The <code>Math</code> class requires no import.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Integer overflow and numeric range" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 3 · Numeric types</span><strong>§§2.18-2.19 Overflow</strong></nav>
+          <div class="content-stack overflow-layout">
+            <header><h2>Integer overflow and numeric range</h2><p class="lead"><strong>Overflow</strong> occurs when a value is outside the range its type can store.</p></header>
+            <div class="range-lines"><div data-step="1"><code>int</code><span class="range-bar int-range"></span><p>32 bits · about −2.1 billion to +2.1 billion</p></div><div data-step="2"><code>long</code><span class="range-bar long-range"></span><p>64 bits · much larger whole-number range</p></div></div>
+            <div class="demo-box overflow-demo" data-step="3"><div class="bit-box"><span>32 available bits</span><code>00000000000000000000000000000001</code></div><div><code>4,294,967,297</code><b>requires a 33rd bit</b><p>The extra bit is lost; a wrapped value may be stored instead of a clear error.</p></div></div>
+            <p class="note-line" data-step="4">Overflow can occur during an intermediate calculation even when the final mathematical result would fit.</p>
+            <p class="linking">Numbers use numeric types; text uses character and string types.</p>
+          </div>
+          <footer class="slide-footer"><span>Use <code>long</code> when an integer may exceed the <code>int</code> range.</span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="char and String" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 4 · Text values</span><strong>§§2.16-2.17 Characters and strings</strong></nav>
+          <div class="content-stack text-types-layout">
+            <header><p class="part-label">Part 4 · Text values</p><h2><code>char</code> and <code>String</code></h2><p class="lead">Java distinguishes one character from a sequence of characters.</p></header>
+            <div class="definition-columns"><div data-step="1"><p class="term"><code>char</code></p><p>Stores one character literal in <strong>single quotes</strong>.</p><pre><code><span class="kw">char</span> grade = <span class="str">'A'</span>;
+<span class="kw">char</span> newline = <span class="str">'\n'</span>;</code></pre></div><div data-step="2"><p class="term"><code>String</code></p><p>Refers to a sequence of characters written in <strong>double quotes</strong>.</p><pre><code>String courseName = <span class="str">"ICS 108"</span>;
+String room = <span class="str">"Building 24"</span>;</code></pre></div></div>
+            <p class="relationship" data-step="3"><code>'A'</code> is a <code>char</code>; <code>"A"</code> is a one-character <code>String</code>. Their types differ.</p>
+            <p class="linking">Scanner provides different ways to read one token, one character, or a whole line.</p>
+          </div>
+          <footer class="slide-footer"><span>Single quotes: one char · double quotes: String</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Reading text with Scanner" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 4 · Text values</span><strong>§2.17 String input</strong></nav>
+          <div class="content-stack scanner-layout">
+            <header><h2>Reading text with <code>Scanner</code></h2><p class="lead"><code>next()</code> reads one token; <code>nextLine()</code> reads the rest of a line.</p></header>
+            <div class="demo-box scanner-demo"><div><label for="scannerInput">Input text</label><input id="scannerInput" value="Betty Sue McKay" autocomplete="off"><div class="scanner-buttons"><button type="button" data-scan-mode="next">Run next()</button><button type="button" data-scan-mode="line">Run nextLine()</button></div></div><div class="scanner-result" aria-live="polite"><p class="demo-label">Stored value</p><output id="scannerOutput">Choose a Scanner method.</output><small id="scannerExplanation">Whitespace determines where reading stops.</small></div></div>
+            <div class="newline-pitfall" data-step="1"><pre><code>age = scnr.nextInt();
+name = scnr.nextLine();</code></pre><p><strong>Common pitfall:</strong> <code>nextInt()</code> leaves the newline. The next <code>nextLine()</code> may read an empty remainder. Consume that newline before reading the intended line.</p></div>
+            <p class="linking">When output is wrong, inspect program state methodically instead of making random edits.</p>
+          </div>
+          <footer class="slide-footer"><span>Character input: <code>scnr.next().charAt(0)</code></span><span></span></footer>
+        </section>
+
+        <section class="slide part-start" data-title="Methodical debugging" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 5 · Integrating the concepts</span><strong>§2.22 Debugging</strong></nav>
+          <div class="content-stack debug-layout">
+            <header><p class="part-label">Part 5 · Integrating the concepts</p><h2>Methodical debugging</h2><p class="lead">Debugging is a repeated two-step process: predict a possible cause, then test whether the prediction is correct.</p></header>
+            <div class="debug-flow"><span>Observe the wrong result</span><b>→</b><span>Predict one cause</span><b>→</b><span>Run a focused test</span><b>→</b><span>Keep or reject the prediction</span><b>↺</b></div>
+            <div class="demo-box circle-debug"><div class="debug-code"><p>Given circumference = 10:</p><button id="radiusBug" type="button"><code>radius = circumference / 2 * Math.PI;</code></button><pre>Observed radius: 15.71
+Expected radius: about 1.59</pre></div><div id="debugExplanation" class="debug-explanation" aria-live="polite"><p class="demo-label">Your diagnosis</p><h3>Select the highlighted calculation.</h3><p>Look for an order-of-operations problem.</p></div></div>
+            <p class="note-line">Useful tests include printing intermediate values, temporarily assigning a known value, and commenting out unrelated code. Remove temporary debug statements afterward.</p>
+            <p class="linking">The final program uses those habits to connect variables, expressions, types, and output.</p>
+          </div>
+          <footer class="slide-footer"><span>Do not stare and guess: predict, test, learn, repeat.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Complete example: HealthData" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 5 · Integrating the concepts</span><strong>§2.6 Health data</strong></nav>
+          <div class="content-stack health-layout">
+            <header><h2>Complete example: HealthData</h2><p class="lead">Read age in years, estimate days and minutes, then estimate lifetime heartbeats.</p></header>
+            <div class="demo-box health-demo">
+              <pre><code><span class="kw">final int</span> DAYS_PER_YEAR = 365;
+<span class="kw">final int</span> MINUTES_PER_DAY = 24 * 60;
+<span class="kw">final int</span> BEATS_PER_MINUTE = 72;
+
+<span class="kw">int</span> ageYears = scnr.nextInt();
+<span class="kw">int</span> ageDays = (ageYears * DAYS_PER_YEAR)
+    + (ageYears / 4);
+<span class="kw">long</span> ageMinutes = (<span class="kw">long</span>) ageDays * MINUTES_PER_DAY;
+<span class="kw">long</span> heartbeats = ageMinutes * BEATS_PER_MINUTE;</code></pre>
+              <div class="run-panel"><label for="ageInput">Age in years</label><div class="run-row"><input id="ageInput" type="number" min="0" max="130" step="1" value="19"><button id="runHealth" type="button">Run program</button></div><div class="health-results" aria-live="polite"><p><span>Days</span><strong id="ageDaysOutput">6,939</strong></p><p><span>Minutes</span><strong id="ageMinutesOutput">9,992,160</strong></p><p><span>Heartbeats</span><strong id="heartbeatsOutput">719,435,520</strong></p></div></div>
+            </div>
+            <div class="health-notes"><span><strong>Constants</strong> explain assumptions.</span><span><strong>Integer division</strong> estimates leap years.</span><span><strong>long</strong> prevents the heartbeat estimate from overflowing <code>int</code>.</span></div>
+          </div>
+          <footer class="slide-footer"><span>Simplified estimate: leap year every four years and 72 beats/minute.</span><span></span></footer>
+        </section>
+
+        <section class="slide" data-title="Check your understanding" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><span>Part 5 · Integrating the concepts</span><strong>Quiz</strong></nav>
+          <div class="content-stack quiz-layout">
+            <header><h2>Check your understanding</h2><p class="lead">Answer each source-derived question. Feedback appears immediately.</p></header>
+            <ol class="choice-quiz">
+              <li data-correct="left"><p>1. Which item must be on the left of <code>=</code>?</p><div><button type="button" data-value="left">one variable</button><button type="button" data-value="expression">any expression</button><output></output></div></li>
+              <li data-correct="camel"><p>2. Which is a valid, clear Java variable identifier?</p><div><button type="button" data-value="camel"><code>numCars</code></button><button type="button" data-value="digit"><code>3rdPlace</code></button><button type="button" data-value="space"><code>car count</code></button><output></output></div></li>
+              <li data-correct="two"><p>3. What does integer expression <code>10 / 4</code> evaluate to?</p><div><button type="button" data-value="two">2</button><button type="button" data-value="fraction">2.5</button><output></output></div></li>
+              <li data-correct="remainder"><p>4. What does <code>17 % 5</code> evaluate to?</p><div><button type="button" data-value="quotient">3</button><button type="button" data-value="remainder">2</button><output></output></div></li>
+              <li data-correct="double"><p>5. Best type for current temperature in Celsius?</p><div><button type="button" data-value="int"><code>int</code></button><button type="button" data-value="double"><code>double</code></button><output></output></div></li>
+              <li data-correct="cast"><p>6. Which expression produces <code>2.5</code>?</p><div><button type="button" data-value="late"><code>(double) (10 / 4)</code></button><button type="button" data-value="cast"><code>(double) 10 / 4</code></button><output></output></div></li>
+            </ol>
+          </div>
+          <footer class="slide-footer"><span>Explain one answer using values and types.</span><span></span></footer>
+        </section>
+
+        <section class="slide closing" data-title="Values have meaning, type, and state" aria-hidden="true">
+          <nav class="breadcrumb" aria-label="Slide location"><span>ICS 108</span><span>Chapter 2</span><strong>Lecture summary</strong></nav>
+          <div class="closing-layout">
+            <div><p class="eyebrow">Chapter 2 summary</p><h2>Values have meaning, type, and state.</h2><p class="closing-summary">Variables store current state. Expressions transform values. Types determine the allowed values and how operations behave.</p></div>
+            <div class="next-steps"><p><strong>Continue in the source:</strong> scientific notation, number bases, random numbers, Java API documentation, style guidelines, <code>var</code>, and extended examples.</p><a href="../resources/index.html">Open the source-access guide →</a><a href="../instructor/walkthroughs.html">Open the Chapter 2 problem-solving walkthroughs →</a><small>Lecture selection: §§2.1–2.12, 2.16–2.19, 2.22–2.23.</small></div>
+          </div>
+          <footer class="slide-footer"><span>ICS 108</span><span>Questions?</span></footer>
+        </section>
+      </div>
+
+      <div class="deck-controls" aria-label="Presentation controls"><button id="prevButton" type="button" aria-label="Previous step or slide">←</button><span id="slideTitle" aria-live="polite">Variables, expressions, and data types</span><span id="slideCounter">01 / 25</span><button id="nextButton" type="button" aria-label="Next step or slide">→</button></div>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ICS 108 — IDE Demo Instructor Handout</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23ffffff'/%3E%3Cpath d='M14 16h36M14 32h36M14 48h24' stroke='%231769aa' stroke-width='6'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #151515;
+      --muted: #5e6266;
+      --line: #cbd0d5;
+      --blue: #1769aa;
+      --soft: #eef5fb;
+      --paper: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: #e7e9eb; }
+
+    body {
+      max-width: 900px;
+      margin: 24px auto;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .page {
+      min-height: 1120px;
+      padding: 42px 48px;
+      break-after: page;
+    }
+
+    .page:last-child { break-after: auto; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 26px;
+      padding-bottom: 14px;
+      border-bottom: 3px solid var(--blue);
+    }
+
+    h1, h2, h3, p, ol, ul, pre { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 5px;
+      font-size: 27px;
+      line-height: 1.1;
+    }
+
+    h2 {
+      margin: 25px 0 10px;
+      color: var(--blue);
+      font-size: 19px;
+    }
+
+    h3 {
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .subtitle, .meta, .muted { color: var(--muted); }
+
+    .meta {
+      flex: 0 0 auto;
+      text-align: right;
+      font-size: 12px;
+    }
+
+    .principle {
+      padding: 12px 15px;
+      border-left: 4px solid var(--blue);
+      background: var(--soft);
+      font-size: 15px;
+    }
+
+    .orientation {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .orientation div {
+      padding: 10px;
+      border: 1px solid var(--line);
+    }
+
+    .orientation strong { display: block; margin-bottom: 3px; }
+
+    .runbook {
+      padding: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .runbook > li {
+      position: relative;
+      padding: 0 0 18px 43px;
+      counter-increment: step;
+    }
+
+    .runbook > li::before {
+      content: counter(step);
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .runbook p { margin-bottom: 7px; }
+
+    .say, .ask, .expect {
+      margin: 5px 0;
+      font-size: 13px;
+    }
+
+    .say strong, .ask strong, .expect strong { color: var(--blue); }
+
+    pre {
+      overflow: hidden;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: #f7f8f9;
+      font: 12px/1.38 "SFMono-Regular", Consolas, monospace;
+      white-space: pre-wrap;
+    }
+
+    code { font-family: "SFMono-Regular", Consolas, monospace; }
+
+    .two-columns {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .error-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .error-table th,
+    .error-table td {
+      padding: 8px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .error-table th { background: var(--soft); }
+
+    .compact-list { padding-left: 19px; }
+    .compact-list li + li { margin-top: 5px; }
+
+    .input-output {
+      display: grid;
+      grid-template-columns: 0.5fr 1.5fr;
+      gap: 14px;
+    }
+
+    .input-output pre { height: 100%; }
+
+    .checklist {
+      columns: 2;
+      column-gap: 32px;
+      padding-left: 19px;
+    }
+
+    .checklist li {
+      break-inside: avoid;
+      margin-bottom: 7px;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 26px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    a { color: var(--blue); }
+
+    @media print {
+      @page { size: A4; margin: 0; }
+      html, body { background: white; }
+      body {
+        width: 210mm;
+        max-width: none;
+        margin: 0;
+        font-size: 9.8pt;
+        line-height: 1.28;
+      }
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 0;
+        padding: 7mm 10mm;
+        overflow: hidden;
+      }
+      header { margin-bottom: 12px; padding-bottom: 8px; }
+      h1 { margin-bottom: 3px; font-size: 22px; }
+      h2 { margin: 13px 0 6px; font-size: 16px; }
+      h3 { margin-bottom: 2px; font-size: 13px; }
+      .meta { font-size: 9.5px; }
+      .principle { padding: 7px 9px; font-size: 11px; }
+      .orientation { gap: 6px; margin-top: 7px; }
+      .orientation div { padding: 6px; }
+      .runbook > li { padding: 0 0 8px 32px; }
+      .runbook > li::before { width: 22px; height: 22px; }
+      .runbook p { margin-bottom: 3px; }
+      .say, .ask, .expect { margin: 3px 0; font-size: 9.5px; }
+      pre { margin-bottom: 4px; padding: 6px 8px; font-size: 9px; line-height: 1.25; }
+      .error-table th, .error-table td { padding: 5px 6px; }
+      .two-columns { gap: 14px; }
+      .input-output { gap: 8px; }
+      .compact-list li + li { margin-top: 3px; }
+      .checklist { column-gap: 24px; }
+      .checklist li { margin-bottom: 3px; }
+      footer { margin-top: 12px; padding-top: 6px; font-size: 8px; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+    @media (max-width: 700px) {
+      body { margin: 0; }
+      .page { min-height: 0; padding: 28px 22px; }
+      .orientation, .two-columns, .input-output { grid-template-columns: 1fr; }
+      .checklist { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+  <section class="page">
+    <header>
+      <div>
+        <h1>IDE Demo — Instructor Cue Sheet</h1>
+        <p class="subtitle">ICS 108 · Variables, input, output, comments, and errors</p>
+      </div>
+      <div class="meta">Target time<br><strong>8–10 minutes</strong></div>
+    </header>
+
+    <p class="principle"><strong>Demo principle:</strong> type a small change, predict what will happen, run it, and connect the result to the lecture. Keep the Console visible.</p>
+
+    <h2>1. Orient students to the IDE <span class="muted">· 1 minute</span></h2>
+    <div class="orientation">
+      <div><strong>Project / files</strong>Where source files are stored.</div>
+      <div><strong>Editor</strong>Where Java code is written.</div>
+      <div><strong>Run control</strong>Compiles and executes the program.</div>
+      <div><strong>Console</strong>Shows input, output, and messages.</div>
+    </div>
+    <p class="ask"><strong>Ask:</strong> “Which area is for the programmer, and which area is for the running program?”</p>
+
+    <h2>2. Build the salary program incrementally <span class="muted">· 5 minutes</span></h2>
+    <ol class="runbook">
+      <li>
+        <h3>Create <code>Salary.java</code> and declare a variable</h3>
+        <pre>public class Salary {
+  public static void main(String[] args) {
+    int wage;
+    wage = 20;
+  }
+}</pre>
+        <p class="say"><strong>Say:</strong> “<code>int</code> is the type, <code>wage</code> is the variable name, and <code>= 20</code> stores a value.”</p>
+        <p class="ask"><strong>Ask before running:</strong> “Will this program display anything?” <strong>Answer:</strong> No—there is no output statement.</p>
+      </li>
+
+      <li>
+        <h3>Add output and run</h3>
+        <pre>System.out.println("Salary is " + wage * 40 * 52);</pre>
+        <p class="expect"><strong>Expected output:</strong> <code>Salary is 41600</code></p>
+        <p class="say"><strong>Point out:</strong> quoted text prints literally; <code>wage</code> without quotes uses the stored value.</p>
+      </li>
+
+      <li>
+        <h3>Replace the fixed value with keyboard input</h3>
+        <pre>import java.util.Scanner;
+
+Scanner scnr = new Scanner(System.in);
+int wage;
+wage = scnr.nextInt();
+System.out.println("Salary is " + wage * 40 * 52);</pre>
+        <p class="say"><strong>Trace aloud:</strong> “The user types <code>20</code> → <code>nextInt()</code> reads it → <code>wage</code> stores it → the calculation uses it.”</p>
+        <p class="ask"><strong>Ask:</strong> “If I enter <code>25</code>, what should the program print?” <strong>Answer:</strong> <code>Salary is 52000</code>.</p>
+      </li>
+
+      <li>
+        <h3>Add one useful comment and format the code</h3>
+        <pre>// Estimate annual salary: 40 hours for 52 weeks.
+System.out.println("Salary is " + wage * 40 * 52);</pre>
+        <p class="say"><strong>Say:</strong> “The compiler ignores the comment and most code whitespace. People do not.” Use the IDE’s formatting shortcut if available.</p>
+      </li>
+    </ol>
+
+    <footer><span>ICS 108 · IDE demo handout</span><span>Page 1 of 2</span></footer>
+  </section>
+
+  <section class="page">
+    <header>
+      <div>
+        <h1>Errors and Applied Demo</h1>
+        <p class="subtitle">Make one mistake at a time, let students predict, then repair it.</p>
+      </div>
+      <div class="meta">Target time<br><strong>6–8 minutes</strong></div>
+    </header>
+
+    <h2>3. Demonstrate errors and warnings <span class="muted">· 3 minutes</span></h2>
+    <table class="error-table">
+      <thead><tr><th>Change to make</th><th>Type</th><th>What to show</th></tr></thead>
+      <tbody>
+        <tr><td>Remove the semicolon after <code>int wage</code>.</td><td><strong>Syntax error</strong></td><td>Compilation stops. Read the first compiler message, repair it, and compile again.</td></tr>
+        <tr><td>Change <code>52</code> weeks to <code>50</code>.</td><td><strong>Logic error</strong></td><td>The program runs, but the answer is wrong. The compiler cannot know the intended number of weeks.</td></tr>
+        <tr><td>Add <code>int zero = 0;</code> and print <code>10 / zero</code>.</td><td><strong>Runtime error</strong></td><td>Compilation succeeds; execution fails with an <code>ArithmeticException</code>.</td></tr>
+        <tr><td>Hover over a yellow underline, if the IDE shows one.</td><td><strong>Warning / inspection</strong></td><td>It usually does not stop the program. Read it and investigate; exact IDE warnings vary.</td></tr>
+      </tbody>
+    </table>
+    <p class="principle"><strong>Recovery habit:</strong> after every repair, run again. Fix the first reported error before chasing later messages.</p>
+
+    <h2>4. Married-couple names mini-demo <span class="muted">· 3–4 minutes</span></h2>
+    <p>Explain the algorithm first: read four strings, then combine them into five output lines.</p>
+    <pre>import java.util.Scanner;
+
+public class MarriedNames {
+  public static void main(String[] args) {
+    Scanner scnr = new Scanner(System.in);
+
+    String firstName1 = scnr.nextLine();
+    String lastName1  = scnr.nextLine();
+    String firstName2 = scnr.nextLine();
+    String lastName2  = scnr.nextLine();
+
+    System.out.println(firstName1 + " " + lastName1 + " and "
+        + firstName2 + " " + lastName2);
+    System.out.println(firstName1 + " and " + firstName2 + " " + lastName1);
+    System.out.println(firstName1 + " and " + firstName2 + " " + lastName2);
+    System.out.println(firstName1 + " and " + firstName2 + " "
+        + lastName1 + "-" + lastName2);
+    System.out.println(firstName1 + " and " + firstName2 + " "
+        + lastName2 + "-" + lastName1);
+  }
+}</pre>
+
+    <div class="input-output">
+      <div>
+        <h3>Enter</h3>
+        <pre>Pat
+Smith
+Kelly
+Jones</pre>
+      </div>
+      <div>
+        <h3>Expected output</h3>
+        <pre>Pat Smith and Kelly Jones
+Pat and Kelly Smith
+Pat and Kelly Jones
+Pat and Kelly Smith-Jones
+Pat and Kelly Jones-Smith</pre>
+      </div>
+    </div>
+    <p class="ask"><strong>Ask:</strong> “Where are the spaces and hyphens coming from?” <strong>Answer:</strong> They are string literals written inside quotes.</p>
+
+    <h2>5. Final instructor checklist</h2>
+    <ul class="checklist">
+      <li>Increase the editor and Console font size before class.</li>
+      <li>Keep the project prepared, but type the important lines live.</li>
+      <li>Run after every meaningful change.</li>
+      <li>Ask students to predict before clicking Run.</li>
+      <li>Keep input order visible when using <code>nextLine()</code>.</li>
+      <li>If time is short, skip the runtime-error demonstration.</li>
+    </ul>
+
+    <footer>
+      <span><a href="../slides/index.html#slide-11">Lecture deck: complete input–process–output example</a></span>
+      <span>Page 2 of 2</span>
+    </footer>
+  </section>
+</body>
+</html>
