@@ -1,69 +1,68 @@
-# ICS 108 — Java lecture materials
+# ICS 108 — Java Programming
 
-Supporting slides, instructor-led problem walkthroughs, concept refreshers, and runnable Java examples for ICS 108.
+Use these materials to review what you learned in class, practice writing Java programs, and check your understanding.
 
 **[Open the course website](https://hammadojh.github.io/ICS_108/)**
 
-## Available lectures
+## Find your lecture
 
-| Lecture | Supporting slides | Instructor handout | Concept refresher |
+| Lecture | What you will study | Slides | Practice |
 |---|---|---|---|
-| 7 — Classes and objects | [Slides](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/slides/index.html) | [Handout](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/instructor/walkthroughs.html) | [Refresher](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/instructor/concept-refresher.html) |
-| 6 — User-defined methods | [Slides](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/slides/index.html) | [Handout](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/instructor/walkthroughs.html) | [Refresher](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/instructor/concept-refresher.html) |
-| 5 — Arrays | [Slides](https://hammadojh.github.io/ICS_108/lec05-arrays/slides/index.html) | [Handout](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/walkthroughs.html) | [Refresher](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/concept-refresher.html) |
+| **5 — Arrays** | Store several values, work with indexes, and find totals and maximums. | [Open slides](https://hammadojh.github.io/ICS_108/lec05-arrays/slides/index.html) | [Problems and worked solutions](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/walkthroughs.html) |
+| **6 — User-defined methods** | Define and call methods, pass arguments, and return values. | [Open slides](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/slides/index.html) | [Practice problems](lec06-user-defined-methods/student-problems.md) |
+| **7 — Classes and objects** | Create objects, read and change their data, and use constructors. | [Open slides](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/slides/index.html) | [Practice problems](lec07-classes%26objects/student-problems.md) |
 
-## Teaching with the materials
+In Lecture 7, the three problems extend the same campus wallet program: display a balance, add money, then keep two students’ balances separate.
 
-Each lecture uses three small instructor-led Java problems. Lecture 7 develops one campus wallet program through three extensions, with brief student prompts, syntax-colored solutions, and simple definition slides. The supporting slides explain one new concept at a time and identify the related problem. Teaching IDs such as `P2-C1` connect slide headers to comments in the complete Java code.
+## How to practice
 
-1. Start with the problem description in the instructor handout.
-2. Write and discuss the program in the IDE, switching to the matching slides at each teaching comment.
-3. Compile and run the program, compare the exact output, and use the prediction and recovery notes.
+1. **Read the problem and expected output.** Try writing your own solution before opening the worked code.
+2. **Use the slides when a concept is unclear.** In the slide viewer, use the arrow keys or the navigation buttons.
+3. **Run your program and compare the output.** If it differs, trace the values and revise your code.
+4. **Review the worked solution afterward.** Explain why it works, then change a value and predict the new result before running it.
 
-Handouts print as three A4 pages. The concept refreshers provide visible summaries with expandable explanations and checks. Lectures 6 and 7 include **Copy problem** buttons that copy self-contained student prompts and expected output, plus a [student-only problem sheet](lec06-user-defined-methods/student-problems.md).
+Lecture 5’s practice page includes solutions on the same page. Lectures 6 and 7 have separate problem sheets.
 
-## Files and source maps
+## Review and check your work
 
-- [Lecture 7 package guide](lec07-classes%26objects/README.md), [Java examples](lec07-classes%26objects/examples/README.md), and [content map](lec07-classes%26objects/docs/CONTENT_MAP.md)
+The **worked solutions** include complete code and explanations. The **concept notes** define the terms and offer expandable explanations. The **Java examples** contain the solution files, sample inputs, and expected outputs.
 
-- [Lecture 6 package guide](lec06-user-defined-methods/README.md), [Java examples](lec06-user-defined-methods/examples/README.md), and [content map](lec06-user-defined-methods/docs/CONTENT_MAP.md)
-- [Lecture 5 package guide](lec05-arrays/README.md), [Java examples](lec05-arrays/examples/README.md), and [content map](lec05-arrays/docs/CONTENT_MAP.md)
-- `ics108-java-intro-slides/` contains earlier introductory lecture materials.
+| Lecture | Worked solutions | Concept notes | Java examples |
+|---|---|---|---|
+| 5 — Arrays | [Solutions](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lec05-arrays/instructor/concept-refresher.html) | [Files and run instructions](lec05-arrays/examples/README.md) |
+| 6 — User-defined methods | [Solutions](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lec06-user-defined-methods/instructor/concept-refresher.html) | [Files and run instructions](lec06-user-defined-methods/examples/README.md) |
+| 7 — Classes and objects | [Solutions](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lec07-classes%26objects/instructor/concept-refresher.html) | [Files and run instructions](lec07-classes%26objects/examples/README.md) |
 
-The content maps identify selected topics, source sections, teaching additions, and deferred depth.
+## Run a Java example
 
-## Open locally
+You need a Java Development Kit (JDK) to compile and run Java code. Use the Java setup from your course.
 
-Clone this repository and open `index.html` in a browser. The lecture HTML files also work directly from disk; no build step is required. Optionally serve the repository with Python:
+**In your IDE:** open the example in a Java project and run its `main` method. Keep the filename the same as the public class name; for example, `CampusWallet1.java` contains `public class CampusWallet1`.
 
-```sh
-python3 -m http.server 8000
-```
-
-Then open `http://localhost:8000`.
-
-## Run the Java examples
-
-Install a Java Development Kit (JDK), then run these commands from the repository root:
+**In a terminal:** after downloading or cloning this repository, open a terminal in the `ICS_108` folder and run:
 
 ```sh
-mkdir -p lec06-user-defined-methods/output/classes
-javac -d lec06-user-defined-methods/output/classes lec06-user-defined-methods/examples/*.java
-java -cp lec06-user-defined-methods/output/classes CampusMenu
-java -cp lec06-user-defined-methods/output/classes LunchBill
-java -cp lec06-user-defined-methods/output/classes WalletTopUp
+cd "lec07-classes&objects/examples"
+javac CampusWallet1.java
+java CampusWallet1
 ```
 
-See each lecture's examples README for its inputs, expected outputs, and boundary checks.
+The first command opens the examples folder. `javac` compiles the file; `java` runs the class. The run command uses the class name without `.java` or `.class`.
 
-## Authoring process
+Expected output:
 
-The [versioned lecture skill](authoring/skills/ics-108-raw-lecture/SKILL.md) preserves the course format and the Lecture 7 refinements for future lectures.
+```text
+Balance: 20 SAR
+```
 
-## GitHub Pages
+For the next two versions, replace `CampusWallet1` with `CampusWallet2` or `CampusWallet3` in the `javac` and `java` commands. Lecture 7’s examples do not require keyboard input. See each lecture’s Java examples page for any required input.
 
-The website is published from the root of the `main` branch. `index.html` is the course homepage, and `.nojekyll` serves the HTML, CSS, and JavaScript directly. Pushing updates to `main` triggers publication.
+## Study offline
 
-## Course readings
+Download or clone this repository, then open `index.html` in your browser. You can also open a lecture’s `slides/index.html` directly. The slides and notes work without internet access; you only need a browser to read them.
 
-Licensed zyBooks PDFs are private authoring sources and are excluded from this repository. Access assigned readings through authorized zyBooks or LMS course access. References to local source PDFs in older materials require that authorized local copy; the public website does not distribute the PDFs.
+If the course website does not open on your network, use this local copy.
+
+## Assigned readings
+
+Access the assigned zyBooks readings through your course’s zyBooks or LMS link. The textbook PDFs are not included in this repository.
