@@ -27,17 +27,21 @@
       </section>
       <section class="slide part-start concept-slide" id="slide-3" data-title="Constructor overloading" data-concept="P1-C1" aria-label="Slide 3: Constructor overloading" aria-hidden="true">
         <div class="breadcrumb"><span>Problem 1 - CampusWallet.java</span><span>ICS 108 · Lecture 8</span><strong>P1-C1</strong></div>
-        <div class="content-stack"><header><p class="part-label">Problem 1</p><h2>Constructor overloading</h2></header><p class="concept-definition">A class can declare multiple constructors when their parameter lists differ.</p><pre class="concept-code"><code>public CampusWallet()</code></pre></div>
+        <div class="content-stack"><header><p class="part-label">Problem 1</p><h2>Constructor overloading</h2></header><p class="concept-definition">A class can declare multiple constructors when their parameter lists differ.</p><pre class="concept-code"><code>public CampusWallet()
+public CampusWallet(int balance)</code></pre></div>
         <footer class="slide-footer"><span>Object references and wrappers</span><span>Return to comment P1-C1 · 3 / 16</span></footer>
       </section>
       <section class="slide concept-slide" id="slide-4" data-title="Constructor chaining" data-concept="P1-C2" aria-label="Slide 4: Constructor chaining" aria-hidden="true">
         <div class="breadcrumb"><span>Problem 1 - CampusWallet.java</span><span>ICS 108 · Lecture 8</span><strong>P1-C2</strong></div>
-        <div class="content-stack"><header><p class="part-label">Problem 1</p><h2>Constructor chaining</h2></header><p class="concept-definition">this(...) calls another constructor in the same class and must be its first statement.</p><pre class="concept-code"><code>this(20);</code></pre></div>
+        <div class="content-stack"><header><p class="part-label">Problem 1</p><h2>Constructor chaining</h2></header><p class="concept-definition">this(...) calls another constructor in the same class and must be its first statement.</p><pre class="concept-code"><code>public CampusWallet() {
+   this(20);
+}</code></pre></div>
         <footer class="slide-footer"><span>Object references and wrappers</span><span>Return to comment P1-C2 · 4 / 16</span></footer>
       </section>
       <section class="slide concept-slide" id="slide-5" data-title="Constructor selection" data-concept="P1-C3" aria-label="Slide 5: Constructor selection" aria-hidden="true">
         <div class="breadcrumb"><span>Problem 1 - CampusWallet.java</span><span>ICS 108 · Lecture 8</span><strong>P1-C3</strong></div>
-        <div class="content-stack"><header><p class="part-label">Problem 1</p><h2>Constructor selection</h2></header><p class="concept-definition">The arguments in a new expression determine which matching constructor runs.</p><pre class="concept-code"><code>new CampusWallet(50)</code></pre></div>
+        <div class="content-stack"><header><p class="part-label">Problem 1</p><h2>Constructor selection</h2></header><p class="concept-definition">The arguments in a new expression determine which matching constructor runs.</p><pre class="concept-code"><code>new CampusWallet()
+new CampusWallet(50)</code></pre></div>
         <footer class="slide-footer"><span>Object references and wrappers</span><span>Return to comment P1-C3 · 5 / 16</span></footer>
       </section>
       <section class="slide" id="slide-6" data-title="Switch to the IDE" aria-label="Slide 6: Switch to the IDE" aria-hidden="true">
@@ -59,7 +63,11 @@ Custom: 50 SAR</code></pre></div></div><div class="resource-links"><a href="../i
       </section>
       <section class="slide concept-slide" id="slide-9" data-title="Reference parameters" data-concept="P2-C3" aria-label="Slide 9: Reference parameters" aria-hidden="true">
         <div class="breadcrumb"><span>Problem 2 - CampusWallet.java</span><span>ICS 108 · Lecture 8</span><strong>P2-C3</strong></div>
-        <div class="content-stack"><header><p class="part-label">Problem 2</p><h2>Reference parameters</h2></header><p class="concept-definition">A method receives a copy of an object reference, so it can use the same object.</p><pre class="concept-code"><code>transferTo(CampusWallet recipient, int amount)</code></pre></div>
+        <div class="content-stack"><header><p class="part-label">Problem 2</p><h2>Reference parameters</h2></header><p class="concept-definition">A method receives a copy of an object reference, so it can use the same object.</p><pre class="concept-code"><code>public void transferTo(CampusWallet recipient, int amount) {
+   balance -= amount;
+   recipient.addMoney(amount);
+   amount = 0;
+}</code></pre></div>
         <footer class="slide-footer"><span>Object references and wrappers</span><span>Return to comment P2-C3 · 9 / 16</span></footer>
       </section>
       <section class="slide" id="slide-10" data-title="Switch to the IDE" aria-label="Slide 10: Switch to the IDE" aria-hidden="true">
@@ -73,7 +81,10 @@ Amount: 10</code></pre></div></div><div class="resource-links"><a href="../instr
       </section>
       <section class="slide part-start concept-slide" id="slide-11" data-title="Wrapper class" data-concept="P3-C1" aria-label="Slide 11: Wrapper class" aria-hidden="true">
         <div class="breadcrumb"><span>Problem 3 - CampusWallet.java</span><span>ICS 108 · Lecture 8</span><strong>P3-C1</strong></div>
-        <div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Wrapper class</h2></header><p class="concept-definition">Integer is a reference type that represents an int value.</p><pre class="concept-code"><code>Integer reward;</code></pre></div>
+        <div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Wrapper class</h2></header><p class="concept-definition">Each primitive type has a matching wrapper class. This wallet uses Integer.</p><pre class="concept-code"><code>byte    → Byte       short   → Short
+int     → Integer    long    → Long
+float   → Float      double  → Double
+char    → Character  boolean → Boolean</code></pre></div>
         <footer class="slide-footer"><span>Object references and wrappers</span><span>Return to comment P3-C1 · 11 / 16</span></footer>
       </section>
       <section class="slide concept-slide" id="slide-12" data-title="null reference" data-concept="P3-C2" aria-label="Slide 12: null reference" aria-hidden="true">
@@ -83,12 +94,14 @@ Amount: 10</code></pre></div></div><div class="resource-links"><a href="../instr
       </section>
       <section class="slide concept-slide" id="slide-13" data-title="Unboxing" data-concept="P3-C3" aria-label="Slide 13: Unboxing" aria-hidden="true">
         <div class="breadcrumb"><span>Problem 3 - CampusWallet.java</span><span>ICS 108 · Lecture 8</span><strong>P3-C3</strong></div>
-        <div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Unboxing</h2></header><p class="concept-definition">Unboxing converts a wrapper value to the corresponding primitive value.</p><pre class="concept-code"><code>balance + reward</code></pre></div>
+        <div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Unboxing</h2></header><p class="concept-definition">Unboxing converts an Integer wrapper value to a primitive int.</p><pre class="concept-code"><code>Integer reward = Integer.valueOf(5); // wrapper
+int rewardAmount = reward;            // primitive</code></pre></div>
         <footer class="slide-footer"><span>Object references and wrappers</span><span>Return to comment P3-C3 · 13 / 16</span></footer>
       </section>
       <section class="slide concept-slide" id="slide-14" data-title="Autoboxing" data-concept="P3-C4" aria-label="Slide 14: Autoboxing" aria-hidden="true">
         <div class="breadcrumb"><span>Problem 3 - CampusWallet.java</span><span>ICS 108 · Lecture 8</span><strong>P3-C4</strong></div>
-        <div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Autoboxing</h2></header><p class="concept-definition">Autoboxing converts a primitive value to its matching wrapper type.</p><pre class="concept-code"><code>standard.setReward(5);</code></pre></div>
+        <div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Autoboxing</h2></header><p class="concept-definition">Autoboxing converts a primitive int to an Integer wrapper value.</p><pre class="concept-code"><code>int rewardAmount = 5;          // primitive
+Integer reward = rewardAmount; // wrapper</code></pre></div>
         <footer class="slide-footer"><span>Object references and wrappers</span><span>Return to comment P3-C4 · 14 / 16</span></footer>
       </section>
       <section class="slide" id="slide-15" data-title="Switch to the IDE" aria-label="Slide 15: Switch to the IDE" aria-hidden="true">
