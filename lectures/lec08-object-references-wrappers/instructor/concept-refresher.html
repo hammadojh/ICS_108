@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Instructor refresher for classes, objects, fields, encapsulation, constructors, and this.">
+  <meta name="theme-color" content="#111820">
+  <title>ICS 108 Lecture 8 - Object references and wrappers concept refresher</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111820'/%3E%3Cg fill='none' stroke='%238ec5ff' stroke-width='4'%3E%3Crect x='8' y='20' width='12' height='24'/%3E%3Crect x='26' y='20' width='12' height='24'/%3E%3Crect x='44' y='20' width='12' height='24'/%3E%3C/g%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: oklch(24% 0.018 250);
+      --ink-soft: oklch(43% 0.022 250);
+      --paper: oklch(98% 0.008 85);
+      --canvas: oklch(93% 0.012 245);
+      --line: oklch(82% 0.018 245);
+      --line-strong: oklch(66% 0.045 245);
+      --blue: oklch(51% 0.145 250);
+      --blue-dark: oklch(38% 0.11 250);
+      --blue-pale: oklch(95% 0.026 245);
+      --warm: oklch(95% 0.025 78);
+      --stage: oklch(18% 0.025 250);
+      --stage-soft: oklch(72% 0.035 245);
+      --code-bg: oklch(22% 0.025 250);
+      --code-ink: oklch(94% 0.012 245);
+      --focus: oklch(70% 0.15 245);
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      max-width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scroll-padding-top: 1rem;
+      background: var(--canvas);
+    }
+    body {
+      max-width: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3, p, ul, ol, table, pre { margin-top: 0; }
+    p, ul, ol { max-width: var(--measure); }
+    h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+    h1 {
+      max-width: 14ch;
+      margin-bottom: 1.5rem;
+      font-size: clamp(2.7rem, 8vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+    h2 {
+      margin-bottom: 0.75rem;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    h3 { margin-bottom: 0.5rem; font-size: 1.2rem; line-height: 1.25; }
+    a { color: var(--blue-dark); text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+    a:hover { text-decoration-thickness: 0.13em; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-variant-ligatures: none;
+    }
+    code {
+      padding: 0.08em 0.28em;
+      background: var(--blue-pale);
+      color: var(--blue-dark);
+      font-size: 0.92em;
+      overflow-wrap: anywhere;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    pre code { padding: 0; background: transparent; color: inherit; overflow-wrap: normal; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 30;
+      top: 0.5rem;
+      left: 0.5rem;
+      transform: translateY(-180%);
+      padding: 0.65rem 0.9rem;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .skip-link:focus { transform: none; }
+    .masthead {
+      padding: clamp(2rem, 7vw, 6rem) max(1.25rem, env(safe-area-inset-left)) clamp(3rem, 8vw, 6.5rem);
+      background: var(--stage);
+      color: var(--paper);
+    }
+    .masthead-inner { width: min(1180px, 100%); margin: 0 auto; }
+    .breadcrumb,
+    .eyebrow,
+    .concept-number,
+    .source-ref,
+    .reading-label,
+    .problem-tag {
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; color: var(--stage-soft); }
+    .breadcrumb a { color: inherit; }
+    .breadcrumb span + span::before { content: "/"; margin-right: 0.5rem; }
+    .eyebrow { margin-bottom: 0.75rem; color: oklch(80% 0.1 245); }
+    .chapter-abstract {
+      display: grid;
+      gap: 1rem;
+      max-width: 900px;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid oklch(39% 0.035 250);
+    }
+    .chapter-abstract .reading-label { color: oklch(80% 0.1 245); }
+    .chapter-abstract p {
+      margin-bottom: 0;
+      color: oklch(91% 0.012 245);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: clamp(1.18rem, 2.5vw, 1.55rem);
+      line-height: 1.5;
+    }
+    .reading-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+    .reading-controls button {
+      min-height: 44px;
+      padding: 0.65rem 1rem;
+      border: 1px solid oklch(52% 0.04 245);
+      border-radius: 0;
+      background: transparent;
+      color: var(--paper);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .reading-controls button:hover { background: oklch(26% 0.035 250); }
+    #readingStatus { color: var(--stage-soft); font-size: 0.86rem; }
+
+    .reading-layout {
+      display: grid;
+      grid-template-columns: minmax(14rem, 0.28fr) minmax(0, 0.72fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3rem 0 5rem;
+    }
+    .reading-map { position: sticky; top: 1rem; align-self: start; min-width: 0; }
+    .reading-map h2 {
+      margin-bottom: 1rem;
+      font: 800 0.72rem/1.2 "Avenir Next", Avenir, sans-serif;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .reading-map ol { display: grid; margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+    .reading-map a {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr);
+      min-height: 44px;
+      align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+    .reading-map a:hover { color: var(--blue-dark); }
+    .map-number { color: var(--blue); font: 700 0.76rem "SFMono-Regular", monospace; }
+    .map-links { display: grid; gap: 0.45rem; margin-top: 1.2rem; font-size: 0.86rem; }
+    .map-links a { display: block; min-height: 0; padding: 0.25rem 0; border-bottom: 0; }
+
+    .reading-main { min-width: 0; }
+    .reading-note { margin-bottom: 3rem; padding: 1.2rem 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .reading-note p:last-child { margin-bottom: 0; }
+    .mental-model { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0 4rem; }
+    .model-term { min-width: 0; padding-top: 0.8rem; border-top: 4px solid var(--blue); }
+    .model-term strong { display: block; margin-bottom: 0.3rem; }
+    .model-term span { display: block; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.45; }
+
+    .concept { margin-bottom: 0; padding: 3rem 0; border-top: 1px solid var(--line-strong); scroll-margin-top: 1rem; }
+    .concept:first-of-type { border-top-width: 3px; }
+    .concept-header { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr); gap: 1rem; margin-bottom: 1.2rem; }
+    .concept-number { padding-top: 0.6rem; color: var(--blue); font-family: "SFMono-Regular", monospace; }
+    .source-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; margin-bottom: 0.4rem; color: var(--ink-soft); }
+    .source-ref a { color: inherit; }
+    .problem-tag { display: inline-flex; align-items: center; min-height: 1.7rem; padding: 0.2rem 0.55rem; background: var(--blue); color: white; }
+    .concept-abstract {
+      margin-bottom: 1rem;
+      color: var(--ink-soft);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 1.18rem;
+      line-height: 1.55;
+    }
+    .key-rule { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; margin: 1rem 0; padding: 1rem 1.5rem; background: var(--blue-pale); }
+    .key-rule strong { color: var(--blue-dark); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .key-rule p { margin-bottom: 0; font-weight: 650; }
+
+    details { max-width: 100%; margin-top: 0.75rem; border-top: 1px solid var(--line); background: var(--paper); }
+    summary {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      min-height: 56px;
+      align-items: center;
+      padding: 0.75rem 3.2rem 0.75rem 1rem;
+      color: var(--blue-dark);
+      font-weight: 750;
+      cursor: pointer;
+      list-style: none;
+      overflow-wrap: anywhere;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue);
+      font: 400 1.5rem "Avenir Next", Avenir, sans-serif;
+    }
+    details[open] summary::after { content: "−"; }
+    .details-body { min-width: 0; max-width: 100%; padding: 0.2rem 1rem 1.2rem; }
+    .details-body > *:last-child { margin-bottom: 0; }
+    .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .details-grid > div { min-width: 0; }
+    .details-grid h3 { margin-top: 0.5rem; }
+    .teaching-line { margin: 1rem 0 0; padding: 0.85rem 1rem; background: var(--warm); }
+    .teaching-line strong { color: var(--blue-dark); }
+    .teaching-line p { margin-bottom: 0; }
+    .compare-wrap { max-width: 100%; overflow-x: auto; }
+    .compare-table { width: 100%; min-width: 31rem; border-collapse: collapse; font-size: 0.88rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--blue-pale); color: var(--blue-dark); }
+    .trace-list { margin: 0; padding-left: 1.25rem; }
+    .trace-list li + li { margin-top: 0.45rem; }
+    .warning { padding: 0.85rem 1rem; background: var(--warm); color: var(--blue-dark); }
+    .concept-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 1rem; font-size: 0.86rem; }
+
+    .readiness, .source-notes { padding: 3rem 0; border-top: 3px solid var(--ink); }
+    .readiness ol { padding-left: 1.4rem; }
+    .readiness li + li { margin-top: 0.55rem; }
+    .readiness code { white-space: normal; }
+    .source-notes { border-top-width: 1px; }
+    .source-notes ul { padding-left: 1.2rem; }
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+      padding: 1.5rem max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom));
+      background: var(--stage);
+      color: var(--stage-soft);
+      font-size: 0.86rem;
+    }
+    .page-footer a { color: var(--paper); }
+
+    @media (max-width: 900px) {
+      .reading-layout { grid-template-columns: minmax(0, 1fr); }
+      .reading-map { position: static; }
+      .reading-map ol { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+      .mental-model { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .masthead { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+      .reading-layout { width: min(calc(100% - 1.5rem), 1180px); padding-top: 2rem; }
+      .reading-map ol, .mental-model, .details-grid { grid-template-columns: minmax(0, 1fr); }
+      .concept-header { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .key-rule { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; padding: 1rem; }
+      .reading-controls { align-items: stretch; }
+      .reading-controls button { flex: 1 1 9rem; }
+      pre { padding: 1rem; font-size: 0.76rem; }
+      .compare-wrap { overflow: visible; }
+      .compare-table,
+      .compare-table tbody,
+      .compare-table tr,
+      .compare-table td { display: block; width: 100%; min-width: 0; }
+      .compare-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .compare-table tr { margin-bottom: 0.8rem; border: 1px solid var(--line); background: var(--paper); }
+      .compare-table td {
+        display: grid;
+        grid-template-columns: minmax(7.5rem, 0.42fr) minmax(0, 0.58fr);
+        gap: 0.75rem;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .compare-table td:last-child { border-bottom: 0; }
+      .compare-table td::before {
+        content: attr(data-label);
+        color: var(--blue-dark);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .page-footer { display: block; }
+      .page-footer span { display: block; }
+      .page-footer span + span { margin-top: 0.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      html, body { overflow: visible; background: white; font-size: 10pt; }
+      .masthead { padding: 0 0 10mm; background: white; color: var(--ink); }
+      .masthead h1 { max-width: none; font-size: 34pt; }
+      .skip-link, .breadcrumb, .reading-controls, .reading-map, .concept-links, .page-footer { display: none !important; }
+      .chapter-abstract p { color: var(--ink); }
+      .reading-layout { display: block; width: auto; padding: 8mm 0 0; }
+      .mental-model { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5mm; }
+      .concept { margin-bottom: 10mm; break-before: page; }
+      details { break-inside: avoid; }
+      details:not([open]) > .details-body { display: block; }
+      summary::after { display: none; }
+      .compare-wrap { overflow: visible; }
+      .compare-table { min-width: 0; }
+      pre { overflow: visible; white-space: pre-wrap; word-break: break-word; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body><a class="skip-link" href="#main-content">Skip to concepts</a><header class="masthead"><div class="masthead-inner"><nav class="breadcrumb" aria-label="Resource location"><span>ICS 108</span><span>Lecture 8</span><span>Instructor concept refresher</span></nav><p class="eyebrow">Quick review · expandable teaching notes</p><h1>Object references and wrappers</h1><section class="chapter-abstract"><span class="reading-label">Lecture abstract</span><p>The campus wallet now has two ways to begin, can transfer between objects, and can hold an optional reward. Constructor arguments select an overload. Reference variables can share one object; primitive arguments are copied. Integer is a wrapper reference type that can be null, and Java converts between Integer and int automatically. These three extensions continue the class and object work from Lecture 7.</p></section><div class="reading-controls"><button type="button" id="openAll">Open all details</button><button type="button" id="closeAll">Close all details</button><span id="readingStatus" role="status" aria-live="polite">Ten concept summaries are visible.</span></div></div></header><div class="reading-layout"><aside class="reading-map" aria-label="Concept map"><h2>Concept map</h2><ol><li><a href="#concept-1"><span class="map-number">01</span><span>Constructor overloading</span></a></li><li><a href="#concept-2"><span class="map-number">02</span><span>Constructor chaining</span></a></li><li><a href="#concept-3"><span class="map-number">03</span><span>Constructor selection</span></a></li><li><a href="#concept-4"><span class="map-number">04</span><span>Aliasing</span></a></li><li><a href="#concept-5"><span class="map-number">05</span><span>Primitive values</span></a></li><li><a href="#concept-6"><span class="map-number">06</span><span>Reference parameters</span></a></li><li><a href="#concept-7"><span class="map-number">07</span><span>Wrapper class</span></a></li><li><a href="#concept-8"><span class="map-number">08</span><span>null reference</span></a></li><li><a href="#concept-9"><span class="map-number">09</span><span>Unboxing</span></a></li><li><a href="#concept-10"><span class="map-number">10</span><span>Autoboxing</span></a></li></ol><div class="map-links"><a href="../slides/index.html">Supporting slides</a><a href="walkthroughs.html">IDE walkthroughs</a><a href="../examples/README.md">Runnable examples</a><a href="#readiness">Readiness check</a></div></aside><main class="reading-main" id="main-content" tabindex="-1"><section class="reading-note"><h2>Read the definitions, then expand</h2><p>The ten visible summaries define the new ideas. Open a detail for the wallet trace and common errors. The concept IDs match the slides and Java comments.</p></section><section><h2>One wallet, three extensions</h2><div class="mental-model"><div class="model-term"><strong>Initialize</strong><span>Choose a constructor by its arguments.</span></div><div class="model-term"><strong>Share</strong><span>Two references can name the same wallet.</span></div><div class="model-term"><strong>Transfer</strong><span>A copied reference can still reach an object.</span></div><div class="model-term"><strong>Optional</strong><span>Check an Integer reference before using its value.</span></div></div></section><section class="concept" id="concept-1"><header class="concept-header"><span class="concept-number">01</span><div><p class="source-ref"><span class="problem-tag">Problem 1 · P1-C1</span>zyBooks §7.7, pp. 36–43</p><h2>Constructor overloading</h2><p class="concept-abstract">A class can declare multiple constructors when their parameter lists differ. In this program: <code>public CampusWallet8A()</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>A class can declare multiple constructors when their parameter lists differ.</p></div><details id="detail-p1-c1"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>The two constructors have the same class name, no return type, and different parameters. A return type alone cannot distinguish overloads. Keep both forms so the previous wallet operations still work.</p><h3>Misconception and recovery</h3><p>If the no-argument constructor is removed, new CampusWallet8A() fails to compile. Restore it and rebuild.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>A class can declare multiple constructors when their parameter lists differ.</p></div></div></details></section><section class="concept" id="concept-2"><header class="concept-header"><span class="concept-number">02</span><div><p class="source-ref"><span class="problem-tag">Problem 1 · P1-C2</span>zyBooks §7.7, pp. 39–43; §7.9, pp. 47–54</p><h2>Constructor chaining</h2><p class="concept-abstract">this(...) calls another constructor in the same class and must be its first statement. In this program: <code>this(20);</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>this(...) calls another constructor in the same class and must be its first statement.</p></div><details id="detail-p1-c2"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>The no-argument constructor delegates to the int constructor. The latter performs the field assignment once. this(20) invokes a constructor; this.balance selects a field.</p><h3>Misconception and recovery</h3><p>Putting any statement before this(20) fails to compile. Move the delegation to the first statement.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>this(...) calls another constructor in the same class and must be its first statement.</p></div></div></details></section><section class="concept" id="concept-3"><header class="concept-header"><span class="concept-number">03</span><div><p class="source-ref"><span class="problem-tag">Problem 1 · P1-C3</span>zyBooks §7.7, pp. 36–43</p><h2>Constructor selection</h2><p class="concept-abstract">The arguments in a new expression determine which matching constructor runs. In this program: <code>new CampusWallet8A(50)</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>The arguments in a new expression determine which matching constructor runs.</p></div><details id="detail-p1-c3"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>No arguments select the standard wallet constructor. One int selects the custom-balance constructor. Java chooses by parameter types and count, not the assignment variable name.</p><h3>Misconception and recovery</h3><p>Changing 50 to a String has no matching constructor. Supply an int or define an appropriate overload.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>The arguments in a new expression determine which matching constructor runs.</p></div></div></details></section><section class="concept" id="concept-4"><header class="concept-header"><span class="concept-number">04</span><div><p class="source-ref"><span class="problem-tag">Problem 2 · P2-C1</span>zyBooks §7.8, pp. 43–47</p><h2>Aliasing</h2><p class="concept-abstract">Two reference variables can refer to the same object. In this program: <code>CampusWallet8B alias = custom;</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>Two reference variables can refer to the same object.</p></div><details id="detail-p2-c1"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>alias and custom refer to one wallet, so either name sees its changed balance. Assigning the reference does not make a second wallet. A second new expression would.</p><h3>Misconception and recovery</h3><p>If alias is created with new, the two balances can diverge. Assign the existing reference to demonstrate sharing.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>Two reference variables can refer to the same object.</p></div></div></details></section><section class="concept" id="concept-5"><header class="concept-header"><span class="concept-number">05</span><div><p class="source-ref"><span class="problem-tag">Problem 2 · P2-C2</span>zyBooks §7.10, pp. 54–61; §7.15, pp. 96–106</p><h2>Primitive values</h2><p class="concept-abstract">An int variable holds a number directly; assigning or passing it copies that value. In this program: <code>int amount = 10;</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>An int variable holds a number directly; assigning or passing it copies that value.</p></div><details id="detail-p2-c2"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>The caller amount remains 10. Inside transferTo, the int parameter gets its own copy; setting it to 0 does not change the caller variable. The copied value can still be used to change object fields.</p><h3>Misconception and recovery</h3><p>Do not claim the transfer changed the caller amount. Print it after the call to check.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>An int variable holds a number directly; assigning or passing it copies that value.</p></div></div></details></section><section class="concept" id="concept-6"><header class="concept-header"><span class="concept-number">06</span><div><p class="source-ref"><span class="problem-tag">Problem 2 · P2-C3</span>zyBooks §7.15, pp. 96–106</p><h2>Reference parameters</h2><p class="concept-abstract">A method receives a copy of an object reference, so it can use the same object. In this program: <code>transferTo(CampusWallet8B recipient, int amount)</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>A method receives a copy of an object reference, so it can use the same object.</p></div><details id="detail-p2-c3"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>The recipient parameter is a local reference to the standard wallet. Calling recipient.addMoney changes that object. Java passes values: the value of a reference variable is copied, rather than an object being passed by reference. Reassigning recipient would not rebind the caller variable.</p><h3>Misconception and recovery</h3><p>If transferTo creates a new recipient instead of using the argument, the standard wallet remains at 20. Use the passed reference.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>A method receives a copy of an object reference, so it can use the same object.</p></div></div></details></section><section class="concept" id="concept-7"><header class="concept-header"><span class="concept-number">07</span><div><p class="source-ref"><span class="problem-tag">Problem 3 · P3-C1</span>zyBooks §7.10, pp. 54–61</p><h2>Wrapper class</h2><p class="concept-abstract">Integer is a reference type that represents an int value. In this program: <code>Integer reward;</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>Integer is a reference type that represents an int value.</p></div><details id="detail-p3-c1"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>int holds a primitive value directly. Integer refers to an immutable wrapper object representing an int. A wrapper can be used where an object is required, such as a generic collection or an optional field. The reference can also be null.</p><h3>Misconception and recovery</h3><p>Do not use new Integer(...); constructors are deprecated in modern Java. Autoboxing or Integer.valueOf is preferable.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>Integer is a reference type that represents an int value.</p></div></div></details></section><section class="concept" id="concept-8"><header class="concept-header"><span class="concept-number">08</span><div><p class="source-ref"><span class="problem-tag">Problem 3 · P3-C2</span>zyBooks §7.8, pp. 43–47; §7.10–7.11, pp. 54–67</p><h2>null reference</h2><p class="concept-abstract">null means a reference currently refers to no object. In this program: <code>if (reward == null)</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>null means a reference currently refers to no object.</p></div><details id="detail-p3-c2"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>No reward differs from a reward of zero. The nullable Integer field starts as null, and clearing it returns to that state. Check null before arithmetic, because arithmetic would unbox the value.</p><h3>Misconception and recovery</h3><p>If reward is null and is unboxed, a NullPointerException occurs. Guard the use and return the base balance.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>null means a reference currently refers to no object.</p></div></div></details></section><section class="concept" id="concept-9"><header class="concept-header"><span class="concept-number">09</span><div><p class="source-ref"><span class="problem-tag">Problem 3 · P3-C3</span>zyBooks §7.11, pp. 61–67</p><h2>Unboxing</h2><p class="concept-abstract">Unboxing converts a wrapper value to the corresponding primitive value. In this program: <code>balance + reward</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>Unboxing converts a wrapper value to the corresponding primitive value.</p></div><details id="detail-p3-c3"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>The + operator needs numeric values; Java unboxes reward to int after the null check. The expression computes a new int and leaves the Integer object unchanged. Wrapper objects are immutable.</p><h3>Misconception and recovery</h3><p>Moving balance + reward before the null check can crash when there is no reward.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>Unboxing converts a wrapper value to the corresponding primitive value.</p></div></div></details></section><section class="concept" id="concept-10"><header class="concept-header"><span class="concept-number">10</span><div><p class="source-ref"><span class="problem-tag">Problem 3 · P3-C4</span>zyBooks §7.11, pp. 61–67</p><h2>Autoboxing</h2><p class="concept-abstract">Autoboxing converts a primitive value to its matching wrapper type. In this program: <code>standard.setReward(5);</code></p></div></header><div class="key-rule"><strong>Key rule</strong><p>Autoboxing converts a primitive value to its matching wrapper type.</p></div><details id="detail-p3-c4"><summary>Expand explanation, trace, and common error</summary><div class="details-body"><h3>How it works and when it matters</h3><p>The literal 5 is an int and setReward expects Integer, so Java boxes it automatically. The parameter receives a reference value. Clearing with null selects absence without pretending that the reward is zero.</p><h3>Misconception and recovery</h3><p>An Integer object should be compared by value with equals, not assumed equal by == identity. This example only compares to null.</p><div class="teaching-line"><strong>Useful teaching sentence</strong><p>Autoboxing converts a primitive value to its matching wrapper type.</p></div></div></details></section><section class="readiness" id="readiness"><h2>Readiness check</h2><p>Predict which constructor runs for each new expression. Explain why alias and custom print the same balance, but amount stays 10. Then predict the result of using reward in arithmetic before checking whether it is null.</p><p>Answers: arguments select the matching constructor; alias and custom share one wallet; the int parameter is a copy; unboxing null throws NullPointerException.</p><div class="map-links"><a href="../slides/index.html">Supporting slides</a><a href="walkthroughs.html">IDE walkthroughs</a></div></section></main></div><script>
+    const details = Array.from(document.querySelectorAll("details"));
+    const status = document.getElementById("readingStatus");
+
+    function updateStatus() {
+      const openCount = details.filter((item) => item.open).length;
+      if (openCount === 0) {
+        status.textContent = "Eleven concept summaries are visible; details are closed.";
+      } else if (openCount === details.length) {
+        status.textContent = `All ${details.length} detail sections are open.`;
+      } else {
+        status.textContent = `${openCount} of ${details.length} detail sections are open.`;
+      }
+    }
+
+    function setAll(open) {
+      details.forEach((item) => { item.open = open; });
+      updateStatus();
+    }
+
+    document.getElementById("openAll").addEventListener("click", () => setAll(true));
+    document.getElementById("closeAll").addEventListener("click", () => setAll(false));
+    details.forEach((item) => item.addEventListener("toggle", updateStatus));
+
+    function openHashTarget() {
+      if (!window.location.hash) return;
+      let target;
+      try {
+        target = document.querySelector(window.location.hash);
+      } catch {
+        return;
+      }
+      if (!target) return;
+      if (target.matches("details")) target.open = true;
+      const containingDetail = target.closest("details");
+      if (containingDetail) containingDetail.open = true;
+      if (target.matches(".concept")) {
+        const firstDetail = target.querySelector("details");
+        if (firstDetail) firstDetail.open = true;
+      }
+      updateStatus();
+      requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+    }
+
+    window.addEventListener("hashchange", openHashTarget);
+    openHashTarget();
+
+    let printState = [];
+    window.addEventListener("beforeprint", () => {
+      printState = details.map((item) => item.open);
+      details.forEach((item) => { item.open = true; });
+    });
+    window.addEventListener("afterprint", () => {
+      details.forEach((item, index) => { item.open = printState[index] ?? false; });
+      updateStatus();
+    });
+
+    updateStatus();
+  </script>
+</body>
+</html>

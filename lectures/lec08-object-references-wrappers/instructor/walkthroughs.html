@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Advanced campus wallet extensions with complete Java solutions and teaching references.">
+  <title>ICS 108 Lecture 8 — Instructor Problem-Solving Walkthroughs</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #e5e8eb;
+      --paper: #ffffff;
+      --ink: #15181b;
+      --muted: #596169;
+      --line: #c8d0d7;
+      --blue: #1769aa;
+      --blue-dark: #0d4d7f;
+      --soft-blue: #eef5fb;
+      --warm: #f7f4ed;
+      --danger: #a13b35;
+      --success: #226b42;
+      --code: #f6f8fa;
+      --console: #18222c;
+      --console-text: #edf4f8;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.48;
+    }
+
+    a { color: var(--blue-dark); text-underline-offset: 0.16em; }
+    code { font-family: var(--mono); }
+    button { font: inherit; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      top: 0.5rem;
+      left: 0.5rem;
+      padding: 0.6rem 0.85rem;
+      color: #fff;
+      background: var(--blue-dark);
+      transform: translateY(-180%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .screen-nav {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 3.1rem;
+      padding: 0.65rem max(1rem, calc((100vw - 210mm) / 2));
+      border-bottom: 1px solid #b7c0c8;
+      background: rgba(245, 247, 249, 0.97);
+      box-shadow: 0 2px 10px rgba(21, 24, 27, 0.08);
+    }
+    .screen-nav strong { margin-right: auto; color: var(--blue-dark); }
+    .screen-nav a { font-size: 0.9rem; font-weight: 650; }
+
+    main { padding: 2rem 1rem 4rem; }
+    .page {
+      position: relative;
+      width: min(210mm, 100%);
+      min-height: 297mm;
+      margin: 0 auto 2rem;
+      padding: 14mm 15mm 13mm;
+      background: var(--paper);
+      box-shadow: 0 12px 35px rgba(21, 24, 27, 0.15);
+    }
+
+    .course-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.5rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 3px solid var(--blue);
+    }
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.45rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .breadcrumb span::after { margin-left: 0.35rem; content: "/"; color: #94a0aa; }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+      font-size: clamp(1.8rem, 4vw, 2.55rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+    .subtitle { margin-bottom: 0; color: var(--muted); font-size: 1rem; }
+    .document-meta {
+      min-width: 9.5rem;
+      margin: 0;
+      padding-left: 1.25rem;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      text-align: right;
+    }
+    .document-meta strong { display: block; color: var(--blue-dark); font-size: 1rem; }
+
+    .lecture-goals {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem 1rem;
+      border: 1px solid #c4d8e8;
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+    }
+    .lecture-goals h2 {
+      margin-bottom: 0.7rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .goal {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.55rem;
+      align-items: start;
+      margin: 0;
+      color: #273039;
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+    .goal b {
+      display: grid;
+      width: 1.55rem;
+      height: 1.55rem;
+      place-items: center;
+      border: 1px solid #aac8df;
+      border-radius: 50%;
+      color: var(--blue-dark);
+      background: #fff;
+      font-size: 0.72rem;
+    }
+
+    .problem-module { margin-top: 1.15rem; }
+    .problem-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 0.85rem;
+    }
+    .problem-heading .kicker {
+      margin-bottom: 0.25rem;
+      color: var(--blue);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .problem-heading h2 {
+      margin-bottom: 0.25rem;
+      font-size: 1.45rem;
+      line-height: 1.15;
+      letter-spacing: -0.018em;
+    }
+    .problem-heading .lead { margin-bottom: 0; color: var(--muted); font-size: 0.9rem; }
+    .slide-map {
+      min-width: 10rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #b8d0e2;
+      background: var(--soft-blue);
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      text-align: right;
+    }
+    .slide-map a { display: block; font-weight: 800; }
+    .slide-map span { color: var(--muted); }
+
+    .content-block {
+      margin-top: 0.85rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--line);
+    }
+    .content-block > h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.55rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .content-block > h3::before {
+      width: 1.15rem;
+      height: 3px;
+      background: var(--blue);
+      content: "";
+    }
+    .content-block p:last-child { margin-bottom: 0; }
+
+    .description-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 0.65fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .problem-copy {
+      padding: 0.75rem 0.9rem;
+      border-left: 4px solid var(--blue);
+      background: var(--warm);
+      font-size: 0.9rem;
+    }
+    .problem-copy p { margin-bottom: 0.45rem; }
+    .data-line { color: var(--muted); }
+    .data-line code { color: var(--ink); font-weight: 650; }
+    .console {
+      overflow: hidden;
+      border: 1px solid #0d1720;
+      background: var(--console);
+      color: var(--console-text);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.42rem 0.7rem;
+      border-bottom: 1px solid #cfd7dd;
+      color: #34404a;
+      background: #e8edf1;
+      font-size: 0.72rem;
+      font-weight: 750;
+    }
+    .console .panel-head {
+      border-color: #344451;
+      color: #c9d6df;
+      background: #111921;
+    }
+    .console pre {
+      margin: 0;
+      padding: 0.72rem 0.8rem;
+      color: inherit;
+      font: 0.78rem/1.4 var(--mono);
+      white-space: pre-wrap;
+    }
+    .console .typed { color: #9bd3ad; font-weight: 700; }
+
+    .concept-overview {
+      display: grid;
+      grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+      gap: 0.9rem;
+      align-items: start;
+    }
+    .learning-outcome {
+      margin: 0;
+      padding: 0.75rem 0.85rem;
+      border-left: 4px solid var(--blue);
+      background: var(--soft-blue);
+      font-size: 0.87rem;
+    }
+    .learning-outcome strong {
+      display: block;
+      margin-bottom: 0.15rem;
+      color: var(--blue-dark);
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .concept-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.38rem 0.7rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .concept-links a {
+      display: flex;
+      gap: 0.45rem;
+      align-items: baseline;
+      min-height: 2rem;
+      padding: 0.38rem 0.5rem;
+      border: 1px solid #d0d8df;
+      color: #26323b;
+      background: #fff;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-decoration: none;
+    }
+    .concept-links a:hover,
+    .concept-links a:focus-visible { border-color: var(--blue); background: var(--soft-blue); }
+    .concept-links code { color: var(--blue-dark); font-size: 0.71rem; font-weight: 800; }
+
+    .section-note { margin-bottom: 0.5rem; color: var(--muted); font-size: 0.78rem; }
+    .code-workbench { overflow: hidden; border: 1px solid #adb7c0; background: var(--code); }
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.48rem 0.65rem;
+      border-bottom: 1px solid #c5ced5;
+      background: #eef1f3;
+    }
+    .code-switches { display: flex; gap: 0.3rem; }
+    .code-switch,
+    .copy-code {
+      min-height: 2rem;
+      padding: 0.35rem 0.65rem;
+      border: 1px solid #9eabb5;
+      border-radius: 3px;
+      color: #28343d;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+    .code-switch[aria-selected="true"] {
+      border-color: var(--blue-dark);
+      color: #fff;
+      background: var(--blue-dark);
+    }
+    .copy-code { margin-left: auto; color: var(--blue-dark); border-color: #8eb5d2; }
+    .code-switch:focus-visible,
+    .copy-code:focus-visible { outline: 3px solid rgba(23, 105, 170, 0.3); outline-offset: 2px; }
+    .code-version {
+      overflow-x: auto;
+      margin: 0;
+      padding: 0.9rem 1rem;
+      color: #172029;
+      background: var(--code);
+      font: 0.78rem/1.42 var(--mono);
+      tab-size: 3;
+      white-space: pre;
+    }
+    .code-version[hidden] { display: none; }
+    .copy-status {
+      min-height: 1.35rem;
+      margin: 0;
+      padding: 0.28rem 0.65rem;
+      border-top: 1px solid #d5dce2;
+      color: var(--success);
+      background: #fff;
+      font-size: 0.73rem;
+    }
+
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+    }
+    .concept-note {
+      scroll-margin-top: 4.5rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #d0d7dd;
+      border-top: 3px solid var(--blue);
+      background: #fff;
+    }
+    .concept-note:target { outline: 3px solid rgba(23, 105, 170, 0.25); outline-offset: 2px; }
+    .concept-note h4 { margin-bottom: 0.28rem; font-size: 0.84rem; line-height: 1.25; }
+    .concept-note h4 code { margin-right: 0.28rem; color: var(--blue-dark); font-size: 0.72rem; }
+    .concept-note p { margin-bottom: 0; color: #36414a; font-size: 0.78rem; line-height: 1.38; }
+    .concept-note .teaching-line { margin-top: 0.3rem; color: var(--muted); }
+    .concept-note .teaching-line strong { color: var(--blue-dark); }
+    .wide-note { grid-column: 1 / -1; }
+
+    .trace-wrap { overflow-x: auto; margin-top: 0.55rem; }
+    .trace {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      line-height: 1.3;
+    }
+    .trace th,
+    .trace td { padding: 0.32rem 0.42rem; border: 1px solid #cfd7dd; text-align: left; }
+    .trace th { color: var(--blue-dark); background: var(--soft-blue); }
+    .trace .update { color: var(--success); font-weight: 750; }
+    .mistake {
+      margin-top: 0.55rem;
+      padding: 0.5rem 0.65rem;
+      border-left: 3px solid var(--danger);
+      color: #63312e;
+      background: #fbf1f0;
+      font-size: 0.76rem;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.73rem;
+    }
+
+    @media (max-width: 760px) {
+      .screen-nav { align-items: flex-start; flex-wrap: wrap; gap: 0.5rem 1rem; }
+      .screen-nav strong { width: 100%; }
+      main { padding: 1rem 0.6rem 2rem; }
+      .page { min-height: 0; padding: 1.2rem 1rem; }
+      .course-header,
+      .problem-heading,
+      .description-grid,
+      .concept-overview { grid-template-columns: 1fr; }
+      .document-meta { padding: 0.65rem 0 0; border-top: 1px solid var(--line); border-left: 0; text-align: left; }
+      .problem-heading { align-items: start; }
+      .slide-map { text-align: left; }
+      .goal-grid,
+      .reference-grid { grid-template-columns: 1fr; }
+      .concept-links { grid-template-columns: 1fr; }
+      .wide-note { grid-column: auto; }
+      .code-toolbar { flex-wrap: wrap; }
+      .copy-code { margin-left: 0; }
+      .code-version { font-size: 0.7rem; }
+    }
+
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+      html, body { width: 210mm; margin: 0; background: #fff; }
+      body { font-size: 8pt; line-height: 1.28; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .skip-link,
+      .screen-nav,
+      .code-toolbar,
+      .copy-status { display: none !important; }
+      main { padding: 0; }
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 297mm;
+        max-height: 297mm;
+        margin: 0;
+        padding: 8mm 10mm 7mm;
+        overflow: hidden;
+        break-after: page;
+        page-break-after: always;
+        box-shadow: none;
+      }
+      .page:last-child { break-after: auto; page-break-after: auto; }
+      .course-header { gap: 5mm; padding-bottom: 2.3mm; border-bottom-width: 1mm; }
+      .course-header { grid-template-columns: minmax(0, 1fr) auto; }
+      .breadcrumb { gap: 1mm; margin-bottom: 1.2mm; font-size: 6.5pt; }
+      .breadcrumb span::after { margin-left: 1mm; }
+      h1 { margin-bottom: 0.8mm; font-size: 17pt; }
+      .subtitle { font-size: 7.8pt; }
+      .document-meta { min-width: 32mm; padding: 0 0 0 4mm; border-top: 0; border-left: 1px solid var(--line); font-size: 7pt; line-height: 1.35; text-align: right; }
+      .document-meta strong { font-size: 8pt; }
+      .lecture-goals { margin-top: 2.5mm; padding: 2.3mm 2.8mm; border-left-width: 1.2mm; }
+      .lecture-goals h2 { margin-bottom: 1.8mm; font-size: 8.5pt; }
+      .goal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.2mm; }
+      .goal { gap: 1.3mm; font-size: 6.8pt; line-height: 1.25; }
+      .goal b { width: 5mm; height: 5mm; font-size: 6pt; }
+      .problem-module { margin-top: 3mm; }
+      .page:not(.page-one) .problem-module { margin-top: 4mm; }
+      .problem-heading { grid-template-columns: minmax(0, 1fr) auto; gap: 4mm; align-items: end; margin-bottom: 2mm; }
+      .problem-heading .kicker { margin-bottom: 0.7mm; font-size: 6.3pt; }
+      .problem-heading h2 { margin-bottom: 0.7mm; font-size: 12pt; }
+      .problem-heading .lead { font-size: 7.2pt; }
+      .slide-map { min-width: 34mm; padding: 1.5mm 2mm; font-size: 6.5pt; text-align: right; }
+      .content-block { margin-top: 2mm; padding-top: 1.7mm; }
+      .content-block > h3 { gap: 1.5mm; margin-bottom: 1.4mm; font-size: 8.7pt; }
+      .content-block > h3::before { width: 4mm; height: 0.7mm; }
+      .description-grid { grid-template-columns: minmax(0, 1.3fr) minmax(42mm, 0.7fr); gap: 2.5mm; }
+      .problem-copy { padding: 1.8mm 2.2mm; border-left-width: 1mm; font-size: 7.1pt; }
+      .problem-copy p { margin-bottom: 1mm; }
+      .panel-head { padding: 1mm 1.6mm; font-size: 6.2pt; }
+      .console pre { padding: 1.7mm 2mm; font-size: 6.5pt; line-height: 1.3; }
+      .concept-overview { grid-template-columns: minmax(44mm, 0.8fr) minmax(0, 1.2fr); gap: 2.4mm; }
+      .learning-outcome { padding: 1.8mm 2.1mm; border-left-width: 1mm; font-size: 6.8pt; }
+      .learning-outcome strong { margin-bottom: 0.5mm; font-size: 6.1pt; }
+      .concept-links { gap: 1mm 1.5mm; }
+      .concept-links a { gap: 1.1mm; min-height: 0; padding: 1mm 1.2mm; font-size: 6.4pt; }
+      .concept-links code { font-size: 5.9pt; }
+      .section-note { margin-bottom: 1.2mm; font-size: 6.3pt; }
+      .code-version { padding: 2mm 2.4mm; font-size: 6.45pt; line-height: 1.23; }
+      #problem-2 .content-block { margin-top: 1.7mm; padding-top: 1.4mm; }
+      #problem-2 .code-version { padding: 1.5mm 2.2mm; font-size: 6.15pt; line-height: 1.15; }
+      #problem-2 .concept-note { padding: 1.2mm 1.5mm; }
+      #problem-2 .trace th,
+      #problem-2 .trace td { padding: 0.55mm 0.9mm; }
+      #problem-2 .mistake { margin-top: 0.7mm; padding: 0.8mm 1mm; }
+      .code-version[data-code-version="starter"] { display: none !important; }
+      .code-version[data-code-version="complete"] { display: block !important; }
+      .reference-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4mm; }
+      .concept-note { padding: 1.5mm 1.7mm; border-top-width: 0.7mm; }
+      .concept-note h4 { margin-bottom: 0.7mm; font-size: 6.8pt; }
+      .concept-note h4 code { margin-right: 0.7mm; font-size: 5.9pt; }
+      .concept-note p { font-size: 6.25pt; line-height: 1.28; }
+      .concept-note .teaching-line { margin-top: 0.7mm; }
+      .wide-note { grid-column: 1 / -1; }
+      .trace-wrap { margin-top: 1.2mm; }
+      .trace { font-size: 6pt; }
+      .trace th,
+      .trace td { padding: 0.8mm 1mm; }
+      .mistake { margin-top: 1.2mm; padding: 1.2mm 1.5mm; border-left-width: 0.8mm; font-size: 6.2pt; }
+      .page-footer { position: absolute; right: 10mm; bottom: 5mm; left: 10mm; margin: 0; padding-top: 1.5mm; font-size: 6.2pt; }
+    }
+  @media print {
+ .code-version, #problem-2 .code-version {font-size:8pt;line-height:1.25;padding:2mm 2.4mm}
+ .concept-note p {font-size:7.3pt;line-height:1.3}
+ .concept-note h4 {font-size:7.8pt}
+ .reference-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .problem-copy {font-size:8pt}.learning-outcome{font-size:7.5pt}.concept-links a{font-size:7pt}
+ .section-note{font-size:7pt}.wide-note{grid-column:1/-1}
+ }
+.problem-actions {display:flex;align-items:center;gap:1rem;margin-bottom:.7rem;}
+.copy-problem {padding:.45rem .8rem;border:1px solid var(--blue);color:var(--blue-dark);background:var(--soft-blue);font-weight:650;cursor:pointer;}
+.copy-problem:focus-visible {outline:3px solid var(--blue);outline-offset:3px;}
+.problem-copy-status {font-size:.8rem;color:var(--blue-dark);}
+.problem-copy ol {margin:.65rem 0 0;padding-left:1.25rem;}
+.problem-copy li {margin:0 0 .45rem;}
+@media print {
+ .problem-actions {display:none!important;}
+ .description-grid {grid-template-columns:minmax(0,1.8fr) minmax(38mm,.7fr);}
+ .problem-copy ol {margin:1mm 0 0;padding-left:3.8mm;}
+ .problem-copy li {margin-bottom:.8mm;}
+}
+@media print { #problem-3 .code-version {line-height:1.15;padding-top:1.5mm;padding-bottom:1.5mm;} }
+.concept-links code {white-space:nowrap;flex-shrink:0;}
+
+.token.keyword {color:#713f9b;font-weight:650;}
+.token.string {color:#226b42;}
+.token.comment {color:#596169;font-style:italic;}
+.token.number {color:#a13b35;}
+.token.type {color:#0d4d7f;}
+.syntax-key {display:flex;flex-wrap:wrap;gap:.75rem;font-size:.75rem;color:var(--muted);margin:0;padding:.5rem .9rem;border-top:1px solid var(--line);}
+@media print {.syntax-key{display:none}.concept-links{grid-template-columns:1fr 1fr}.code-version,#problem-2 .code-version,#problem-3 .code-version{font-size:8pt;line-height:1.2}.concept-note p{font-size:7.2pt;line-height:1.28}}
+@media print {.page{padding:6mm 8mm 6mm}.course-header{padding-bottom:1mm}.problem-module,.page:not(.page-one) .problem-module{margin-top:2mm}.problem-heading{margin-bottom:1mm}.content-block,#problem-2 .content-block{margin-top:1mm;padding-top:1mm}.content-block > h3{margin-bottom:.7mm}.problem-actions{display:none!important}.description-grid{gap:1mm}.problem-copy{padding:1mm 1.5mm}.concept-overview{gap:1mm}.learning-outcome{padding:1mm 1.5mm}.concept-links a{padding:.5mm 1mm}.section-note{margin-bottom:.5mm}.code-version,#problem-2 .code-version,#problem-3 .code-version{font-size:7pt;line-height:1.08;padding:1mm 1.5mm}.reference-grid{gap:.7mm}.concept-note,#problem-2 .concept-note{padding:.7mm 1mm}.concept-note h4{font-size:6.7pt;margin-bottom:.4mm}.concept-note p{font-size:6.1pt;line-height:1.15}.page-footer{bottom:3mm}}</style>
+</head>
+<body><a class="skip-link" href="#problem-1">Skip to the first problem</a><nav class="screen-nav" aria-label="Instructor resources"><strong>ICS 108 · Lecture 8 instructor set</strong><a href="../slides/index.html">Supporting slides</a><a href="concept-refresher.html">Concept refresher</a><a href="../student-problems.md">Student problems</a></nav><main>
+<article class="page page-one" id="problem-1"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 8</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">Object references and wrappers: three campus wallet extensions.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 35 min<br>Page 1 of 3</p></header><section class="lecture-goals"><h2>What will students learn in this lecture?</h2><div class="goal-grid"><p class="goal"><b>1</b><span>Use overloaded constructors.</span></p><p class="goal"><b>2</b><span>Trace primitives and object references.</span></p><p class="goal"><b>3</b><span>Handle an optional Integer reward.</span></p></div></section><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 1 · About 9 minutes</p><h2>Two ways to start a wallet</h2><p class="lead">CampusWallet8A.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-3">Supporting slides 3–6</a><span>IDE checkpoint: slide 6.</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="1" aria-label="Copy Problem 1 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="1" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>A standard campus wallet starts with 20 SAR; a custom wallet starts with 50 SAR. Display both starting balances.</p><p>No keyboard input is required.</p></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>Standard: 20 SAR
+Custom: 50 SAR</pre></div></div></section><section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Use two constructors for different starting balances and share initialization.</p><ul class="concept-links"><li><a href="#p1-c1"><code>P1-C1</code><span>Constructor overloading</span></a></li><li><a href="#p1-c2"><code>P1-C2</code><span>Constructor chaining</span></a></li><li><a href="#p1-c3"><code>P1-C3</code><span>Constructor selection</span></a></li></ul></div></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Instructor solution · Pause at each concept ID. Run: <code>javac CampusWallet8A.java</code>, then <code>java CampusWallet8A</code>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusWallet8A.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button><span data-copy-status role="status" aria-live="polite"></span></div><pre class="code-version" data-code-version="complete"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> CampusWallet8A {
+   <span class="token keyword">private</span> <span class="token keyword">int</span> balance;
+
+   <span class="token comment">// P1-C1: Constructors can share a name when their parameters differ.</span>
+   <span class="token keyword">public</span> CampusWallet8A() {
+      <span class="token comment">// P1-C2: This constructor delegates to the int constructor.</span>
+      <span class="token keyword">this</span>(<span class="token number">20</span>);
+   }
+
+   <span class="token keyword">public</span> CampusWallet8A(<span class="token keyword">int</span> balance) {
+      <span class="token keyword">this</span>.balance = balance;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> addMoney(<span class="token keyword">int</span> amount) {
+      balance += amount;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">int</span> getBalance() {
+      <span class="token keyword">return</span> balance;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(String[] args) {
+      <span class="token comment">// P1-C3: Arguments select the matching constructor.</span>
+      CampusWallet8A standard = <span class="token keyword">new</span> CampusWallet8A();
+      CampusWallet8A custom = <span class="token keyword">new</span> CampusWallet8A(<span class="token number">50</span>);
+      System.out.println(<span class="token string">&quot;Standard: &quot;</span> + standard.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      System.out.println(<span class="token string">&quot;Custom: &quot;</span> + custom.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+   }
+}
+</code></pre></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p1-c1"><h4><code>P1-C1</code> Constructor overloading</h4><p>The two constructors have the same class name, no return type, and different parameters. A return type alone cannot distinguish overloads. Keep both forms so the previous wallet operations still work. <strong>Check:</strong> If the no-argument constructor is removed, new CampusWallet8A() fails to compile. Restore it and rebuild.</p></article><article class="concept-note" id="p1-c2"><h4><code>P1-C2</code> Constructor chaining</h4><p>The no-argument constructor delegates to the int constructor. The latter performs the field assignment once. this(20) invokes a constructor; this.balance selects a field. <strong>Check:</strong> Putting any statement before this(20) fails to compile. Move the delegation to the first statement.</p></article><article class="concept-note" id="p1-c3"><h4><code>P1-C3</code> Constructor selection</h4><p>No arguments select the standard wallet constructor. One int selects the custom-balance constructor. Java chooses by parameter types and count, not the assignment variable name. <strong>Check:</strong> Changing 50 to a String has no matching constructor. Supply an int or define an appropriate overload.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 8 · Problem 1</span><span>Supporting slides 3–6 · Page 1 of 3</span></footer></article>
+<article class="page" id="problem-2"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 8</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">Object references and wrappers: three campus wallet extensions.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 35 min<br>Page 2 of 3</p></header><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 2 · About 12 minutes</p><h2>Transfer through another name</h2><p class="lead">CampusWallet8B.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-7">Supporting slides 7–10</a><span>IDE checkpoint: slide 10.</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="2" aria-label="Copy Problem 2 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="2" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>Extend Problem 1: transfer 10 SAR from the custom wallet to the standard wallet. Another name for the custom wallet should report its updated balance, while the transfer amount remains 10.</p><p>No keyboard input is required.</p></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>Standard: 30 SAR
+Custom: 40 SAR
+Alias: 40 SAR
+Amount: 10</pre></div></div></section><section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Distinguish aliases, primitive values, and object-reference parameters.</p><ul class="concept-links"><li><a href="#p2-c1"><code>P2-C1</code><span>Aliasing</span></a></li><li><a href="#p2-c2"><code>P2-C2</code><span>Primitive values</span></a></li><li><a href="#p2-c3"><code>P2-C3</code><span>Reference parameters</span></a></li></ul></div></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Instructor solution · Pause at each concept ID. Run: <code>javac CampusWallet8B.java</code>, then <code>java CampusWallet8B</code>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusWallet8B.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button><span data-copy-status role="status" aria-live="polite"></span></div><pre class="code-version" data-code-version="complete"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> CampusWallet8B {
+   <span class="token keyword">private</span> <span class="token keyword">int</span> balance;
+
+   <span class="token keyword">public</span> CampusWallet8B() {
+      <span class="token keyword">this</span>(<span class="token number">20</span>);
+   }
+
+   <span class="token keyword">public</span> CampusWallet8B(<span class="token keyword">int</span> balance) {
+      <span class="token keyword">this</span>.balance = balance;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> addMoney(<span class="token keyword">int</span> amount) {
+      balance += amount;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">int</span> getBalance() {
+      <span class="token keyword">return</span> balance;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(String[] args) {
+      CampusWallet8B standard = <span class="token keyword">new</span> CampusWallet8B();
+      CampusWallet8B custom = <span class="token keyword">new</span> CampusWallet8B(<span class="token number">50</span>);
+      <span class="token comment">// P2-C1: Assigning a reference makes another name for the same object.</span>
+      CampusWallet8B alias = custom;
+      <span class="token comment">// P2-C2: The int variable contains its number directly.</span>
+      <span class="token keyword">int</span> amount = <span class="token number">10</span>;
+      alias.transferTo(standard, amount);
+      System.out.println(<span class="token string">&quot;Standard: &quot;</span> + standard.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      System.out.println(<span class="token string">&quot;Custom: &quot;</span> + custom.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      System.out.println(<span class="token string">&quot;Alias: &quot;</span> + alias.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      System.out.println(<span class="token string">&quot;Amount: &quot;</span> + amount);
+   }
+
+   <span class="token comment">// P2-C3: The recipient parameter receives a copy of an object reference.</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> transferTo(CampusWallet8B recipient, <span class="token keyword">int</span> amount) {
+      balance -= amount;
+      recipient.addMoney(amount);
+      amount = <span class="token number">0</span>; <span class="token comment">// Only this local primitive copy changes.</span>
+   }
+}
+</code></pre></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p2-c1"><h4><code>P2-C1</code> Aliasing</h4><p>alias and custom refer to one wallet, so either name sees its changed balance. Assigning the reference does not make a second wallet. A second new expression would. <strong>Check:</strong> If alias is created with new, the two balances can diverge. Assign the existing reference to demonstrate sharing.</p></article><article class="concept-note" id="p2-c2"><h4><code>P2-C2</code> Primitive values</h4><p>The caller amount remains 10. Inside transferTo, the int parameter gets its own copy; setting it to 0 does not change the caller variable. The copied value can still be used to change object fields. <strong>Check:</strong> Do not claim the transfer changed the caller amount. Print it after the call to check.</p></article><article class="concept-note" id="p2-c3"><h4><code>P2-C3</code> Reference parameters</h4><p>The recipient parameter is a local reference to the standard wallet. Calling recipient.addMoney changes that object. Java passes values: the value of a reference variable is copied, rather than an object being passed by reference. Reassigning recipient would not rebind the caller variable. <strong>Check:</strong> If transferTo creates a new recipient instead of using the argument, the standard wallet remains at 20. Use the passed reference.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 8 · Problem 2</span><span>Supporting slides 7–10 · Page 2 of 3</span></footer></article>
+<article class="page" id="problem-3"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 8</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">Object references and wrappers: three campus wallet extensions.</p></div><p class="document-meta"><strong>3 problems</strong>Approx. 35 min<br>Page 3 of 3</p></header><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 3 · About 13 minutes</p><h2>Add an optional reward</h2><p class="lead">CampusWallet8C.java</p></div><div class="slide-map"><a href="../slides/index.html#slide-11">Supporting slides 11–15</a><span>IDE checkpoint: slide 15.</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button type="button" class="copy-problem" data-copy-problem="3" aria-label="Copy Problem 3 for students">Copy problem</button><span class="problem-copy-status" data-problem-status="3" role="status" aria-live="polite"></span></div><div class="description-grid"><div class="problem-copy"><p>Extend Problem 2: the standard wallet may have a 5 SAR reward. Show its available balance with the reward and after the reward is cleared; retain the transfer results.</p><p>No keyboard input is required.</p></div><div class="console"><div class="panel-head"><span>Console</span><span>Expected output</span></div><pre>Standard: 30 SAR
+Custom: 40 SAR
+Alias: 40 SAR
+Amount: 10
+With reward: 35 SAR
+Without reward: 30 SAR</pre></div></div></section><section class="content-block"><h3>What new concepts does it have?</h3><div class="concept-overview"><p class="learning-outcome"><strong>Students will learn</strong>Use an optional Integer safely and recognize automatic boxing and unboxing.</p><ul class="concept-links"><li><a href="#p3-c1"><code>P3-C1</code><span>Wrapper class</span></a></li><li><a href="#p3-c2"><code>P3-C2</code><span>null reference</span></a></li><li><a href="#p3-c3"><code>P3-C3</code><span>Unboxing</span></a></li><li><a href="#p3-c4"><code>P3-C4</code><span>Autoboxing</span></a></li></ul></div></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Instructor solution · Pause at each concept ID. Run: <code>javac CampusWallet8C.java</code>, then <code>java CampusWallet8C</code>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusWallet8C.java</span><span>Complete</span></div><div class="code-toolbar"><button type="button" class="copy-code" data-copy-code>Copy complete code</button><span data-copy-status role="status" aria-live="polite"></span></div><pre class="code-version" data-code-version="complete"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> CampusWallet8C {
+   <span class="token keyword">private</span> <span class="token keyword">int</span> balance;
+   <span class="token comment">// P3-C1: Integer is a reference type that represents an int value.</span>
+   <span class="token keyword">private</span> <span class="token type">Integer</span> reward;
+
+   <span class="token keyword">public</span> CampusWallet8C() { <span class="token keyword">this</span>(<span class="token number">20</span>); }
+   <span class="token keyword">public</span> CampusWallet8C(<span class="token keyword">int</span> balance) { <span class="token keyword">this</span>.balance = balance; }
+   <span class="token keyword">public</span> <span class="token keyword">void</span> addMoney(<span class="token keyword">int</span> amount) { balance += amount; }
+   <span class="token keyword">public</span> <span class="token keyword">int</span> getBalance() { <span class="token keyword">return</span> balance; }
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> transferTo(CampusWallet8C recipient, <span class="token keyword">int</span> amount) {
+      balance -= amount;
+      recipient.addMoney(amount);
+      amount = <span class="token number">0</span>;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> setReward(<span class="token type">Integer</span> reward) { <span class="token keyword">this</span>.reward = reward; }
+
+   <span class="token keyword">public</span> <span class="token keyword">int</span> getAvailableBalance() {
+      <span class="token comment">// P3-C2: null represents an absent optional reward.</span>
+      <span class="token keyword">if</span> (reward == <span class="token keyword">null</span>) { <span class="token keyword">return</span> balance; }
+      <span class="token comment">// P3-C3: Arithmetic unboxes Integer to int.</span>
+      <span class="token keyword">return</span> balance + reward;
+   }
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(String[] args) {
+      CampusWallet8C standard = <span class="token keyword">new</span> CampusWallet8C();
+      CampusWallet8C custom = <span class="token keyword">new</span> CampusWallet8C(<span class="token number">50</span>);
+      CampusWallet8C alias = custom;
+      <span class="token keyword">int</span> amount = <span class="token number">10</span>;
+      alias.transferTo(standard, amount);
+      System.out.println(<span class="token string">&quot;Standard: &quot;</span> + standard.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      System.out.println(<span class="token string">&quot;Custom: &quot;</span> + custom.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      System.out.println(<span class="token string">&quot;Alias: &quot;</span> + alias.getBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      System.out.println(<span class="token string">&quot;Amount: &quot;</span> + amount);
+      <span class="token comment">// P3-C4: Passing int 5 to an Integer parameter autoboxes it.</span>
+      standard.setReward(<span class="token number">5</span>);
+      System.out.println(<span class="token string">&quot;With reward: &quot;</span> + standard.getAvailableBalance() + <span class="token string">&quot; SAR&quot;</span>);
+      standard.setReward(<span class="token keyword">null</span>);
+      System.out.println(<span class="token string">&quot;Without reward: &quot;</span> + standard.getAvailableBalance() + <span class="token string">&quot; SAR&quot;</span>);
+   }
+}
+</code></pre></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p3-c1"><h4><code>P3-C1</code> Wrapper class</h4><p>int holds a primitive value directly. Integer refers to an immutable wrapper object representing an int. A wrapper can be used where an object is required, such as a generic collection or an optional field. The reference can also be null. <strong>Check:</strong> Do not use new Integer(...); constructors are deprecated in modern Java. Autoboxing or Integer.valueOf is preferable.</p></article><article class="concept-note" id="p3-c2"><h4><code>P3-C2</code> null reference</h4><p>No reward differs from a reward of zero. The nullable Integer field starts as null, and clearing it returns to that state. Check null before arithmetic, because arithmetic would unbox the value. <strong>Check:</strong> If reward is null and is unboxed, a NullPointerException occurs. Guard the use and return the base balance.</p></article><article class="concept-note" id="p3-c3"><h4><code>P3-C3</code> Unboxing</h4><p>The + operator needs numeric values; Java unboxes reward to int after the null check. The expression computes a new int and leaves the Integer object unchanged. Wrapper objects are immutable. <strong>Check:</strong> Moving balance + reward before the null check can crash when there is no reward.</p></article><article class="concept-note" id="p3-c4"><h4><code>P3-C4</code> Autoboxing</h4><p>The literal 5 is an int and setReward expects Integer, so Java boxes it automatically. The parameter receives a reference value. Clearing with null selects absence without pretending that the reward is zero. <strong>Check:</strong> An Integer object should be compared by value with equals, not assumed equal by == identity. This example only compares to null.</p></article></div></section></section><footer class="page-footer"><span>ICS 108 · Lecture 8 · Problem 3</span><span>Supporting slides 11–15 · Page 3 of 3</span></footer></article>
+</main><script>
+async function copyText(text) {
+ if(navigator.clipboard && window.isSecureContext) {try {await navigator.clipboard.writeText(text); return;} catch(error) { /* Fall back when local-file clipboard access is denied. */ }}
+ const active=document.activeElement;
+ const area=document.createElement('textarea'); area.value=text; area.setAttribute('readonly',''); area.style.cssText='position:fixed;opacity:0;left:0;top:0'; document.body.appendChild(area); area.select(); area.setSelectionRange(0,area.value.length);
+ const ok=document.execCommand('copy'); area.remove(); active?.focus(); if(!ok) throw new Error('Copy unavailable');
+}
+document.querySelectorAll('[data-code-workbench]').forEach(workbench=>workbench.querySelector('[data-copy-code]').addEventListener('click',async()=>{
+ const status=workbench.querySelector('[data-copy-status]'); try {await copyText(workbench.querySelector('code').textContent);status.textContent='Complete code copied.';}catch(error){status.textContent='Copy failed. Select the code and copy it manually.';}
+}));
+</script><script type="application/json" id="student-problems">{"1": "Problem 1 — Two ways to start a wallet\n\nA standard campus wallet starts with 20 SAR; a custom wallet starts with 50 SAR. Display both starting balances.\n\nNo keyboard input is required.\n\nExpected output:\nStandard: 20 SAR\nCustom: 50 SAR", "2": "Problem 2 — Transfer through another name\n\nExtend Problem 1: transfer 10 SAR from the custom wallet to the standard wallet. Another name for the custom wallet should report its updated balance, while the transfer amount remains 10.\n\nNo keyboard input is required.\n\nExpected output:\nStandard: 30 SAR\nCustom: 40 SAR\nAlias: 40 SAR\nAmount: 10", "3": "Problem 3 — Add an optional reward\n\nExtend Problem 2: the standard wallet may have a 5 SAR reward. Show its available balance with the reward and after the reward is cleared; retain the transfer results.\n\nNo keyboard input is required.\n\nExpected output:\nStandard: 30 SAR\nCustom: 40 SAR\nAlias: 40 SAR\nAmount: 10\nWith reward: 35 SAR\nWithout reward: 30 SAR"}</script><script>
+const studentProblems=JSON.parse(document.getElementById("student-problems").textContent);
+document.querySelectorAll("[data-copy-problem]").forEach(button=>button.addEventListener("click",async()=>{const id=button.dataset.copyProblem;const status=document.querySelector(`[data-problem-status="${id}"]`);try{await copyText(studentProblems[id]);status.textContent="Problem and expected output copied.";}catch(error){status.textContent="Copy failed. Select the problem and expected output manually.";}}));
+</script></body></html>

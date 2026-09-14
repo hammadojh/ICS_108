@@ -18,11 +18,13 @@ Read [references/package-contract.md](references/package-contract.md) and [refer
    - If the package spans chapters, label the artifacts by course lecture number and topic (for example, `Lecture 4 · Branches + Loops`) rather than implying that the package is one source chapter.
    - Keep licensed source files private unless redistribution permission is explicit.
    - Inspect relevant earlier task history when the user asks to carry previous lecture preferences forward.
+   - For a follow-on lecture using the same chapter, record the new course lecture number separately from the source chapter, reuse the private source in place, and identify what the preceding lecture already taught. Build deeper problems from the deferred concepts without repeating the foundation or assuming a new PDF is required.
 
 2. Map before designing.
    - Create `docs/CONTENT_MAP.md` with source sections, selected concepts, complete teaching treatment, slide assignment, examples, timing, teaching additions, and deferred depth.
    - Select a coherent foundation for roughly 30 minutes. A deliberately combined lecture may extend to roughly 35–40 minutes when needed, but must still defer depth rather than compress every source section or teach half a concept.
    - Shape the selected foundation into exactly three small Java problems in the same program/domain. Prefer an ordinary campus-life context students can recognize. Problem 1 establishes the working program; Problems 2 and 3 explicitly extend the preceding version and retain its useful behavior. Introduce only the concepts required by each extension.
+   - When the user requests a deeper continuation, allow each problem to carry more reasoning while keeping the student prompt brief, the code runnable, and the three extensions teachable in the stated time. Preserve useful behavior from the preceding lecture when the same program domain continues.
 
 3. Define the tutorial sequence.
    - Group the lecture into three problem parts. Use enough slides to define one related concept per slide. Choose the count from the selected concepts; there is no slide-count quota.

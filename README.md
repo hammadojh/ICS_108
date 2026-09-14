@@ -15,8 +15,9 @@ Use these materials to review what you learned in class, practice writing Java p
 | **5 — Arrays** | Store several values, work with indexes, and find totals and maximums. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec05-arrays/slides/index.html) | [Problems and worked solutions](https://hammadojh.github.io/ICS_108/lectures/lec05-arrays/instructor/walkthroughs.html) |
 | **6 — User-defined methods** | Define and call methods, pass arguments, and return values. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec06-user-defined-methods/slides/index.html) | [Practice problems](lectures/lec06-user-defined-methods/student-problems.md) |
 | **7 — Classes and objects** | Create objects, read and change their data, and use constructors. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec07-classes%26objects/slides/index.html) | [Practice problems](lectures/lec07-classes%26objects/student-problems.md) |
+| **8 — Object references and wrappers** | Overload constructors, trace shared objects and primitive values, and use an optional Integer. | [Open slides](https://hammadojh.github.io/ICS_108/lectures/lec08-object-references-wrappers/slides/index.html) | [Practice problems](lectures/lec08-object-references-wrappers/student-problems.md) |
 
-In Lecture 7, the three problems extend the same campus wallet program: display a balance, add money, then keep two students’ balances separate.
+Lectures 7 and 8 follow the same campus wallet. Lecture 7 establishes objects and independent balances; Lecture 8 adds overloaded constructors, transfers through shared references, and an optional reward.
 
 ## How to practice
 
@@ -25,7 +26,7 @@ In Lecture 7, the three problems extend the same campus wallet program: display 
 3. **Run your program and compare the output.** If it differs, trace the values and revise your code.
 4. **Review the worked solution afterward.** Explain why it works, then change a value and predict the new result before running it.
 
-Lecture 1 is an orientation session. Lecture 2’s practice is embedded in the slides. Lectures 3–5 include worked solutions on their practice pages, while Lectures 6 and 7 have separate problem sheets.
+Lecture 1 is an orientation session. Lecture 2’s practice is embedded in the slides. Lectures 3–5 include worked solutions on their practice pages, while Lectures 6–8 have separate problem sheets.
 
 ## Review and check your work
 
@@ -40,6 +41,7 @@ The **worked solutions** include complete code and explanations. From Lecture 3 
 | 5 — Arrays | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec05-arrays/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec05-arrays/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec05-arrays/examples/README.md) |
 | 6 — User-defined methods | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec06-user-defined-methods/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec06-user-defined-methods/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec06-user-defined-methods/examples/README.md) |
 | 7 — Classes and objects | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec07-classes%26objects/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec07-classes%26objects/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec07-classes%26objects/examples/README.md) |
+| 8 — Object references and wrappers | [Solutions](https://hammadojh.github.io/ICS_108/lectures/lec08-object-references-wrappers/instructor/walkthroughs.html) | [Notes](https://hammadojh.github.io/ICS_108/lectures/lec08-object-references-wrappers/instructor/concept-refresher.html) | [Files and run instructions](lectures/lec08-object-references-wrappers/examples/README.md) |
 
 ## Run a Java example
 
@@ -67,7 +69,7 @@ For the next two versions, replace `CampusWallet1` with `CampusWallet2` or `Camp
 
 ## Study offline
 
-All lecture folders are under `lectures/`, numbered `lec01` through `lec07`.
+All lecture folders are under `lectures/`, numbered `lec01` through `lec08`.
 
 Download or clone this repository, then open `index.html` in your browser. You can also open a lecture’s `slides/index.html` directly. The slides and notes work without internet access; you only need a browser to read them.
 
