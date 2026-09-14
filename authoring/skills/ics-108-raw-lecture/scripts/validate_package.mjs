@@ -370,9 +370,15 @@ try {
 }
 
 const examplesDir = path.join(target, "examples");
-const javaFiles = fs.existsSync(examplesDir)
-  ? fs.readdirSync(examplesDir).filter((name) => name.endsWith(".java"))
-  : [];
+function listJavaFiles(directory, prefix = "") {
+  if (!fs.existsSync(directory)) return [];
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const relative = path.join(prefix, entry.name);
+    if (entry.isDirectory()) return listJavaFiles(path.join(directory, entry.name), relative);
+    return entry.name.endsWith(".java") ? [relative] : [];
+  });
+}
+const javaFiles = listJavaFiles(examplesDir);
 report.counts.javaExamples = javaFiles.length;
 if (javaFiles.length !== 3) {
   failures.push(`Expected exactly 3 Java examples, found ${javaFiles.length}`);
@@ -401,7 +407,7 @@ const completeBlocks = [...handout.matchAll(/<pre\b[^>]*data-code-version=["']co
 if (completeBlocks.length !== report.counts.completeCodeBlocks) {
   failures.push("Every Complete code block must contain one readable code element");
 }
-for (const match of completeBlocks) {
+for (const [index, match] of completeBlocks.entries()) {
   const code = codeText(match[1]);
   if (!/<span\b[^>]*class=["'][^"']*\b(?:token|tok-[\w-]+|hljs-[\w-]+)\b[^"']*["']/i.test(match[1])) {
     failures.push("Every Complete handout block needs offline syntax-color markup");
@@ -411,13 +417,15 @@ for (const match of completeBlocks) {
     failures.push("A Complete handout block has no public class");
     continue;
   }
-  const javaPath = path.join(examplesDir, `${className}.java`);
+  const nestedPath = path.join(examplesDir, `problem-${index + 1}`, `${className}.java`);
+  const flatPath = path.join(examplesDir, `${className}.java`);
+  const javaPath = fs.existsSync(nestedPath) ? nestedPath : flatPath;
   if (!fs.existsSync(javaPath)) {
-    failures.push(`Complete handout code has no matching examples/${className}.java`);
+    failures.push(`Complete handout code has no matching example for Problem ${index + 1}: ${className}.java`);
     continue;
   }
   const javaCode = fs.readFileSync(javaPath, "utf8").replaceAll("\r\n", "\n");
-  if (code !== javaCode) failures.push(`Complete handout code differs from examples/${className}.java`);
+  if (code !== javaCode) failures.push(`Complete handout code differs from ${path.relative(target, javaPath)}`);
 }
 
 console.log(JSON.stringify({ ...report, failures }, null, 2));

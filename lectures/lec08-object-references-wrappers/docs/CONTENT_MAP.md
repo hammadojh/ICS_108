@@ -6,6 +6,8 @@ Lecture 8 continues the user-supplied zyBooks Chapter 7 PDF used in Lecture 7 (1
 
 Approximately 35 minutes: goals 1 minute, Problem 1 9 minutes, Problem 2 12 minutes, Problem 3 13 minutes. Prerequisites: Lecture 7's class, object, private field, accessor, mutator, constructor, and `this` basics; Lecture 6's method parameters; integer arithmetic and conditionals. Whole-SAR starting balances and transfers are nonnegative, transfers do not exceed the source balance, and totals fit `int`. Those domain assumptions keep the focus on object semantics, not payment validation.
 
+Each problem keeps the class name `CampusWallet`. Its complete snapshot lives in a separate `examples/problem-N/` folder, so students can extend the same class without a lecture-number suffix. Compile and run each version from its own folder.
+
 Mental model: an object has state; a constructor establishes it. A primitive `int` variable stores a number. A class-typed variable stores an object reference, which can be copied and shared. A wrapper such as `Integer` is itself a reference type: it can hold a value or be absent (`null`).
 
 ## Chapter 7 section disposition
@@ -39,15 +41,15 @@ Exactly ten selected concepts, one simple definition slide each. All implementat
 | Slide | Problem | Concept / teaching treatment | Source |
 |---:|---|---|---|
 | 1–2 | 1–3 | Literal title, route, and measurable learning goals | Lecture synthesis |
-| 3 | 1 / `CampusWallet8A.java` | P1-C1 Constructor overloading: two constructors, distinct parameter lists | §7.7 pp. 36–43 |
+| 3 | 1 / `examples/problem-1/CampusWallet.java` | P1-C1 Constructor overloading: two constructors, distinct parameter lists | §7.7 pp. 36–43 |
 | 4 | 1 | P1-C2 Constructor chaining: `this(20)` must be first | §7.7 pp. 39–43; §7.9 pp. 47–54 |
 | 5 | 1 | P1-C3 Constructor selection: zero versus one `int` argument | §7.7 pp. 36–43 |
 | 6 | 1 | IDE checkpoint: standard 20, custom 50 | Original exercise |
-| 7 | 2 / `CampusWallet8B.java` | P2-C1 Aliasing: `alias = custom` shares one wallet | §7.8 pp. 43–47 |
+| 7 | 2 / `examples/problem-2/CampusWallet.java` | P2-C1 Aliasing: `alias = custom` shares one wallet | §7.8 pp. 43–47 |
 | 8 | 2 | P2-C2 Primitive values: caller's `int` remains 10 | §7.10 pp. 54–61; §7.15 pp. 96–106 |
 | 9 | 2 | P2-C3 Reference parameters: copied reference can mutate reached object | §7.15 pp. 96–106 |
 | 10 | 2 | IDE checkpoint: transfer 10, two names for custom, amount unchanged | Original exercise |
-| 11 | 3 / `CampusWallet8C.java` | P3-C1 Wrapper class: `Integer` reference representing `int` | §7.10 pp. 54–61 |
+| 11 | 3 / `examples/problem-3/CampusWallet.java` | P3-C1 Wrapper class: `Integer` reference representing `int` | §7.10 pp. 54–61 |
 | 12 | 3 | P3-C2 Null reference: optional reward absent, guard before unboxing | §7.8 pp. 43–47; §7.10–7.11 pp. 54–67 |
 | 13 | 3 | P3-C3 Unboxing: wrapper to primitive for addition | §7.11 pp. 61–67 |
 | 14 | 3 | P3-C4 Autoboxing: `int` 5 to `Integer` parameter | §7.11 pp. 61–67 |
@@ -68,4 +70,4 @@ Boundary checks: starting both wallets at 0, transferring 0, and setting a rewar
 
 ## Cross-artifact QA
 
-Compile all three examples together and run exact outputs above. Verify code text in the handout equals the `.java` files, including final newline. Check that all ten IDs occur on slides, Java comments, handout, refresher, and this map; that the three IDE checkpoints and handout ranges align; that every student-facing description is solution-free; and that print yields exactly three legible A4 pages. The licensed source PDF, extracted text, and local paths are excluded from publication.
+Compile and run each example from its own folder and check the exact outputs above. Verify code text in the handout equals the `.java` files, including final newline. Check that all ten IDs occur on slides, Java comments, handout, refresher, and this map; that the three IDE checkpoints and handout ranges align; that every student-facing description is solution-free; and that print yields exactly three legible A4 pages. The licensed source PDF, extracted text, and local paths are excluded from publication.

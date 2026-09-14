@@ -6,7 +6,7 @@ About 35 minutes, with three extensions of the campus wallet from Lecture 7.
 - [Supporting slides](slides/index.html): simple definitions and an IDE checkpoint for each problem.
 - [Instructor handout](instructor/walkthroughs.html): three printable A4 pages with complete syntax-colored solutions, Copy problem, and Copy complete code.
 - [Concept refresher](instructor/concept-refresher.html): visible summaries and expandable teaching notes.
-- [Java examples](examples/README.md): three runnable program snapshots.
+- [Java examples](examples/README.md): three runnable `CampusWallet.java` snapshots, one folder per problem.
 - [Content map](docs/CONTENT_MAP.md): source coverage and teaching choices.
 
 | Problem | Extension | Slides |

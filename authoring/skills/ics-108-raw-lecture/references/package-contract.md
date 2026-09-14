@@ -148,7 +148,7 @@ The refresher is for an instructor who may spend two minutes or twenty minutes.
 ## 6. Cross-artifact consistency
 
 - One public class per `.java` file; filename equals class name.
-- Use exactly three Java files, one for each handout problem. Each is a self-contained, independently runnable snapshot of the cumulative program. Use distinct public class names and avoid auxiliary class-name collisions when compiling all three together.
+- Use exactly three Java files, one for each handout problem. Each is a self-contained, independently runnable snapshot of the cumulative program. Distinct public class names may live directly under `examples/` and compile together. For one evolving class, use `examples/problem-1/CampusWallet.java` through `examples/problem-3/CampusWallet.java` and compile each folder separately. Avoid auxiliary class-name collisions within each runnable problem.
 - The same problem must use the same variables, inputs, outputs, and fix everywhere.
 - Use the same `Pn-Cn` IDs in slide headers, handout concept sections, inline Java comments, and `docs/CONTENT_MAP.md`.
 - The source map owns scope and source alignment.

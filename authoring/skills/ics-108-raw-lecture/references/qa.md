@@ -14,7 +14,7 @@ Resolve every missing file, duplicate ID, broken relative asset, stale chapter r
 
 ## Java validation
 
-Compile all three example programs together in a temporary output directory. Run every documented normal, boundary, and error-revealing input. Compare exact output with the slides and handout. Extract each handout's complete code as text (decode entities and remove syntax spans) and require an exact match with its `.java` file, including whitespace and final newline. Also verify the actual clipboard payload so highlighting cannot silently alter copied code. Do not leave `.class` files beside source files.
+Compile all three example programs together when their public class names differ. If the same class name is used in separate problem folders, compile each folder to its own temporary output directory. Run every documented normal, boundary, and error-revealing input. Compare exact output with the slides and handout. Extract each handout's complete code as text (decode entities and remove syntax spans) and require an exact match with its `.java` file, including whitespace and final newline. Also verify the actual clipboard payload so highlighting cannot silently alter copied code. Do not leave `.class` files beside source files.
 
 ## Supporting slides validation
 

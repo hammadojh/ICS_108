@@ -1,14 +1,14 @@
-public class CampusWallet8C {
+public class CampusWallet {
    private int balance;
    // P3-C1: Integer is a reference type that represents an int value.
    private Integer reward;
 
-   public CampusWallet8C() { this(20); }
-   public CampusWallet8C(int balance) { this.balance = balance; }
+   public CampusWallet() { this(20); }
+   public CampusWallet(int balance) { this.balance = balance; }
    public void addMoney(int amount) { balance += amount; }
    public int getBalance() { return balance; }
 
-   public void transferTo(CampusWallet8C recipient, int amount) {
+   public void transferTo(CampusWallet recipient, int amount) {
       balance -= amount;
       recipient.addMoney(amount);
       amount = 0;
@@ -24,9 +24,9 @@ public class CampusWallet8C {
    }
 
    public static void main(String[] args) {
-      CampusWallet8C standard = new CampusWallet8C();
-      CampusWallet8C custom = new CampusWallet8C(50);
-      CampusWallet8C alias = custom;
+      CampusWallet standard = new CampusWallet();
+      CampusWallet custom = new CampusWallet(50);
+      CampusWallet alias = custom;
       int amount = 10;
       alias.transferTo(standard, amount);
       System.out.println("Standard: " + standard.getBalance() + " SAR");

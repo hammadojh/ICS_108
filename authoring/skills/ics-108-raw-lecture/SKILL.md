@@ -45,10 +45,10 @@ Read [references/package-contract.md](references/package-contract.md) and [refer
    - Keep interaction optional and simple, such as one definition check or answer reveal. Do not add demos or extra slides to meet an interaction percentage.
 
 5. Build runnable examples.
-   - Create exactly one complete Java file for each of the three IDE-handout problems under `examples/`. These are independently runnable snapshots of the cumulative program, with distinct public class names so all three compile together. Keep the extension small and recognizable.
+   - Create exactly one complete Java file for each of the three IDE-handout problems under `examples/`. These are independently runnable snapshots of the cumulative program. When class-name suffixes distract from one evolving class, put each `CampusWallet.java` snapshot in `examples/problem-N/` and compile it from that folder; otherwise use distinct class names that compile together. Keep the extension recognizable.
    - Add short inline comments at the exact lines where concepts are introduced. Prefix them with the shared IDs, for example `// P2-C3: Store one input value in the current element.`
    - Keep filenames, public classes, inputs, outputs, and fixes identical across examples, slides, and instructor notes.
-   - Compile all examples together and run every documented input.
+   - Compile all examples together when their public class names differ; otherwise compile each problem from its own folder. Run every documented input.
 
 6. Build the instructor IDE handout.
    - Create `instructor/walkthroughs.html` from `assets/reference-package/instructor/walkthroughs.html` as the design reference.
