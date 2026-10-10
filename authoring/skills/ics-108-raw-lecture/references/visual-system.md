@@ -11,7 +11,7 @@ The reference files in `assets/reference-package/slides/` are the source of trut
 - Type: `Helvetica Neue`, Helvetica, Arial, sans-serif; SFMono/Consolas/Liberation Mono for code.
 - Color: warm white `#f4f4f2`, muted `#a6a6a1`, restrained blue `#8ec5ff`, green `#9bd3ad`, red `#e9a0a0`.
 - Character: large type, negative space, hairline structure, flat diagrams, precise controls, 180 ms transitions.
-- Copy style: plain English, a literal term heading and one short definition per concept slide, at most one minimal example, and a visible problem/program label in every header. Keep the definition legible at a glance.
+- Copy style: plain English, a literal term heading and one short definition per concept slide, short contrasting examples when useful, and a visible problem/program label in every header. Keep the definition legible at a glance.
 - Prohibited framing: slogans, hooks, cinematic framing, stories, narratives, metaphors, movie language, and promotional language. Also prohibit gradients, background grids/textures, chapter-color palettes, Avenir display type, giant chapter numerals, ornamental illustration, rounded card systems, and decorative badges.
 
 Copy the shell first. Add chapter-specific component selectors after it and resolve their colors through the accepted tokens.

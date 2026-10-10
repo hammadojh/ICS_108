@@ -19,6 +19,12 @@ Use these materials to review what you learned in class, practice writing Java p
 
 Lectures 7 and 8 follow the same campus wallet. Lecture 7 establishes objects and independent balances; Lecture 8 adds overloaded constructors, transfers through shared references, and an optional reward.
 
+## Exception handling
+
+| Package | Syllabus session | Materials |
+|---|---|---|
+| **14 — Exception handling** | 16 · October 19, 2026 | [Slides](lectures/lec14-exception-handling/slides/index.html) · [Practice](lectures/lec14-exception-handling/student-problems.md) · [Solutions](lectures/lec14-exception-handling/instructor/walkthroughs.html) · [Concept notes](lectures/lec14-exception-handling/instructor/concept-refresher.html) |
+
 ## How to practice
 
 1. **Read the problem and expected output.** Try writing your own solution before opening the worked code.
@@ -69,7 +75,7 @@ For the next two versions, replace `CampusWallet1` with `CampusWallet2` or `Camp
 
 ## Study offline
 
-All lecture folders are under `lectures/`, numbered `lec01` through `lec08`.
+Lecture packages are stored under `lectures/`.
 
 Download or clone this repository, then open `index.html` in your browser. You can also open a lecture’s `slides/index.html` directly. The slides and notes work without internet access; you only need a browser to read them.
 

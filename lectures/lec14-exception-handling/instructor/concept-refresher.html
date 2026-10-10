@@ -1,0 +1,426 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ICS 108 Lecture 14 - Concept refresher</title><link rel="icon" href="data:,"><style>
+    :root {
+      --ink: oklch(24% 0.018 250);
+      --ink-soft: oklch(43% 0.022 250);
+      --paper: oklch(98% 0.008 85);
+      --canvas: oklch(93% 0.012 245);
+      --line: oklch(82% 0.018 245);
+      --line-strong: oklch(66% 0.045 245);
+      --blue: oklch(51% 0.145 250);
+      --blue-dark: oklch(38% 0.11 250);
+      --blue-pale: oklch(95% 0.026 245);
+      --warm: oklch(95% 0.025 78);
+      --stage: oklch(18% 0.025 250);
+      --stage-soft: oklch(72% 0.035 245);
+      --code-bg: oklch(22% 0.025 250);
+      --code-ink: oklch(94% 0.012 245);
+      --focus: oklch(70% 0.15 245);
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      max-width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scroll-padding-top: 1rem;
+      background: var(--canvas);
+    }
+    body {
+      max-width: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3, p, ul, ol, table, pre { margin-top: 0; }
+    p, ul, ol { max-width: var(--measure); }
+    h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+    h1 {
+      max-width: 14ch;
+      margin-bottom: 1.5rem;
+      font-size: clamp(2.7rem, 8vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+    h2 {
+      margin-bottom: 0.75rem;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    h3 { margin-bottom: 0.5rem; font-size: 1.2rem; line-height: 1.25; }
+    a { color: var(--blue-dark); text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+    a:hover { text-decoration-thickness: 0.13em; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-variant-ligatures: none;
+    }
+    code {
+      padding: 0.08em 0.28em;
+      background: var(--blue-pale);
+      color: var(--blue-dark);
+      font-size: 0.92em;
+      overflow-wrap: anywhere;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    pre code { padding: 0; background: transparent; color: inherit; overflow-wrap: normal; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 30;
+      top: 0.5rem;
+      left: 0.5rem;
+      transform: translateY(-180%);
+      padding: 0.65rem 0.9rem;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .skip-link:focus { transform: none; }
+    .masthead {
+      padding: clamp(2rem, 7vw, 6rem) max(1.25rem, env(safe-area-inset-left)) clamp(3rem, 8vw, 6.5rem);
+      background: var(--stage);
+      color: var(--paper);
+    }
+    .masthead-inner { width: min(1180px, 100%); margin: 0 auto; }
+    .breadcrumb,
+    .eyebrow,
+    .concept-number,
+    .source-ref,
+    .reading-label,
+    .problem-tag {
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; color: var(--stage-soft); }
+    .breadcrumb a { color: inherit; }
+    .breadcrumb span + span::before { content: "/"; margin-right: 0.5rem; }
+    .eyebrow { margin-bottom: 0.75rem; color: oklch(80% 0.1 245); }
+    .chapter-abstract {
+      display: grid;
+      gap: 1rem;
+      max-width: 900px;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid oklch(39% 0.035 250);
+    }
+    .chapter-abstract .reading-label { color: oklch(80% 0.1 245); }
+    .chapter-abstract p {
+      margin-bottom: 0;
+      color: oklch(91% 0.012 245);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: clamp(1.18rem, 2.5vw, 1.55rem);
+      line-height: 1.5;
+    }
+    .reading-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+    .reading-controls button {
+      min-height: 44px;
+      padding: 0.65rem 1rem;
+      border: 1px solid oklch(52% 0.04 245);
+      border-radius: 0;
+      background: transparent;
+      color: var(--paper);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .reading-controls button:hover { background: oklch(26% 0.035 250); }
+    #readingStatus { color: var(--stage-soft); font-size: 0.86rem; }
+
+    .reading-layout {
+      display: grid;
+      grid-template-columns: minmax(14rem, 0.28fr) minmax(0, 0.72fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3rem 0 5rem;
+    }
+    .reading-map { position: sticky; top: 1rem; align-self: start; min-width: 0; }
+    .reading-map h2 {
+      margin-bottom: 1rem;
+      font: 800 0.72rem/1.2 "Avenir Next", Avenir, sans-serif;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .reading-map ol { display: grid; margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+    .reading-map a {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr);
+      min-height: 44px;
+      align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+    .reading-map a:hover { color: var(--blue-dark); }
+    .map-number { color: var(--blue); font: 700 0.76rem "SFMono-Regular", monospace; }
+    .map-links { display: grid; gap: 0.45rem; margin-top: 1.2rem; font-size: 0.86rem; }
+    .map-links a { display: block; min-height: 0; padding: 0.25rem 0; border-bottom: 0; }
+
+    .reading-main { min-width: 0; }
+    .reading-note { margin-bottom: 3rem; padding: 1.2rem 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .reading-note p:last-child { margin-bottom: 0; }
+    .mental-model { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0 4rem; }
+    .model-term { min-width: 0; padding-top: 0.8rem; border-top: 4px solid var(--blue); }
+    .model-term strong { display: block; margin-bottom: 0.3rem; }
+    .model-term span { display: block; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.45; }
+
+    .concept { margin-bottom: 0; padding: 3rem 0; border-top: 1px solid var(--line-strong); scroll-margin-top: 1rem; }
+    .concept:first-of-type { border-top-width: 3px; }
+    .concept-header { margin-bottom: 1.2rem; }
+    .concept-number { display: none; }
+    .source-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; margin-bottom: 0.4rem; color: var(--ink-soft); }
+    .source-ref a { color: inherit; }
+    .problem-tag { display: inline-flex; align-items: center; min-height: 1.7rem; padding: 0.2rem 0.55rem; background: var(--blue); color: white; }
+    .concept-abstract {
+      margin-bottom: 1rem;
+      color: var(--ink-soft);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 1.18rem;
+      line-height: 1.55;
+    }
+    .key-rule { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; margin: 1rem 0; padding: 1rem 1.5rem; background: var(--blue-pale); }
+    .key-rule strong { color: var(--blue-dark); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .key-rule p { margin-bottom: 0; font-weight: 650; }
+
+    details { max-width: 100%; margin-top: 0.75rem; border-top: 1px solid var(--line); background: var(--paper); }
+    summary {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      min-height: 56px;
+      align-items: center;
+      padding: 0.75rem 3.2rem 0.75rem 1rem;
+      color: var(--blue-dark);
+      font-weight: 750;
+      cursor: pointer;
+      list-style: none;
+      overflow-wrap: anywhere;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue);
+      font: 400 1.5rem "Avenir Next", Avenir, sans-serif;
+    }
+    details[open] summary::after { content: "−"; }
+    .details-body { min-width: 0; max-width: 100%; padding: 0.2rem 1rem 1.2rem; }
+    .details-body > *:last-child { margin-bottom: 0; }
+    .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .details-grid > div { min-width: 0; }
+    .details-grid h3 { margin-top: 0.5rem; }
+    .teaching-line { margin: 1rem 0 0; padding: 0.85rem 1rem; background: var(--warm); }
+    .teaching-line strong { color: var(--blue-dark); }
+    .teaching-line p { margin-bottom: 0; }
+    .compare-wrap { max-width: 100%; overflow-x: auto; }
+    .compare-table { width: 100%; min-width: 31rem; border-collapse: collapse; font-size: 0.88rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--blue-pale); color: var(--blue-dark); }
+    .trace-list { margin: 0; padding-left: 1.25rem; }
+    .trace-list li + li { margin-top: 0.45rem; }
+    .warning { padding: 0.85rem 1rem; background: var(--warm); color: var(--blue-dark); }
+    .concept-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 1rem; font-size: 0.86rem; }
+
+    .readiness, .source-notes { padding: 3rem 0; border-top: 3px solid var(--ink); }
+    .readiness ol { padding-left: 1.4rem; }
+    .readiness li + li { margin-top: 0.55rem; }
+    .readiness code { white-space: normal; }
+    .source-notes { border-top-width: 1px; }
+    .source-notes ul { padding-left: 1.2rem; }
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+      padding: 1.5rem max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom));
+      background: var(--stage);
+      color: var(--stage-soft);
+      font-size: 0.86rem;
+    }
+    .page-footer a { color: var(--paper); }
+
+    @media (max-width: 900px) {
+      .reading-layout { grid-template-columns: minmax(0, 1fr); }
+      .reading-map { position: static; }
+      .reading-map ol { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+      .mental-model { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .masthead { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+      .reading-layout { width: min(calc(100% - 1.5rem), 1180px); padding-top: 2rem; }
+      .reading-map ol, .mental-model, .details-grid { grid-template-columns: minmax(0, 1fr); }
+      .concept-header { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .key-rule { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; padding: 1rem; }
+      .reading-controls { align-items: stretch; }
+      .reading-controls button { flex: 1 1 9rem; }
+      pre { padding: 1rem; font-size: 0.76rem; }
+      .compare-wrap { overflow: visible; }
+      .compare-table,
+      .compare-table tbody,
+      .compare-table tr,
+      .compare-table td { display: block; width: 100%; min-width: 0; }
+      .compare-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .compare-table tr { margin-bottom: 0.8rem; border: 1px solid var(--line); background: var(--paper); }
+      .compare-table td {
+        display: grid;
+        grid-template-columns: minmax(7.5rem, 0.42fr) minmax(0, 0.58fr);
+        gap: 0.75rem;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .compare-table td:last-child { border-bottom: 0; }
+      .compare-table td::before {
+        content: attr(data-label);
+        color: var(--blue-dark);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .page-footer { display: block; }
+      .page-footer span { display: block; }
+      .page-footer span + span { margin-top: 0.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      html, body { overflow: visible; background: white; font-size: 10pt; }
+      .masthead { padding: 0 0 10mm; background: white; color: var(--ink); }
+      .masthead h1 { max-width: none; font-size: 34pt; }
+      .skip-link, .breadcrumb, .reading-controls, .reading-map, .concept-links, .page-footer { display: none !important; }
+      .chapter-abstract p { color: var(--ink); }
+      .reading-layout { display: block; width: auto; padding: 8mm 0 0; }
+      .mental-model { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5mm; }
+      .concept { margin-bottom: 10mm; break-before: page; }
+      details { break-inside: avoid; }
+      details:not([open]) > .details-body { display: block; }
+      summary::after { display: none; }
+      .compare-wrap { overflow: visible; }
+      .compare-table { min-width: 0; }
+      pre { overflow: visible; white-space: pre-wrap; word-break: break-word; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+.abstract,.mental-model-summary{max-width:70ch;font-size:1.15rem;line-height:1.55} .mental-model-summary{display:block;margin:1.5rem 0} .reading-controls a{color:var(--stage-soft)} .reading-map a{display:block;padding:.65rem 0} .concept-header{display:block} .concept-number{display:none} .reading{min-width:0} pre{overflow:auto;max-width:100%} .concept-extra{margin:30px 0} @media(max-width:760px){.layout{display:block} .concept-map{position:static}} @media print{.skip-link{display:none}}</style></head><body><header class="masthead"><div class="masthead-inner"><p class="eyebrow">ICS 108 · Lecture 14 · Instructor concept refresher</p><h1>Exception handling</h1><p class="abstract">Reading an integer can fail because its text is malformed. Even a valid integer may violate a booking rule. This lecture separates normal work from recovery, adds a retry loop that makes progress, and moves validation into a method that can pass a checked exception to its caller.</p><p class="abstract">The extra examples deliberately change the context while preserving the rule. <code>new Scanner("cold 24")</code> reads tokens from supplied text instead of the keyboard, making each result reproducible. Read each prediction before expanding its answer.</p><p class="mental-model-summary"><strong>Mental model:</strong> Try the operation. If it throws, leave the normal path and select a compatible handler. The handler decides how to recover; a loop supplies the next attempt.</p><div class="reading-controls"><button id="openAll">Open all details</button><button id="closeAll">Close all details</button><a href="../slides/index.html">Supporting slides</a><a href="walkthroughs.html">IDE handout</a></div><p id="readingStatus" role="status" aria-live="polite"></p></div></header><div class="reading-layout"><nav class="reading-map" aria-label="Concept map"><h2>Concept map</h2><a href="#p1-c1">P1-C1 · Input exceptions</a><a href="#p1-c2">P1-C2 · The try block</a><a href="#p1-c3">P1-C3 · The catch block</a><a href="#p2-c1">P2-C1 · Retrying an operation</a><a href="#p2-c2">P2-C2 · Discarding invalid input</a><a href="#p2-c3">P2-C3 · End of input</a><a href="#p3-c1">P3-C1 · Throwing an exception</a><a href="#p3-c2">P3-C2 · Declaring checked exceptions</a><a href="#p3-c3">P3-C3 · Exception propagation</a><a href="#p3-c4">P3-C4 · Multiple handlers</a></nav><main class="reading-main"><section class="concept" id="p1-c1"><header class="concept-header"><div><p class="source-ref">P1-C1 · 9.1, pp. 1–3</p><h2>Input exceptions</h2><p class="concept-abstract">An exception interrupts normal execution when an operation cannot finish.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>Scanner.nextInt() throws InputMismatchException for a token it cannot read as an int.</p></div><details id="detail-p1-c1"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>The program expects a seat count. A word such as two, a decimal such as 2.5, or an integer outside int&#x27;s range cannot be read by nextInt. The assignment does not finish. Without a matching handler in the call chain, the exception escapes main and ends the main thread.</p><pre><code>int seats = scnr.nextInt();</code></pre><h3>Common mistakes</h3><p>A negative integer is still an integer. nextInt does not enforce a booking rule such as 1 to 4.</p><div class="teaching-line"><strong>Check and answer</strong><p>Would -1 cause InputMismatchException? No. It fits int; range validation is added in Problem 3.</p></div></div></details><details class="transfer-example" id="transfer-p1-c1"><summary>Another context: Quiz score input</summary><div class="details-body"><p>The domain changes; a token still has to match the requested type.</p><pre><code>Scanner scores = new Scanner(&quot;absent&quot;);
+try {
+   int score = scores.nextInt();
+} catch (InputMismatchException e) {
+   System.out.println(&quot;Score is not an integer.&quot;);
+}</code></pre><h3>Result</h3><pre>Score is not an integer.</pre><p><strong>Predict a change:</strong> Would -5 fail at this read?</p><details><summary>Check your prediction</summary><p>No. -5 is a valid int. A score-range rule needs a separate check.</p></details></div></details></section><section class="concept" id="p1-c2"><header class="concept-header"><div><p class="source-ref">P1-C2 · 9.1, pp. 3–6</p><h2>The try block</h2><p class="concept-abstract">A try block contains operations whose exceptions a following handler can catch.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>When a statement throws, the rest of that try block is skipped.</p></div><details id="detail-p1-c2"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>Place both the read and its success report inside try. With two as input, the read throws, so no seat report is printed. With 2, both statements finish and the catch is skipped. Earlier completed operations are not automatically undone.</p><pre><code>try {
+   int seats = scnr.nextInt();
+   System.out.println(&quot;Seats requested: &quot; + seats);
+}</code></pre><h3>Common mistakes</h3><p>Printing a success result after the catch can report a default or stale value. Keep the success report inside try.</p><div class="teaching-line"><strong>Check and answer</strong><p>After the failed read, does Java return to the next line inside try? No.</p></div></div></details><details class="transfer-example" id="transfer-p1-c2"><summary>Another context: Array lookup</summary><div class="details-body"><p>A different operation can throw; later statements in the same try are still skipped.</p><pre><code>int[] marks = {80, 90};
+try {
+   System.out.println(marks[2]);
+   System.out.println(&quot;Lookup finished.&quot;);
+} catch (ArrayIndexOutOfBoundsException e) {
+   System.out.println(&quot;No such position.&quot;);
+}</code></pre><h3>Result</h3><pre>No such position.</pre><p><strong>Predict a change:</strong> What changes if marks[2] becomes marks[1]?</p><details><summary>Check your prediction</summary><p>It prints 90 and then Lookup finished. Array indices here are 0 and 1; index 2 is outside the array.</p></details></div></details></section><section class="concept" id="p1-c3"><header class="concept-header"><div><p class="source-ref">P1-C3 · 9.1, pp. 3–6</p><h2>The catch block</h2><p class="concept-abstract">A catch block handles an exception whose type matches its parameter.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>After a handler finishes normally, execution continues after the try/catch.</p></div><details id="detail-p1-c3"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>The parameter e refers to the exception object. This handler prints a useful message for malformed input; it does not retry the read. Session complete is outside try/catch, so both the success and handled-failure paths reach it.</p><pre><code>catch (InputMismatchException e) {
+   System.out.println(&quot;Enter a whole number.&quot;);
+}</code></pre><h3>Common mistakes</h3><p>Catching an exception does not repair the input or repeat the operation. Recovery must be written explicitly.</p><div class="teaching-line"><strong>Check and answer</strong><p>For two, which lines print? Enter a whole number. then Session complete.</p></div></div></details><details class="transfer-example" id="transfer-p1-c3"><summary>Another context: Integer division</summary><div class="details-body"><p>A matching handler can finish normally, allowing execution after try/catch.</p><pre><code>try {
+   int groups = 0;
+   System.out.println(12 / groups);
+} catch (ArithmeticException e) {
+   System.out.println(&quot;Cannot divide by zero.&quot;);
+}
+System.out.println(&quot;Next task.&quot;);</code></pre><h3>Result</h3><pre>Cannot divide by zero.
+Next task.</pre><p><strong>Predict a change:</strong> Would catch(InputMismatchException e) handle this failure?</p><details><summary>Check your prediction</summary><p>No. Integer division by zero throws ArithmeticException. That unrelated handler would not match; Next task. would not run. Floating-point division is a different case.</p></details></div></details></section><section class="concept" id="p2-c1"><header class="concept-header"><div><p class="source-ref">P2-C1 · 9.1, pp. 6–9</p><h2>Retrying an operation</h2><p class="concept-abstract">A loop can repeat an operation after its exception is handled.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>Mark the operation finished only after every required step succeeds.</p></div><details id="detail-p2-c1"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>Problem 2 puts the existing try/catch inside a loop. The flag remains true after a failed read and becomes false only after an integer is reported. Catch is inside the loop so one bad attempt does not abandon the whole repetition.</p><pre><code>boolean needInput = true;
+while (needInput &amp;&amp; scnr.hasNext()) {
+   // Try one read; set needInput false on success.
+}</code></pre><h3>Common mistakes</h3><p>Setting needInput to false in the handler prevents a retry. Keep that assignment on the success path.</p><div class="teaching-line"><strong>Check and answer</strong><p>For two 3, how many attempts occur? Two: one failure and one success.</p></div></div></details><details class="transfer-example" id="transfer-p2-c1"><summary>Another context: Sensor reading retry</summary><div class="details-body"><p>A failed attempt keeps the loop active; a successful attempt changes its condition.</p><pre><code>Scanner sensor = new Scanner(&quot;offline 18&quot;);
+boolean pending = true;
+while (pending &amp;&amp; sensor.hasNext()) {
+   try {
+      System.out.println(sensor.nextInt());
+      pending = false;
+   } catch (InputMismatchException e) { sensor.next(); }
+}</code></pre><h3>Result</h3><pre>18</pre><p><strong>Predict a change:</strong> If pending = false moves into the handler, is 18 reached?</p><details><summary>Check your prediction</summary><p>No. The failed first attempt would stop the loop. The success flag belongs after the operation succeeds.</p></details></div></details></section><section class="concept" id="p2-c2"><header class="concept-header"><div><p class="source-ref">P2-C2 · 9.1, pp. 6–9</p><h2>Discarding invalid input</h2><p class="concept-abstract">Scanner leaves a mismatching token unread until the program consumes it.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>Consume the bad token before retrying nextInt.</p></div><details id="detail-p2-c2"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>A token is a sequence of non-whitespace characters. next reads one token as text without requiring an integer. After nextInt rejects two, next removes two, leaving the later 3 available. The input contract treats each whitespace-separated token as one attempt.</p><pre><code>catch (InputMismatchException e) {
+   System.out.println(&quot;Enter a whole number.&quot;);
+   scnr.next();
+}</code></pre><h3>Common mistakes</h3><p>Retrying without next repeats the same failure indefinitely. nextLine would discard the rest of the line, including a valid later attempt on that line.</p><div class="teaching-line"><strong>Check and answer</strong><p>For two 3 on one line, why choose next instead of nextLine? To discard only two and preserve 3.</p></div></div></details><details class="transfer-example" id="transfer-p2-c2"><summary>Another context: Temperature tokens</summary><div class="details-body"><p>Consuming only the bad token preserves the next token, even on the same line.</p><pre><code>Scanner temperatures = new Scanner(&quot;cold 24&quot;);
+try {
+   temperatures.nextInt();
+} catch (InputMismatchException e) {
+   System.out.println(temperatures.next());
+}
+System.out.println(temperatures.nextInt());</code></pre><h3>Result</h3><pre>cold
+24</pre><p><strong>Predict a change:</strong> What if nextLine() replaces next() in the handler?</p><details><summary>Check your prediction</summary><p>It consumes cold 24, the rest of the line. The final nextInt then has no token and throws NoSuchElementException. Cleanup must match the input format.</p></details></div></details></section><section class="concept" id="p2-c3"><header class="concept-header"><div><p class="source-ref">P2-C3 · Teaching addition; Scanner loop application</p><h2>End of input</h2><p class="concept-abstract">Scanner.hasNext() reports whether another token is available.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>Stop cleanly when input ends before a successful attempt.</p></div><details id="detail-p2-c3"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>hasNext checks for any token, not specifically an integer, so malformed tokens still reach the catch. It does not consume input. In an interactive console it may wait for a token or an end-of-input signal. This guard prevents an empty input stream from being treated as a mismatch.</p><pre><code>while (needInput &amp;&amp; scnr.hasNext()) {
+   // Read the available token.
+}</code></pre><h3>Common mistakes</h3><p>hasNextInt as the loop condition would stop on two and never demonstrate the recovery handler. InputMismatchException is not the exception for exhausted input.</p><div class="teaching-line"><strong>Check and answer</strong><p>For empty input in Problem 2, what prints? Only Session complete.</p></div></div></details><details class="transfer-example" id="transfer-p2-c3"><summary>Another context: End of a data stream</summary><div class="details-body"><p>hasNext checks availability without consuming a token; availability changes after a read.</p><pre><code>Scanner values = new Scanner(&quot;7&quot;);
+System.out.println(values.hasNext());
+System.out.println(values.nextInt());
+System.out.println(values.hasNext());</code></pre><h3>Result</h3><pre>true
+7
+false</pre><p><strong>Predict a change:</strong> What are the first and last results for an empty string?</p><details><summary>Check your prediction</summary><p>The first hasNext is false. The unguarded nextInt then throws NoSuchElementException, so no last result prints. Put the read behind the guard.</p></details></div></details></section><section class="concept" id="p3-c1"><header class="concept-header"><div><p class="source-ref">P3-C1 · 9.2, pp. 11–16</p><h2>Throwing an exception</h2><p class="concept-abstract">A throw statement creates an exceptional exit from the current operation.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>Reject an invalid value before printing a success report.</p></div><details id="detail-p3-c1"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>An integer can be well formed but unsuitable for a booking. validateSeats accepts 1 through 4 inclusive; otherwise new constructs an Exception object and throw transfers control. The constructor stores the message, which getMessage later retrieves.</p><pre><code>if (seats &lt; 1 || seats &gt; 4) {
+   throw new Exception(&quot;Seats must be 1 to 4.&quot;);
+}</code></pre><h3>Common mistakes</h3><p>new Exception alone only creates an object. It does not throw it. A thrown exception does not automatically undo earlier changes.</p><div class="teaching-line"><strong>Check and answer</strong><p>For 0, does the success report run? No. The validation call throws first.</p></div></div></details><details class="transfer-example" id="transfer-p3-c1"><summary>Another context: Quiz score validation</summary><div class="details-body"><p>Parsing a value and accepting it under a domain rule are separate decisions.</p><pre><code>int score = 105;
+try {
+   if (score &lt; 0 || score &gt; 100) {
+      throw new Exception(&quot;Score out of range.&quot;);
+   }
+   System.out.println(&quot;Score accepted.&quot;);
+} catch (Exception e) { System.out.println(e.getMessage()); }</code></pre><h3>Result</h3><pre>Score out of range.</pre><p><strong>Predict a change:</strong> Would 100 throw? Would -1 throw?</p><details><summary>Check your prediction</summary><p>100 is accepted; -1 throws. The condition defines the valid range, and throw interrupts the success path.</p></details></div></details></section><section class="concept" id="p3-c2"><header class="concept-header"><div><p class="source-ref">P3-C2 · 9.3, pp. 24–31</p><h2>Declaring checked exceptions</h2><p class="concept-abstract">A throws clause declares an exception that may leave a method.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>For a checked exception, catch it or declare it with throws.</p></div><details id="detail-p3-c2"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>Exception itself is a checked type. validateSeats lets it escape, so its signature declares throws Exception. The caller catches it. InputMismatchException is unchecked: Java permits catching it, but the compiler does not require a catch or throws declaration for it.</p><pre><code>static void validateSeats(int seats) throws Exception {
+   // Reject an invalid seat count.
+}</code></pre><h3>Common mistakes</h3><p>throws does not handle an exception and does not throw one by itself. Removing throws from this method without adding a local catch prevents compilation.</p><div class="teaching-line"><strong>Check and answer</strong><p>Why does nextInt need no throws declaration in main? Its InputMismatchException is unchecked.</p></div></div></details><details class="transfer-example" id="transfer-p3-c2"><summary>Another context: A method that may fail</summary><div class="details-body"><p>throws declares a possible checked exception; it does not cause or handle the failure.</p><pre><code>static void checkMark(int mark) throws Exception {
+   if (mark &lt; 0) throw new Exception(&quot;Negative mark.&quot;);
+}
+// Caller must catch or declare this checked exception.</code></pre><h3>Result</h3><pre>For checkMark(-1): Exception leaves the method.</pre><p><strong>Predict a change:</strong> If the body never executes throw, does throws Exception force a failure?</p><details><summary>Check your prediction</summary><p>No. A nonnegative mark completes normally. A caller must still satisfy catch-or-declare because the declaration permits a checked exception.</p></details></div></details></section><section class="concept" id="p3-c3"><header class="concept-header"><div><p class="source-ref">P3-C3 · 9.3, pp. 25–27</p><h2>Exception propagation</h2><p class="concept-abstract">An uncaught exception leaves a method and is considered by handlers around its call.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>A method call that throws does not complete normally.</p></div><details id="detail-p3-c3"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>For 0, nextInt succeeds and consumes the token. validateSeats then throws. Control leaves that method and the caller&#x27;s try block; the seat report and success flag are skipped. The caller decides to show the message and retry. The validation method stays independent of input and output.</p><pre><code>int seats = scnr.nextInt();
+validateSeats(seats);
+System.out.println(&quot;Seats requested: &quot; + seats);</code></pre><h3>Common mistakes</h3><p>After handling, execution does not resume inside validateSeats or after its call within try. The loop starts a fresh attempt.</p><div class="teaching-line"><strong>Check and answer</strong><p>For 0 3, does the handler need next()? No. The 0 was already consumed successfully.</p></div></div></details><details class="transfer-example" id="transfer-p3-c3"><summary>Another context: A failed helper call</summary><div class="details-body"><p>A thrown exception crosses the method boundary and skips the rest of the caller’s try.</p><pre><code>try {
+   checkMark(-1);
+   System.out.println(&quot;Saved.&quot;);
+} catch (Exception e) {
+   System.out.println(&quot;Not saved.&quot;);
+}</code></pre><h3>Result</h3><pre>Not saved.</pre><p><strong>Predict a change:</strong> After the catch, does execution return to print Saved.?</p><details><summary>Check your prediction</summary><p>No. The call and its surrounding try ended exceptionally. Execution continues after the whole try/catch. This snippet uses checkMark from the preceding example.</p></details></div></details></section><section class="concept" id="p3-c4"><header class="concept-header"><div><p class="source-ref">P3-C4 · 9.2, pp. 16–23; 9.4, p. 36 limitation</p><h2>Multiple handlers</h2><p class="concept-abstract">Java selects the first compatible catch block for the thrown exception.</p></div></header><div class="key-rule"><strong>Key rule</strong><p>Put a specific exception handler before a handler for its superclass.</p></div><details id="detail-p3-c4"><summary>Explanation, example, and recovery</summary><div class="details-body"><h3>How it works and when it matters</h3><p>InputMismatchException is a subclass of Exception. The specific handler must come first so malformed input receives its own message and token cleanup. The later handler reports validation failures. Only one handler runs for a given thrown exception. Exception is broad and could catch other unintended failures; a custom checked type is deferred.</p><pre><code>catch (InputMismatchException e) {
+   // Discard the malformed token.
+}
+catch (Exception e) {
+   System.out.println(e.getMessage());
+}</code></pre><h3>Common mistakes</h3><p>Putting catch(Exception) first makes the following InputMismatchException handler unreachable and fails compilation. Do not consume another token after a range error.</p><div class="teaching-line"><strong>Check and answer</strong><p>If the first handler matches, does the second run too? No.</p></div></div></details><details class="transfer-example" id="transfer-p3-c4"><summary>Another context: Two failure types</summary><div class="details-body"><p>The first compatible handler runs; a superclass handler must follow its subclasses.</p><pre><code>try {
+   int n = new Scanner(&quot;zero&quot;).nextInt();
+   if (n == 0) throw new Exception(&quot;Zero is forbidden.&quot;);
+} catch (InputMismatchException e) {
+   System.out.println(&quot;Bad text.&quot;);
+} catch (Exception e) { System.out.println(e.getMessage()); }</code></pre><h3>Result</h3><pre>Bad text.</pre><p><strong>Predict a change:</strong> If the text changes from zero to 0, which handler runs?</p><details><summary>Check your prediction</summary><p>The general Exception handler prints Zero is forbidden. Parsing succeeded, so the specific mismatch handler does not match the explicitly thrown Exception.</p></details></div></details></section><section class="readiness"><h2>Readiness self-check</h2><p>Why must only the malformed-input handler discard a token?</p><details><summary>Reveal answer</summary><p>nextInt leaves a malformed token unread. A range error occurs after nextInt consumed the integer, so discarding again would lose the next attempt.</p></details><details><summary>Problem 1: trace and practice</summary><div class="details-body"><ol><li><strong>Read the token.</strong> nextInt sees two and throws InputMismatchException; seats is not assigned.</li><li><strong>Handle the failure.</strong> The rest of try is skipped. catch prints Enter a whole number.</li><li><strong>Continue below try/catch.</strong> The final statement prints Session complete.</li></ol><p>Handling permits continuation; it does not retry.</p><pre>Enter a whole number.
+Session complete.</pre><p>Predict input 2, then run it: Seats requested: 2 followed by Session complete. Compare the path with two.</p></div></details><details><summary>Problem 2: trace and practice</summary><div class="details-body"><ol><li><strong>First attempt: two.</strong> hasNext is true. nextInt fails and the handler prints Enter a whole number.</li><li><strong>Remove the failed token.</strong> next consumes two. needInput remains true.</li><li><strong>Second attempt: 3.</strong> nextInt returns 3. The program reports Seats requested: 3 and sets needInput false.</li><li><strong>Leave the loop.</strong> The final statement prints Session complete.</li></ol><p>A retry needs both repetition and progress through the input.</p><pre>Enter a whole number.
+Seats requested: 3
+Session complete.</pre><p>Try two 3 on one line and on separate lines: output is identical. Empty input prints only Session complete.</p></div></details><details><summary>Problem 3: trace and practice</summary><div class="details-body"><ol><li><strong>two fails to parse.</strong> The specific handler prints Enter a whole number. and consumes two.</li><li><strong>0 parses but fails validation.</strong> validateSeats(0) throws Exception. The general handler prints Seats must be 1 to 4.; 0 is already consumed.</li><li><strong>3 succeeds.</strong> validateSeats(3) returns normally. The report prints Seats requested: 3 and needInput becomes false.</li><li><strong>Finish.</strong> The loop stops; Session complete. prints.</li></ol><p>Parsing failure leaves a token unread; validation failure occurs after it was consumed.</p><pre>Enter a whole number.
+Seats must be 1 to 4.
+Seats requested: 3
+Session complete.</pre><p>Try 1 and 4 (accepted), then 0 5 4 (two range messages, one successful report). Remove throws, compile, then restore it and rerun.</p></div></details><details><summary>Recovery rehearsals and boundary cases</summary><div class="details-body"><p>In a temporary copy of Problem 3, remove throws Exception. Compilation fails because the checked exception is neither caught locally nor declared. Restore it, compile again, and rerun two 0 3. Next, move catch(Exception) before catch(InputMismatchException). Compilation fails because the specific handler is unreachable. Restore the original order and rerun the same input.</p><p>For Problem 3: 1 and 4 succeed; -1 1 and 5 4 each print one range message before success; 2.5 2 and 2147483648 2 each print one whole-number message before success; empty input prints only Session complete. Input two ends with a whole-number message and Session complete., without claiming a booking succeeded.</p><p>For independent practice, predict each case before running. Explain exactly which tokens remain after each handler. As a transfer check, change the upper limit to 6 and identify the condition, message, student prompt, and boundary cases that must change together.</p></div></details></section><section class="source-notes"><h2>Sources and scope</h2><p>Supplied zyBooks Chapter 9, 82-page export dated October 10, 2026. Selected sections: 9.1–9.3. Original campus examples and teaching explanations. Use the licensed source through authorized course access.</p><p>Custom exception classes, file input/output, finally, try-with-resources and record conversion are deferred. The general Exception handler is a teaching step; a custom checked type would let production callers catch only the intended validation failure.</p><p><a href="../docs/CONTENT_MAP.md">Source coverage, timing, and course placement</a></p></section></main></div><script>const details=[...document.querySelectorAll('details')],status=document.getElementById('readingStatus');function report(){status.textContent=`${details.filter(d=>d.open).length} of ${details.length} details open; all concept summaries remain visible.`}document.getElementById('openAll').onclick=()=>{details.forEach(d=>d.open=true);report()};document.getElementById('closeAll').onclick=()=>{details.forEach(d=>d.open=false);report()};details.forEach(d=>d.addEventListener('toggle',report));function openHash(){if(!location.hash)return;let t;try{t=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(e){return}if(!t)return;if(t.tagName==='DETAILS')t.open=true;else if(t.closest('details'))t.closest('details').open=true;t.scrollIntoView()}window.addEventListener('hashchange',openHash);let saved;window.addEventListener('beforeprint',()=>{saved=details.map(d=>d.open);details.forEach(d=>d.open=true)});window.addEventListener('afterprint',()=>{details.forEach((d,i)=>d.open=saved?.[i]??false);report()});openHash();report();</script></body></html>

@@ -54,7 +54,7 @@ The `Supporting slides` are a simple definition reference used alongside the IDE
 - Use a literal technical title. Do not use slogans, hooks, cinematic framing, stories, narratives, metaphors, movie language, or promotional language.
 - Use exactly three cumulative problem parts in one program/domain. Prefer a relatable campus-life context. Problem 1 establishes the program; Problems 2 and 3 extend it. Cover, lecture goals, and a final check may sit outside those parts.
 - Put the related problem and program in every slide header: `Problem N - ProgramName.java`. Use `Problems 1-3` only on lecture-wide slides.
-- Give each new concept a stable `Pn-Cn` ID and exactly one concept slide; do not duplicate concept explanations. Use a descriptive term heading or statement, not an instruction, one short definition, and at most one minimal example. Avoid dense traces, multi-panel explanations, complete programs, and complex demos.
+- Give each new concept a stable `Pn-Cn` ID and exactly one concept slide; do not duplicate concept explanations. Use a descriptive term heading or statement, not an instruction, one short definition, and short contrasting examples when useful. Avoid dense traces, multi-panel explanations, complete programs, and complex demos.
 - End each problem part with a visible `Switch to the IDE` checkpoint and exact run instructions or output.
 - Keep the three slide ranges contiguous and link them from the corresponding handout pages.
 - Use short, literal tutorial headings and simple English. Define terms before using them as shorthand.
@@ -66,6 +66,14 @@ The `Supporting slides` are a simple definition reference used alongside the IDE
 - Keep complete runnable Java and exact problem input/output in the handout and example files.
 - Move execution traces, edge cases, comparisons, and worked solutions to the instructor reference.
 - Keep each extension small enough to type, explain, and run during one IDE segment.
+
+### Generalization across examples
+
+The three cumulative problems give continuity; supporting examples should also show where the same rule applies elsewhere. For each selected concept where transfer is meaningful, pair the program example with a concise example from a different familiar context. Keep one concept per slide and explicitly state what stays the same. Change the situation, input source, operation, or failure mode rather than merely renaming variables. Explain any new API or exception type at the point of use and avoid introducing a second unplanned lesson.
+
+In the concept refresher, provide the alternative snippet, its exact output or precise outcome, and a prediction question that changes one relevant feature. Put its answer and explanation behind a native details element so learners can reason first. Include useful boundary cases or non-examples that distinguish the rule from a misleading overgeneralization. Show required setup or name any prerequisite helper method; never imply an isolated fragment is independently runnable.
+
+Keep examples short enough for projector reading. Use a paired layout or a simple accessible example switch when needed; put longer traces in the refresher. Keep existing concept IDs, contiguous problem ranges, and three cumulative Java files. Compile and run new illustrative snippets in temporary harnesses, including their stated variants; record the actual checks and any added discussion time.
 
 ### Interaction
 

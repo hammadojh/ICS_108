@@ -36,13 +36,15 @@ Read [references/package-contract.md](references/package-contract.md) and [refer
    - Call the deck `Supporting slides` in the title, navigation, handout links, and package README.
    - Use `assets/reference-package/slides/` as the accepted shell and visual source of truth. Preserve its palette, typefaces, stage, spacing rhythm, controls, transitions, and diagram treatment exactly. Treat the historical reference content as visual scaffolding, not a teaching-density target. Add only the component rules required by the new chapter; never invent a chapter-themed palette, font stack, texture, gradient, or ornamental cover treatment.
    - Replace every chapter-specific example, label, selector, demo, and quiz; never shallowly relabel the old supporting slides.
-   - Give each selected concept exactly one concept slide; do not duplicate its explanation on another slide. Put exactly one new concept on each concept slide: a literal concept heading, one short definition, and at most one minimal example when it materially clarifies the definition. Avoid dense traces, multi-panel explanations, full solutions, and complex demos. Cover, goals, IDE checkpoints, and a short final check may use separate slides.
+   - Give each selected concept exactly one concept slide; do not duplicate its explanation on another slide. Put exactly one new concept on each concept slide: a literal concept heading, one short definition, and short paired examples when a changed context helps learners generalize. Avoid dense traces, multi-panel explanations, full solutions, and complex demos. Cover, goals, IDE checkpoints, and a short final check may use separate slides.
    - Start every slide header with the related problem, such as `Problem 2 - ProgramName.java`; use `Problems 1-3` only for lecture-wide slides.
    - Give every concept a stable ID such as `P2-C3`. Show that ID in the slide header and at the matching inline comment in the Java code.
    - End each problem part with an explicit IDE checkpoint. Link each handout problem to its contiguous supporting-slide range, and link checkpoint slides back to the handout or runnable file.
    - Introduce technical terms in short, plain sentences. Prefer literal definition headings such as `Object`, `Instance field`, or `Defining methods`; use descriptive concept names or statements rather than orders to the student. The slide should answer “What does this term mean?” at a glance.
    - Preserve keyboard/click navigation, URL hashes, progressive reveals, progress state, reduced motion, print behavior, and accessible form controls.
    - Keep interaction optional and simple, such as one definition check or answer reveal. Do not add demos or extra slides to meet an interaction percentage.
+
+   - Help learners generalize beyond the cumulative program. Pair important concepts with a short example in a different familiar context, and state what stays the same. In the refresher, include the result plus a prediction question that changes an input, boundary, or code choice, with an expandable explanation. Vary the operation or situation meaningfully rather than only renaming variables. See the generalization guidance in the package contract. These illustrations do not add handout problems or runnable snapshot files.
 
 5. Build runnable examples.
    - Create exactly one complete Java file for each of the three IDE-handout problems under `examples/`. These are independently runnable snapshots of the cumulative program. When class-name suffixes distract from one evolving class, put each `CampusWallet.java` snapshot in `examples/problem-N/` and compile it from that folder; otherwise use distinct class names that compile together. Keep the extension recognizable.
@@ -98,7 +100,7 @@ Do not deliver until:
 - the instructor handout/refresher explains what each selected concept is, when it matters, how it works, and what mistake to avoid;
 - every handout module contains exactly one student learning statement in its new-concepts section;
 - every handout module has syntax-colored complete code shown by default, working local-file-safe Copy code and Copy problem controls, and complete-only print output; copied source exactly matches the Java file and any optional Starter is hidden and unselected initially;
-- every concept slide names its problem and gives one simple definition, with at most one minimal example; detailed explanations live in the handout/refresher;
+- every concept slide names its problem and gives one simple definition, with short examples that make the general rule visible; detailed explanations live in the handout/refresher;
 - every concept ID maps across a slide header, an inline Java comment, the handout, and the content map;
 - each problem has a clear supporting-slide range and an IDE checkpoint;
 - all visible language is plain, literal, and tutorial-focused, with no cinematic or story framing;

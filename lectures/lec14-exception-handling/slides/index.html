@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ICS 108 Lecture 14 - Exception handling Supporting slides</title><link rel="icon" href="data:,"><link rel="stylesheet" href="styles.css"></head><body><a class="skip-link" href="#slide-1">Skip to slides</a><main class="app"><div class="deck-shell"><div class="progress" aria-hidden="true"><div id="progressFill"></div></div><div class="stage" id="stage"><section class="slide " id="slide-1" data-title="Exception handling" aria-hidden="true"><div class="breadcrumb"><span>Problems 1-3</span><span>ICS 108 · Lecture 14</span><strong>Supporting slides</strong></div><div class="content-stack"><header><p class="part-label">Lecture 14</p><h1>Exception handling</h1></header><p class="lead">Three cumulative campus booking problems.</p><div class="problem-route"><a href="#slide-3"><b>01</b><span><strong>Handle one booking attempt</strong><small>CampusBooking.java · slides 3–6</small></span></a><a href="#slide-7"><b>02</b><span><strong>Retry a malformed attempt</strong><small>CampusBooking.java · slides 7–10</small></span></a><a href="#slide-11"><b>03</b><span><strong>Validate the seat count</strong><small>CampusBooking.java · slides 11–15</small></span></a></div></div><footer class="slide-footer"><span>Exception handling</span><span>1 / 16</span></footer></section>
+<section class="slide " id="slide-2" data-title="What you will be able to do" aria-hidden="true"><div class="breadcrumb"><span>Problems 1-3</span><span>ICS 108 · Lecture 14</span><strong>Supporting slides</strong></div><div class="content-stack"><header><p class="part-label">Lecture 14</p><h2>What you will be able to do</h2></header><ul class="goal-list"><li>Trace a failed read, handle it, and identify where execution continues.</li><li>Retry safely by consuming the failed token and checking for end of input.</li><li>Throw and propagate a checked exception, then select the appropriate handler.</li></ul><p class="lead">40-minute core · Chapter 9, sections 9.1–9.3</p></div><footer class="slide-footer"><span>Exception handling</span><span>2 / 16</span></footer></section>
+<section class="slide concept-slide part-start" id="slide-3" data-title="Input exceptions" aria-hidden="true"><div class="breadcrumb"><span>Problem 1 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P1-C1</strong></div><div class="content-stack"><header><p class="part-label">Problem 1</p><h2>Input exceptions</h2></header><p class="concept-definition">An exception interrupts normal execution when an operation cannot finish.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>int seats = scnr.nextInt();</code></pre></div><div><p class="example-label">Another context · Quiz score input</p><pre class="concept-code"><code>Scanner scores = new Scanner(&quot;absent&quot;);
+try {
+   int score = scores.nextInt();
+} catch (InputMismatchException e) {
+   System.out.println(&quot;Score is not an integer.&quot;);
+}</code></pre><p class="example-result"><strong>Result:</strong> Score is not an integer.</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> The domain changes; a token still has to match the requested type.</p></div><footer class="slide-footer"><span>Exception handling</span><span>3 / 16</span></footer></section>
+<section class="slide concept-slide" id="slide-4" data-title="The try block" aria-hidden="true"><div class="breadcrumb"><span>Problem 1 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P1-C2</strong></div><div class="content-stack"><header><p class="part-label">Problem 1</p><h2>The try block</h2></header><p class="concept-definition">A try block contains operations whose exceptions a following handler can catch.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>try {
+   int seats = scnr.nextInt();
+   System.out.println(&quot;Seats requested: &quot; + seats);
+}</code></pre></div><div><p class="example-label">Another context · Array lookup</p><pre class="concept-code"><code>int[] marks = {80, 90};
+try {
+   System.out.println(marks[2]);
+   System.out.println(&quot;Lookup finished.&quot;);
+} catch (ArrayIndexOutOfBoundsException e) {
+   System.out.println(&quot;No such position.&quot;);
+}</code></pre><p class="example-result">ArrayIndexOutOfBoundsException: an invalid array index. <strong>Result:</strong> No such position.</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> A different operation can throw; later statements in the same try are still skipped.</p></div><footer class="slide-footer"><span>Exception handling</span><span>4 / 16</span></footer></section>
+<section class="slide concept-slide" id="slide-5" data-title="The catch block" aria-hidden="true"><div class="breadcrumb"><span>Problem 1 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P1-C3</strong></div><div class="content-stack"><header><p class="part-label">Problem 1</p><h2>The catch block</h2></header><p class="concept-definition">A catch block handles an exception whose type matches its parameter.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>catch (InputMismatchException e) {
+   System.out.println(&quot;Enter a whole number.&quot;);
+}</code></pre></div><div><p class="example-label">Another context · Integer division</p><pre class="concept-code"><code>try {
+   int groups = 0;
+   System.out.println(12 / groups);
+} catch (ArithmeticException e) {
+   System.out.println(&quot;Cannot divide by zero.&quot;);
+}
+System.out.println(&quot;Next task.&quot;);</code></pre><p class="example-result">ArithmeticException: integer division by zero here. <strong>Result:</strong> Cannot divide by zero. · Next task.</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> A matching handler can finish normally, allowing execution after try/catch.</p></div><footer class="slide-footer"><span>Exception handling</span><span>5 / 16</span></footer></section>
+<section class="slide " id="slide-6" data-title="Switch to the IDE" aria-hidden="true"><div class="breadcrumb"><span>Problem 1 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>Supporting slides</strong></div><div class="content-stack"><header><p class="part-label">Problem 1</p><h2>Switch to the IDE</h2></header><p class="lead">Handle one booking attempt</p><div class="checkpoint-columns"><div><p class="part-label">Input: two</p><pre class="concept-code"><code>javac CampusBooking.java
+java CampusBooking</code></pre></div><div><p class="part-label">Exact output</p><pre class="concept-code"><code>Enter a whole number.
+Session complete.</code></pre></div></div><div class="resource-links"><a href="../instructor/walkthroughs.html#problem-1">Present Problem 1 from the handout</a><a href="../examples/problem-1/CampusBooking.java">Java file</a></div></div><footer class="slide-footer"><span>Exception handling</span><span>6 / 16</span></footer></section>
+<section class="slide concept-slide part-start" id="slide-7" data-title="Retrying an operation" aria-hidden="true"><div class="breadcrumb"><span>Problem 2 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P2-C1</strong></div><div class="content-stack"><header><p class="part-label">Problem 2</p><h2>Retrying an operation</h2></header><p class="concept-definition">A loop can repeat an operation after its exception is handled.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>boolean needInput = true;
+while (needInput &amp;&amp; scnr.hasNext()) {
+   // Try one read; set needInput false on success.
+}</code></pre></div><div><p class="example-label">Another context · Sensor reading retry</p><pre class="concept-code"><code>Scanner sensor = new Scanner(&quot;offline 18&quot;);
+boolean pending = true;
+while (pending &amp;&amp; sensor.hasNext()) {
+   try {
+      System.out.println(sensor.nextInt());
+      pending = false;
+   } catch (InputMismatchException e) { sensor.next(); }
+}</code></pre><p class="example-result"><strong>Result:</strong> 18</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> A failed attempt keeps the loop active; a successful attempt changes its condition.</p></div><footer class="slide-footer"><span>Exception handling</span><span>7 / 16</span></footer></section>
+<section class="slide concept-slide" id="slide-8" data-title="Discarding invalid input" aria-hidden="true"><div class="breadcrumb"><span>Problem 2 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P2-C2</strong></div><div class="content-stack"><header><p class="part-label">Problem 2</p><h2>Discarding invalid input</h2></header><p class="concept-definition">Scanner leaves a mismatching token unread until the program consumes it.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>catch (InputMismatchException e) {
+   System.out.println(&quot;Enter a whole number.&quot;);
+   scnr.next();
+}</code></pre></div><div><p class="example-label">Another context · Temperature tokens</p><pre class="concept-code"><code>Scanner temperatures = new Scanner(&quot;cold 24&quot;);
+try {
+   temperatures.nextInt();
+} catch (InputMismatchException e) {
+   System.out.println(temperatures.next());
+}
+System.out.println(temperatures.nextInt());</code></pre><p class="example-result"><strong>Result:</strong> cold · 24</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> Consuming only the bad token preserves the next token, even on the same line.</p></div><footer class="slide-footer"><span>Exception handling</span><span>8 / 16</span></footer></section>
+<section class="slide concept-slide" id="slide-9" data-title="End of input" aria-hidden="true"><div class="breadcrumb"><span>Problem 2 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P2-C3</strong></div><div class="content-stack"><header><p class="part-label">Problem 2</p><h2>End of input</h2></header><p class="concept-definition">Scanner.hasNext() reports whether another token is available.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>while (needInput &amp;&amp; scnr.hasNext()) {
+   // Read the available token.
+}</code></pre></div><div><p class="example-label">Another context · End of a data stream</p><pre class="concept-code"><code>Scanner values = new Scanner(&quot;7&quot;);
+System.out.println(values.hasNext());
+System.out.println(values.nextInt());
+System.out.println(values.hasNext());</code></pre><p class="example-result"><strong>Result:</strong> true · 7 · false</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> hasNext checks availability without consuming a token; availability changes after a read.</p></div><footer class="slide-footer"><span>Exception handling</span><span>9 / 16</span></footer></section>
+<section class="slide " id="slide-10" data-title="Switch to the IDE" aria-hidden="true"><div class="breadcrumb"><span>Problem 2 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>Supporting slides</strong></div><div class="content-stack"><header><p class="part-label">Problem 2</p><h2>Switch to the IDE</h2></header><p class="lead">Retry a malformed attempt</p><div class="checkpoint-columns"><div><p class="part-label">Input: two 3</p><pre class="concept-code"><code>javac CampusBooking.java
+java CampusBooking</code></pre></div><div><p class="part-label">Exact output</p><pre class="concept-code"><code>Enter a whole number.
+Seats requested: 3
+Session complete.</code></pre></div></div><div class="resource-links"><a href="../instructor/walkthroughs.html#problem-2">Present Problem 2 from the handout</a><a href="../examples/problem-2/CampusBooking.java">Java file</a></div></div><footer class="slide-footer"><span>Exception handling</span><span>10 / 16</span></footer></section>
+<section class="slide concept-slide part-start" id="slide-11" data-title="Throwing an exception" aria-hidden="true"><div class="breadcrumb"><span>Problem 3 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P3-C1</strong></div><div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Throwing an exception</h2></header><p class="concept-definition">A throw statement creates an exceptional exit from the current operation.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>if (seats &lt; 1 || seats &gt; 4) {
+   throw new Exception(&quot;Seats must be 1 to 4.&quot;);
+}</code></pre></div><div><p class="example-label">Another context · Quiz score validation</p><pre class="concept-code"><code>int score = 105;
+try {
+   if (score &lt; 0 || score &gt; 100) {
+      throw new Exception(&quot;Score out of range.&quot;);
+   }
+   System.out.println(&quot;Score accepted.&quot;);
+} catch (Exception e) { System.out.println(e.getMessage()); }</code></pre><p class="example-result"><strong>Result:</strong> Score out of range.</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> Parsing a value and accepting it under a domain rule are separate decisions.</p></div><footer class="slide-footer"><span>Exception handling</span><span>11 / 16</span></footer></section>
+<section class="slide concept-slide" id="slide-12" data-title="Declaring checked exceptions" aria-hidden="true"><div class="breadcrumb"><span>Problem 3 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P3-C2</strong></div><div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Declaring checked exceptions</h2></header><p class="concept-definition">A throws clause declares an exception that may leave a method.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>static void validateSeats(int seats) throws Exception {
+   // Reject an invalid seat count.
+}</code></pre></div><div><p class="example-label">Another context · A method that may fail</p><pre class="concept-code"><code>static void checkMark(int mark) throws Exception {
+   if (mark &lt; 0) throw new Exception(&quot;Negative mark.&quot;);
+}
+// Caller must catch or declare this checked exception.</code></pre><p class="example-result"><strong>Result:</strong> For checkMark(-1): Exception leaves the method.</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> throws declares a possible checked exception; it does not cause or handle the failure.</p></div><footer class="slide-footer"><span>Exception handling</span><span>12 / 16</span></footer></section>
+<section class="slide concept-slide" id="slide-13" data-title="Exception propagation" aria-hidden="true"><div class="breadcrumb"><span>Problem 3 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P3-C3</strong></div><div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Exception propagation</h2></header><p class="concept-definition">An uncaught exception leaves a method and is considered by handlers around its call.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>int seats = scnr.nextInt();
+validateSeats(seats);
+System.out.println(&quot;Seats requested: &quot; + seats);</code></pre></div><div><p class="example-label">Another context · A failed helper call</p><pre class="concept-code"><code>try {
+   checkMark(-1);
+   System.out.println(&quot;Saved.&quot;);
+} catch (Exception e) {
+   System.out.println(&quot;Not saved.&quot;);
+}</code></pre><p class="example-result">Uses checkMark from the preceding slide. <strong>Result:</strong> Not saved.</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> A thrown exception crosses the method boundary and skips the rest of the caller’s try.</p></div><footer class="slide-footer"><span>Exception handling</span><span>13 / 16</span></footer></section>
+<section class="slide concept-slide" id="slide-14" data-title="Multiple handlers" aria-hidden="true"><div class="breadcrumb"><span>Problem 3 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>P3-C4</strong></div><div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Multiple handlers</h2></header><p class="concept-definition">Java selects the first compatible catch block for the thrown exception.</p><div class="example-pair"><div><p class="example-label">Booking example</p><pre class="concept-code"><code>catch (InputMismatchException e) {
+   // Discard the malformed token.
+}
+catch (Exception e) {
+   System.out.println(e.getMessage());
+}</code></pre></div><div><p class="example-label">Another context · Two failure types</p><pre class="concept-code"><code>try {
+   int n = new Scanner(&quot;zero&quot;).nextInt();
+   if (n == 0) throw new Exception(&quot;Zero is forbidden.&quot;);
+} catch (InputMismatchException e) {
+   System.out.println(&quot;Bad text.&quot;);
+} catch (Exception e) { System.out.println(e.getMessage()); }</code></pre><p class="example-result"><strong>Result:</strong> Bad text.</p></div></div><p class="transfer-rule"><strong>What stays the same:</strong> The first compatible handler runs; a superclass handler must follow its subclasses.</p></div><footer class="slide-footer"><span>Exception handling</span><span>14 / 16</span></footer></section>
+<section class="slide " id="slide-15" data-title="Switch to the IDE" aria-hidden="true"><div class="breadcrumb"><span>Problem 3 - CampusBooking.java</span><span>ICS 108 · Lecture 14</span><strong>Supporting slides</strong></div><div class="content-stack"><header><p class="part-label">Problem 3</p><h2>Switch to the IDE</h2></header><p class="lead">Validate the seat count</p><div class="checkpoint-columns"><div><p class="part-label">Input: two 0 3</p><pre class="concept-code"><code>javac CampusBooking.java
+java CampusBooking</code></pre></div><div><p class="part-label">Exact output</p><pre class="concept-code"><code>Enter a whole number.
+Seats must be 1 to 4.
+Seats requested: 3
+Session complete.</code></pre></div></div><div class="resource-links"><a href="../instructor/walkthroughs.html#problem-3">Present Problem 3 from the handout</a><a href="../examples/problem-3/CampusBooking.java">Java file</a></div></div><footer class="slide-footer"><span>Exception handling</span><span>15 / 16</span></footer></section>
+<section class="slide " id="slide-16" data-title="Check your understanding" aria-hidden="true"><div class="breadcrumb"><span>Problems 1-3</span><span>ICS 108 · Lecture 14</span><strong>Supporting slides</strong></div><div class="content-stack"><header><p class="part-label">Lecture 14</p><h2>Check your understanding</h2></header><p class="check-question">Why must only the malformed-input handler discard a token?</p><button class="answer-control" id="revealAnswer" type="button" aria-controls="finalAnswer" aria-expanded="false">Show answer</button><p class="check-answer" id="finalAnswer" data-step="1" aria-hidden="true">nextInt leaves a malformed token unread. A range error occurs after nextInt consumed the integer, so discarding again would lose the next attempt.</p><div class="resource-links"><a href="../instructor/walkthroughs.html">IDE handout</a><a href="../instructor/concept-refresher.html">Concept refresher</a></div></div><footer class="slide-footer"><span>Exception handling</span><span>16 / 16</span></footer></section><nav class="deck-controls" aria-label="Slide controls"><button id="prevButton" aria-label="Previous slide">←</button><span id="slideTitle" aria-live="polite"></span><span id="slideCounter" aria-live="polite"></span><button id="nextButton" aria-label="Next slide">→</button></nav></div></div></main><script src="script.js"></script></body></html>

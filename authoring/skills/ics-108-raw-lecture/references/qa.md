@@ -23,7 +23,7 @@ Use a real browser and test at both 1440x900 and 1280x720.
 1. Confirm slide count, part starts, progress, title, and URL hash.
 2. Confirm exactly three problem parts and one `Switch to the IDE` checkpoint for each problem.
 3. Confirm every slide header names `Problem N - ProgramName.java`, or `Problems 1-3` for lecture-wide slides.
-4. Confirm each concept slide has one short definition and the same `Pn-Cn` ID as its inline Java comment. Require descriptive concept labels, not orders, and no duplicate concept slides. At most one tiny example may clarify it. Move dense traces, multi-panel detail, full code solutions, and complex demos to the instructor materials.
+4. Confirm each concept slide has one short definition and the same `Pn-Cn` ID as its inline Java comment. Require descriptive concept labels, not orders, and no duplicate concept slides. Use short examples from different contexts to clarify the same concept; keep the stage readable. Move dense traces, multi-panel detail, full code solutions, and complex demos to the instructor materials.
 5. Advance and reverse through every progressive reveal.
 6. Test Arrow keys, Page keys, Space, Enter, Backspace, Home, End, click navigation, and controls.
 7. Fully reveal every slide and confirm each slide's content fits its stage.
@@ -75,3 +75,10 @@ Use a real browser and test at both 1440x900 and 1280x720.
 - Can a learner reproduce each result without spoken narration?
 - Are answers available after, not before, a meaningful attempt?
 - Is deferred depth identified rather than silently omitted?
+
+## Generalization checks
+
+- Verify that contrasting examples change a meaningful context or operation while demonstrating the same concept; the invariant is explicit.
+- Compile/run new fragments in temporary harnesses with their documented setup and compare stated results, including prediction variants. Keep temporary harnesses out of the three-file example package.
+- Check that new types or APIs are explained, the examples stay within scope, and prediction answers are available in the refresher.
+- Recheck all modified slides at both desktop sizes, with examples and reveals visible; recheck refresher details at 390px. Preserve existing problem/slide mappings and account for extra discussion time.
