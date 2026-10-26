@@ -1,0 +1,361 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ICS 108 Lecture 16 - Concept refresher</title><link rel="icon" href="data:,"><style>
+    :root {
+      --ink: oklch(24% 0.018 250);
+      --ink-soft: oklch(43% 0.022 250);
+      --paper: oklch(98% 0.008 85);
+      --canvas: oklch(93% 0.012 245);
+      --line: oklch(82% 0.018 245);
+      --line-strong: oklch(66% 0.045 245);
+      --blue: oklch(51% 0.145 250);
+      --blue-dark: oklch(38% 0.11 250);
+      --blue-pale: oklch(95% 0.026 245);
+      --warm: oklch(95% 0.025 78);
+      --stage: oklch(18% 0.025 250);
+      --stage-soft: oklch(72% 0.035 245);
+      --code-bg: oklch(22% 0.025 250);
+      --code-ink: oklch(94% 0.012 245);
+      --focus: oklch(70% 0.15 245);
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      max-width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scroll-padding-top: 1rem;
+      background: var(--canvas);
+    }
+    body {
+      max-width: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3, p, ul, ol, table, pre { margin-top: 0; }
+    p, ul, ol { max-width: var(--measure); }
+    h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+    h1 {
+      max-width: 14ch;
+      margin-bottom: 1.5rem;
+      font-size: clamp(2.7rem, 8vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+    h2 {
+      margin-bottom: 0.75rem;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    h3 { margin-bottom: 0.5rem; font-size: 1.2rem; line-height: 1.25; }
+    a { color: var(--blue-dark); text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+    a:hover { text-decoration-thickness: 0.13em; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-variant-ligatures: none;
+    }
+    code {
+      padding: 0.08em 0.28em;
+      background: var(--blue-pale);
+      color: var(--blue-dark);
+      font-size: 0.92em;
+      overflow-wrap: anywhere;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    pre code { padding: 0; background: transparent; color: inherit; overflow-wrap: normal; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 30;
+      top: 0.5rem;
+      left: 0.5rem;
+      transform: translateY(-180%);
+      padding: 0.65rem 0.9rem;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .skip-link:focus { transform: none; }
+    .masthead {
+      padding: clamp(2rem, 7vw, 6rem) max(1.25rem, env(safe-area-inset-left)) clamp(3rem, 8vw, 6.5rem);
+      background: var(--stage);
+      color: var(--paper);
+    }
+    .masthead-inner { width: min(1180px, 100%); margin: 0 auto; }
+    .breadcrumb,
+    .eyebrow,
+    .concept-number,
+    .source-ref,
+    .reading-label,
+    .problem-tag {
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; color: var(--stage-soft); }
+    .breadcrumb a { color: inherit; }
+    .breadcrumb span + span::before { content: "/"; margin-right: 0.5rem; }
+    .eyebrow { margin-bottom: 0.75rem; color: oklch(80% 0.1 245); }
+    .chapter-abstract {
+      display: grid;
+      gap: 1rem;
+      max-width: 900px;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid oklch(39% 0.035 250);
+    }
+    .chapter-abstract .reading-label { color: oklch(80% 0.1 245); }
+    .chapter-abstract p {
+      margin-bottom: 0;
+      color: oklch(91% 0.012 245);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: clamp(1.18rem, 2.5vw, 1.55rem);
+      line-height: 1.5;
+    }
+    .reading-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+    .reading-controls button {
+      min-height: 44px;
+      padding: 0.65rem 1rem;
+      border: 1px solid oklch(52% 0.04 245);
+      border-radius: 0;
+      background: transparent;
+      color: var(--paper);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .reading-controls button:hover { background: oklch(26% 0.035 250); }
+    #readingStatus { color: var(--stage-soft); font-size: 0.86rem; }
+
+    .reading-layout {
+      display: grid;
+      grid-template-columns: minmax(14rem, 0.28fr) minmax(0, 0.72fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3rem 0 5rem;
+    }
+    .reading-map { position: sticky; top: 1rem; align-self: start; min-width: 0; }
+    .reading-map h2 {
+      margin-bottom: 1rem;
+      font: 800 0.72rem/1.2 "Avenir Next", Avenir, sans-serif;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .reading-map ol { display: grid; margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+    .reading-map a {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr);
+      min-height: 44px;
+      align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+    .reading-map a:hover { color: var(--blue-dark); }
+    .map-number { color: var(--blue); font: 700 0.76rem "SFMono-Regular", monospace; }
+    .map-links { display: grid; gap: 0.45rem; margin-top: 1.2rem; font-size: 0.86rem; }
+    .map-links a { display: block; min-height: 0; padding: 0.25rem 0; border-bottom: 0; }
+
+    .reading-main { min-width: 0; }
+    .reading-note { margin-bottom: 3rem; padding: 1.2rem 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .reading-note p:last-child { margin-bottom: 0; }
+    .mental-model { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0 4rem; }
+    .model-term { min-width: 0; padding-top: 0.8rem; border-top: 4px solid var(--blue); }
+    .model-term strong { display: block; margin-bottom: 0.3rem; }
+    .model-term span { display: block; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.45; }
+
+    .concept { margin-bottom: 0; padding: 3rem 0; border-top: 1px solid var(--line-strong); scroll-margin-top: 1rem; }
+    .concept:first-of-type { border-top-width: 3px; }
+    .concept-header { margin-bottom: 1.2rem; }
+    .concept-number { display: none; }
+    .source-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; margin-bottom: 0.4rem; color: var(--ink-soft); }
+    .source-ref a { color: inherit; }
+    .problem-tag { display: inline-flex; align-items: center; min-height: 1.7rem; padding: 0.2rem 0.55rem; background: var(--blue); color: white; }
+    .concept-abstract {
+      margin-bottom: 1rem;
+      color: var(--ink-soft);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 1.18rem;
+      line-height: 1.55;
+    }
+    .key-rule { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; margin: 1rem 0; padding: 1rem 1.5rem; background: var(--blue-pale); }
+    .key-rule strong { color: var(--blue-dark); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .key-rule p { margin-bottom: 0; font-weight: 650; }
+
+    details { max-width: 100%; margin-top: 0.75rem; border-top: 1px solid var(--line); background: var(--paper); }
+    summary {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      min-height: 56px;
+      align-items: center;
+      padding: 0.75rem 3.2rem 0.75rem 1rem;
+      color: var(--blue-dark);
+      font-weight: 750;
+      cursor: pointer;
+      list-style: none;
+      overflow-wrap: anywhere;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue);
+      font: 400 1.5rem "Avenir Next", Avenir, sans-serif;
+    }
+    details[open] summary::after { content: "−"; }
+    .details-body { min-width: 0; max-width: 100%; padding: 0.2rem 1rem 1.2rem; }
+    .details-body > *:last-child { margin-bottom: 0; }
+    .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .details-grid > div { min-width: 0; }
+    .details-grid h3 { margin-top: 0.5rem; }
+    .teaching-line { margin: 1rem 0 0; padding: 0.85rem 1rem; background: var(--warm); }
+    .teaching-line strong { color: var(--blue-dark); }
+    .teaching-line p { margin-bottom: 0; }
+    .compare-wrap { max-width: 100%; overflow-x: auto; }
+    .compare-table { width: 100%; min-width: 31rem; border-collapse: collapse; font-size: 0.88rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--blue-pale); color: var(--blue-dark); }
+    .trace-list { margin: 0; padding-left: 1.25rem; }
+    .trace-list li + li { margin-top: 0.45rem; }
+    .warning { padding: 0.85rem 1rem; background: var(--warm); color: var(--blue-dark); }
+    .concept-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 1rem; font-size: 0.86rem; }
+
+    .readiness, .source-notes { padding: 3rem 0; border-top: 3px solid var(--ink); }
+    .readiness ol { padding-left: 1.4rem; }
+    .readiness li + li { margin-top: 0.55rem; }
+    .readiness code { white-space: normal; }
+    .source-notes { border-top-width: 1px; }
+    .source-notes ul { padding-left: 1.2rem; }
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+      padding: 1.5rem max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom));
+      background: var(--stage);
+      color: var(--stage-soft);
+      font-size: 0.86rem;
+    }
+    .page-footer a { color: var(--paper); }
+
+    @media (max-width: 900px) {
+      .reading-layout { grid-template-columns: minmax(0, 1fr); }
+      .reading-map { position: static; }
+      .reading-map ol { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+      .mental-model { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .masthead { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+      .reading-layout { width: min(calc(100% - 1.5rem), 1180px); padding-top: 2rem; }
+      .reading-map ol, .mental-model, .details-grid { grid-template-columns: minmax(0, 1fr); }
+      .concept-header { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .key-rule { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; padding: 1rem; }
+      .reading-controls { align-items: stretch; }
+      .reading-controls button { flex: 1 1 9rem; }
+      pre { padding: 1rem; font-size: 0.76rem; }
+      .compare-wrap { overflow: visible; }
+      .compare-table,
+      .compare-table tbody,
+      .compare-table tr,
+      .compare-table td { display: block; width: 100%; min-width: 0; }
+      .compare-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .compare-table tr { margin-bottom: 0.8rem; border: 1px solid var(--line); background: var(--paper); }
+      .compare-table td {
+        display: grid;
+        grid-template-columns: minmax(7.5rem, 0.42fr) minmax(0, 0.58fr);
+        gap: 0.75rem;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .compare-table td:last-child { border-bottom: 0; }
+      .compare-table td::before {
+        content: attr(data-label);
+        color: var(--blue-dark);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .page-footer { display: block; }
+      .page-footer span { display: block; }
+      .page-footer span + span { margin-top: 0.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      html, body { overflow: visible; background: white; font-size: 10pt; }
+      .masthead { padding: 0 0 10mm; background: white; color: var(--ink); }
+      .masthead h1 { max-width: none; font-size: 34pt; }
+      .skip-link, .breadcrumb, .reading-controls, .reading-map, .concept-links, .page-footer { display: none !important; }
+      .chapter-abstract p { color: var(--ink); }
+      .reading-layout { display: block; width: auto; padding: 8mm 0 0; }
+      .mental-model { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5mm; }
+      .concept { margin-bottom: 10mm; break-before: page; }
+      details { break-inside: avoid; }
+      details:not([open]) > .details-body { display: block; }
+      summary::after { display: none; }
+      .compare-wrap { overflow: visible; }
+      .compare-table { min-width: 0; }
+      pre { overflow: visible; white-space: pre-wrap; word-break: break-word; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+.abstract,.mental-model-summary{max-width:70ch;font-size:1.15rem;line-height:1.55} .mental-model-summary{display:block;margin:1.5rem 0} .reading-controls a{color:var(--stage-soft)} .reading-map a{display:block;padding:.65rem 0} .concept-header{display:block} .concept-number{display:none} .reading{min-width:0} pre{overflow:auto;max-width:100%} .concept-extra{margin:30px 0} @media(max-width:760px){.layout{display:block} .concept-map{position:static}} @media print{.skip-link{display:none}}</style></head><body><header class="masthead"><div class="masthead-inner"><p class="eyebrow">ICS 108 · Lecture 16 · Instructor concept refresher</p><h1>JavaFX windows and layouts</h1><p class="abstract">Build a visible booking form from ordinary Java objects. A JavaFX Application starts the interface, a Stage supplies its window, and a Scene displays a root layout container. Controls become visible when attached to that container. A GridPane then organizes the same booking into labeled rows with consistent spacing.</p><p class="mental-model-summary"><strong>Mental model:</strong> Application starts → Stage hosts a Scene → the Scene has a root Pane → the pane contains controls. Values are calculated as numbers and displayed as text.</p><div class="reading-controls"><button id="openAll">Open all details</button><button id="closeAll">Close all details</button><a href="../slides/index.html">Supporting slides</a><a href="walkthroughs.html">IDE handout</a></div><p id="readingStatus" role="status" aria-live="polite"></p></div></header><div class="reading-layout"><nav class="reading-map" aria-label="Concept map"><h2>Concept map</h2><a href="#p1-c1">P1-C1 · Application lifecycle</a><a href="#p1-c2">P1-C2 · Stage</a><a href="#p1-c3">P1-C3 · Scene</a><a href="#p1-c4">P1-C4 · Pane and children</a><a href="#p1-c5">P1-C5 · TextField</a><a href="#p2-c1">P2-C1 · Label</a><a href="#p2-c2">P2-C2 · GridPane coordinates</a><a href="#p2-c3">P2-C3 · Number-to-text conversion</a><a href="#p3-c1">P3-C1 · Outer padding</a><a href="#p3-c2">P3-C2 · Grid gaps</a><a href="#readiness">Readiness and practice</a><a href="#sources">Sources and scope</a></nav><main class="reading-main"><section class="concept" id="p1-c1"><header class="concept-header"><p class="source-tag">P1-C1 · 10.1 · pp. 1–3</p><h2>Application lifecycle</h2></header><p class="concept-abstract">Application supplies the lifecycle of a JavaFX program. The familiar main method starts the JavaFX runtime. The runtime creates the Application object and invokes start on the JavaFX Application Thread. Build the interface in start. @Override lets the compiler check the method signature; it does not call the method. Closing the last window normally ends this small application.</p><p class="key-rule"><strong>Key rule:</strong> Call launch once; JavaFX calls your overridden start method.</p><details id="p1-c1-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>public class CampusBooking extends Application {
+  @Override
+  public void start(Stage stage) { /* GUI setup */ }
+}</code></pre><p>The familiar main method starts the JavaFX runtime. The runtime creates the Application object and invokes start on the JavaFX Application Thread. Build the interface in start. @Override lets the compiler check the method signature; it does not call the method. Closing the last window normally ends this small application.</p><p><strong>Common mistakes:</strong> Do not call start yourself or instantiate Stage before the JavaFX runtime starts.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>public class Attendance extends Application {
+  @Override
+  public void start(Stage stage) { /* GUI setup */ }
+}</code></pre><p><strong>Outcome:</strong> Both classes receive their primary Stage when JavaFX invokes start. The comments stand for the window setup shown in the complete program.</p><p><strong>What stays the same:</strong> Call launch once; JavaFX calls your overridden start method.</p></div></details><p><strong>Predict:</strong> Does calling launch(args) repeatedly create one new application per call?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. Application.launch may be called only once in a running JVM. Close the program and run it again for a new launch.</p></div></details></section><section class="concept" id="p1-c2"><header class="concept-header"><p class="source-tag">P1-C2 · 10.1 · pp. 2–3</p><h2>Stage</h2></header><p class="concept-abstract">A Stage is a top-level window. The Stage passed to start is the primary window. Its title belongs to the operating-system title bar, not to the form inside the window. In our code, setScene attaches the prepared content before show is called.</p><p class="key-rule"><strong>Key rule:</strong> Assign the title and scene, then call show to display the window.</p><details id="p1-c2-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>stage.setTitle(&quot;Campus booking&quot;);
+stage.show();</code></pre><p>The Stage passed to start is the primary window. Its title belongs to the operating-system title bar, not to the form inside the window. In our code, setScene attaches the prepared content before show is called.</p><p><strong>Common mistakes:</strong> Constructing controls or setting a title alone does not display a window.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>stage.setTitle(&quot;Attendance&quot;);
+stage.show();</code></pre><p><strong>Outcome:</strong> The already-configured Stage becomes visible with the given title.</p><p><strong>What stays the same:</strong> Assign the title and scene, then call show to display the window.</p></div></details><p><strong>Predict:</strong> If show is removed, does setTitle display the window?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. Setting properties does not make the window visible; show does.</p></div></details></section><section class="concept" id="p1-c3"><header class="concept-header"><p class="source-tag">P1-C3 · 10.1 · pp. 1–3</p><h2>Scene</h2></header><p class="concept-abstract">A Scene holds the content displayed inside a Stage. The scene is the content container; its root is the top of a tree of visible nodes. Here the root is a Pane and the TextField is its child. Stage → Scene → Pane → TextField describes containment, not inheritance. Replacing a scene replaces the window content.</p><p class="key-rule"><strong>Key rule:</strong> Give the scene a root node, then attach the scene to a Stage.</p><details id="p1-c3-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>Scene scene = new Scene(pane);
+stage.setScene(scene);</code></pre><p>The scene is the content container; its root is the top of a tree of visible nodes. Here the root is a Pane and the TextField is its child. Stage → Scene → Pane → TextField describes containment, not inheritance. Replacing a scene replaces the window content.</p><p><strong>Common mistakes:</strong> Do not confuse the Stage window with its Scene content.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>Scene scene = new Scene(attendancePane);
+stage.setScene(scene);</code></pre><p><strong>Outcome:</strong> In each fragment the named pane must already exist. Its child controls become the scene content.</p><p><strong>What stays the same:</strong> Give the scene a root node, then attach the scene to a Stage.</p></div></details><p><strong>Predict:</strong> Can one Stage display two different scenes at the same time?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. A Stage has one scene at a time; separate stages can display different scenes.</p></div></details></section><section class="concept" id="p1-c4"><header class="concept-header"><p class="source-tag">P1-C4 · 10.1 · pp. 2–3</p><h2>Pane and children</h2></header><p class="concept-abstract">A Pane is a container whose children are graphical nodes. A control that exists only in a variable is not automatically on screen. getChildren returns the pane’s child-node list; add attaches a node. One plain Pane with one field is enough for Problem 1. GridPane later replaces this layout container while keeping the content.</p><p class="key-rule"><strong>Key rule:</strong> Create a control, then add it to the displayed container.</p><details id="p1-c4-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>Pane pane = new Pane();
+pane.getChildren().add(summary);</code></pre><p>A control that exists only in a variable is not automatically on screen. getChildren returns the pane’s child-node list; add attaches a node. One plain Pane with one field is enough for Problem 1. GridPane later replaces this layout container while keeping the content.</p><p><strong>Common mistakes:</strong> Creating a control without adding it leaves it invisible.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>Pane pane = new Pane();
+pane.getChildren().add(attendanceField);</code></pre><p><strong>Outcome:</strong> The previously created field joins the pane. A plain Pane does not arrange several fields into rows.</p><p><strong>What stays the same:</strong> Create a control, then add it to the displayed container.</p></div></details><p><strong>Predict:</strong> If a second field is added to a plain Pane without positioning it, does it appear on the next row?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. A plain Pane does not provide row layout; controls can overlap at the default position. Use GridPane for rows and columns.</p></div></details></section><section class="concept" id="p1-c5"><header class="concept-header"><p class="source-tag">P1-C5 · 10.1 · pp. 1–3</p><h2>TextField</h2></header><p class="concept-abstract">A TextField displays one line of text and can allow editing. The constructor used here supplies initial text. setPrefColumnCount suggests a width in average text columns, not an input-length limit. A TextField holds String text even when that text looks numeric. Do not mistake a non-editable result for numeric storage.</p><p class="key-rule"><strong>Key rule:</strong> Use setText for its content and setEditable(false) for output-only text.</p><details id="p1-c5-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>TextField summary = new TextField(&quot;3 seats: 30 SAR&quot;);
+summary.setEditable(false);</code></pre><p>The constructor used here supplies initial text. setPrefColumnCount suggests a width in average text columns, not an input-length limit. A TextField holds String text even when that text looks numeric. Do not mistake a non-editable result for numeric storage.</p><p><strong>Common mistakes:</strong> setPrefColumnCount does not cap the number of characters.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>TextField status = new TextField(&quot;Present: 18&quot;);
+status.setEditable(false);</code></pre><p><strong>Outcome:</strong> Both fields display text that the user cannot edit; code can still change it with setText.</p><p><strong>What stays the same:</strong> Use setText for its content and setEditable(false) for output-only text.</p></div></details><p><strong>Predict:</strong> Can status.setText(&quot;Present: 19&quot;) update the non-editable field?</p><details><summary>Prediction answer</summary><div class="details-body"><p>Yes. setEditable(false) prevents user editing; it does not prevent program updates.</p></div></details></section><section class="concept" id="p2-c1"><header class="concept-header"><p class="source-tag">P2-C1 · 10.3 · pp. 6–8</p><h2>Label</h2></header><p class="concept-abstract">A Label displays descriptive, non-editable text beside a control. Labels help students distinguish the meaning of two fields. Our labels say Seats: and Total (SAR):. A label can change through setText, but it is not an input editor. Optional accessibility depth: setLabelFor can associate a label with its input.</p><p class="key-rule"><strong>Key rule:</strong> Use labels to explain what each value means.</p><details id="p2-c1-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>Label seatsLabel = new Label(&quot;Seats:&quot;);</code></pre><p>Labels help students distinguish the meaning of two fields. Our labels say Seats: and Total (SAR):. A label can change through setText, but it is not an input editor. Optional accessibility depth: setLabelFor can associate a label with its input.</p><p><strong>Common mistakes:</strong> Do not put user input in a Label and expect typing to modify it.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>Label roomLabel = new Label(&quot;Room:&quot;);
+roomLabel.setText(&quot;Room number:&quot;);</code></pre><p><strong>Outcome:</strong> The first label reads Seats:. The second ends with Room number:.</p><p><strong>What stays the same:</strong> Use labels to explain what each value means.</p></div></details><p><strong>Predict:</strong> Can the user type a new room number into roomLabel?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. A Label describes content; use an editable TextField to collect text.</p></div></details></section><section class="concept" id="p2-c2"><header class="concept-header"><p class="source-tag">P2-C2 · 10.3 · pp. 8–11</p><h2>GridPane coordinates</h2></header><p class="concept-abstract">A GridPane places controls in cells addressed by column and row. Columns increase to the right; rows increase downward. Cells grow to fit their contents, so indices are not pixel coordinates. In Problem 2 we replace the Pane with GridPane, retaining the same three-seat booking and total. Each control is added once.</p><p class="key-rule"><strong>Key rule:</strong> The order is node, column, row; the top-left cell is (0, 0).</p><details id="p2-c2-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>grid.add(seatsLabel, 0, 0);
+grid.add(seatsField, 1, 0);</code></pre><p>Columns increase to the right; rows increase downward. Cells grow to fit their contents, so indices are not pixel coordinates. In Problem 2 we replace the Pane with GridPane, retaining the same three-seat booking and total. Each control is added once.</p><p><strong>Common mistakes:</strong> Reversing row and column places controls in the wrong cell.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>grid.add(roomLabel, 0, 1);
+grid.add(roomField, 1, 1);</code></pre><p><strong>Outcome:</strong> The first pair shares row 0. The second pair shares row 1. Labels are left of their fields.</p><p><strong>What stays the same:</strong> The order is node, column, row; the top-left cell is (0, 0).</p></div></details><p><strong>Predict:</strong> Where does grid.add(roomField, 0, 2) place the field?</p><details><summary>Prediction answer</summary><div class="details-body"><p>Column 0, row 2: the first column and third row. It is not column 2.</p></div></details></section><section class="concept" id="p2-c3"><header class="concept-header"><p class="source-tag">P2-C3 · 10.3 · p. 7</p><h2>Number-to-text conversion</h2></header><p class="concept-abstract">Integer.toString converts an int value into String text. The multiplication still uses integer arithmetic. Only the result becomes display text. String concatenation is another familiar conversion route, but numeric addition and text concatenation are different operations. Changing the display text does not change the original numeric variable.</p><p class="key-rule"><strong>Key rule:</strong> Calculate with numbers, then convert the result for the field.</p><details id="p2-c3-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>int total = 3 * 10;
+totalField.setText(Integer.toString(total));</code></pre><p>The multiplication still uses integer arithmetic. Only the result becomes display text. String concatenation is another familiar conversion route, but numeric addition and text concatenation are different operations. Changing the display text does not change the original numeric variable.</p><p><strong>Common mistakes:</strong> Do not pass an int directly to setText.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>int remaining = 20 - 6;
+statusField.setText(Integer.toString(remaining));</code></pre><p><strong>Outcome:</strong> The booking field displays 30; the other field displays 14.</p><p><strong>What stays the same:</strong> Calculate with numbers, then convert the result for the field.</p></div></details><p><strong>Predict:</strong> Would totalField.setText(30) compile?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. setText expects a String. Integer.toString(30) supplies &quot;30&quot;.</p></div></details></section><section class="concept" id="p3-c1"><header class="concept-header"><p class="source-tag">P3-C1 · 10.3 · pp. 11–12; single-value constructor is a teaching addition</p><h2>Outer padding</h2></header><p class="concept-abstract">Insets describes space at the top, right, bottom, and left edges of a region. The single-number constructor uses the same value on all four sides. The four-number constructor follows top, right, bottom, left. Padding belongs to the layout region, so controls stay inset when its size changes. It does not alter the booking calculation.</p><p class="key-rule"><strong>Key rule:</strong> Apply Insets to the grid to keep content away from its edges.</p><details id="p3-c1-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>grid.setPadding(new Insets(16));</code></pre><p>The single-number constructor uses the same value on all four sides. The four-number constructor follows top, right, bottom, left. Padding belongs to the layout region, so controls stay inset when its size changes. It does not alter the booking calculation.</p><p><strong>Common mistakes:</strong> Do not confuse outer padding with the gaps between cells.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>grid.setPadding(new Insets(10, 20, 10, 20));</code></pre><p><strong>Outcome:</strong> The first grid has 16 pixels on every side. The second has 10 top/bottom and 20 right/left.</p><p><strong>What stays the same:</strong> Apply Insets to the grid to keep content away from its edges.</p></div></details><p><strong>Predict:</strong> Does new Insets(10, 20, 10, 20) create 20 pixels between columns?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. Insets sets outer padding. Use setHgap for space between columns.</p></div></details></section><section class="concept" id="p3-c2"><header class="concept-header"><p class="source-tag">P3-C2 · 10.3 · pp. 11–12</p><h2>Grid gaps</h2></header><p class="concept-abstract">Horizontal and vertical gaps separate adjacent GridPane columns and rows. Problem 3 retains the two existing rows and adds a visible price row. The total is still three seats at ten SAR each. Grid spacing makes the form easier to scan; it neither changes coordinates nor creates extra empty rows.</p><p class="key-rule"><strong>Key rule:</strong> Hgap separates columns; Vgap separates rows.</p><details id="p3-c2-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>grid.setHgap(12);
+grid.setVgap(8);</code></pre><p>Problem 3 retains the two existing rows and adds a visible price row. The total is still three seats at ten SAR each. Grid spacing makes the form easier to scan; it neither changes coordinates nor creates extra empty rows.</p><p><strong>Common mistakes:</strong> Do not add blank Labels just to simulate normal row spacing.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>grid.setHgap(0);
+grid.setVgap(16);</code></pre><p><strong>Outcome:</strong> The first layout separates both columns and rows. The second has no added column gap and 16 pixels between rows.</p><p><strong>What stays the same:</strong> Hgap separates columns; Vgap separates rows.</p></div></details><p><strong>Predict:</strong> If Vgap changes from 8 to 20, do the field values change?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. Only the spacing changes; the numeric state and displayed values remain the same.</p></div></details></section><section class="concept-extra" id="readiness"><h2>Readiness and practice</h2><p>75 minutes: setup and recall 10; Problem 1 12; Problem 2 12; Problem 3 12; individual practice 20; exit check and recap 9.</p><details><summary>Problem 1: reproduce, change, explain</summary><div class="details-body"><p>main calls launch; JavaFX calls start; the field becomes a child of the pane; the scene is attached to the stage; show displays the window.</p><p>Change the booking to 4 seats at 10 SAR. The summary should read 4 seats: 40 SAR. Removing show leaves no visible window.</p></div></details><details><summary>Problem 2: reproduce, change, explain</summary><div class="details-body"><p>Compute 3 × 10; convert 3 and 30 to text; add each label in column 0 and each field in column 1; display the grid in the scene.</p><p>Change seats to 4: the fields show 4 and 40. Move the total field to (0, 1): it shares the label’s cell and may overlap it; restore (1, 1).</p></div></details><details><summary>Problem 3: reproduce, change, explain</summary><div class="details-body"><p>Retain seats and total; add the price row; apply outer padding and internal gaps; show the same booking with a more readable layout.</p><p>Set price to 12: the price field shows 12 and the total 36. Double Vgap: only the spacing changes.</p></div></details></section><section class="concept-extra" id="sources"><h2>Sources and scope</h2><p>Supplied zyBooks Chapter 10, 28-page export dated October 25, 2026. Chapter 10 in this export is JavaFX, although the syllabus labels Chapter 10 Generics. The instructor explicitly assigned 10.1–10.4 to Monday, October 26, and 10.5–10.7 to Wednesday, October 28. Package numbers 16 and 17 are local lecture identifiers, not the original syllabus session numbers.</p><p>Sections 10.2, 10.4, and 10.6 are code-lab pages; their interactive source is absent from the export. Section 10.7 supplies only the image-clicking task, so the venue viewer is an original implementation. Read publisher activities through authorized course access.</p><p>Setup follows the supplied IntelliJ IDEA Setup document: Java project, IntelliJ build system, Liberica Full JDK 25. Images and problems in this package are original.</p><p><a href="https://openjfx.io/javadoc/25/javafx.graphics/javafx/application/Application.html">Application API</a> · <a href="https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/image/Image.html">Image API</a> · <a href="https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/image/ImageView.html">ImageView API</a> · <a href="https://docs.oracle.com/javase/specs/jls/se17/html/jls-8.html#jls-8.1.3">Java local-variable capture rule</a></p><p><a href="../docs/CONTENT_MAP.md">Content map and timing</a> · <a href="../docs/SETUP.md">Setup</a> · <a href="../examples/README.md">Run cases</a></p></section></main></div><script>const details=[...document.querySelectorAll('details')],status=document.getElementById('readingStatus');function report(){status.textContent=`${details.filter(d=>d.open).length} of ${details.length} details open; all concept summaries remain visible.`}document.getElementById('openAll').onclick=()=>{details.forEach(d=>d.open=true);report()};document.getElementById('closeAll').onclick=()=>{details.forEach(d=>d.open=false);report()};details.forEach(d=>d.addEventListener('toggle',report));function openHash(){if(!location.hash)return;let t;try{t=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(e){return}if(!t)return;if(t.tagName==='DETAILS')t.open=true;else if(t.closest('details'))t.closest('details').open=true;t.scrollIntoView()}window.addEventListener('hashchange',openHash);let saved;window.addEventListener('beforeprint',()=>{saved=details.map(d=>d.open);details.forEach(d=>d.open=true)});window.addEventListener('afterprint',()=>{details.forEach((d,i)=>d.open=saved?.[i]??false);report()});openHash();report();</script></body></html>

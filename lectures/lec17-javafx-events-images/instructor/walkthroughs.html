@@ -1,0 +1,881 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ICS 108 Lecture 17 - Instructor walkthroughs</title><link rel="icon" href="data:,"><style>
+    :root {
+      color-scheme: light;
+      --canvas: #e5e8eb;
+      --paper: #ffffff;
+      --ink: #15181b;
+      --muted: #596169;
+      --line: #c8d0d7;
+      --blue: #1769aa;
+      --blue-dark: #0d4d7f;
+      --soft-blue: #eef5fb;
+      --warm: #f7f4ed;
+      --danger: #a13b35;
+      --success: #226b42;
+      --code: #f6f8fa;
+      --console: #18222c;
+      --console-text: #edf4f8;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.48;
+    }
+
+    a { color: var(--blue-dark); text-underline-offset: 0.16em; }
+    code { font-family: var(--mono); }
+    button { font: inherit; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      top: 0.5rem;
+      left: 0.5rem;
+      padding: 0.6rem 0.85rem;
+      color: #fff;
+      background: var(--blue-dark);
+      transform: translateY(-180%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .screen-nav {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 3.1rem;
+      padding: 0.65rem max(1rem, calc((100vw - 210mm) / 2));
+      border-bottom: 1px solid #b7c0c8;
+      background: rgba(245, 247, 249, 0.97);
+      box-shadow: 0 2px 10px rgba(21, 24, 27, 0.08);
+    }
+    .screen-nav strong { margin-right: auto; color: var(--blue-dark); }
+    .screen-nav a { font-size: 0.9rem; font-weight: 650; }
+
+    main { padding: 2rem 1rem 4rem; }
+    .page {
+      position: relative;
+      width: min(210mm, 100%);
+      min-height: 297mm;
+      margin: 0 auto 2rem;
+      padding: 14mm 15mm 13mm;
+      background: var(--paper);
+      box-shadow: 0 12px 35px rgba(21, 24, 27, 0.15);
+    }
+
+    .course-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.5rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 3px solid var(--blue);
+    }
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.45rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .breadcrumb span::after { margin-left: 0.35rem; content: "/"; color: #94a0aa; }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+      font-size: clamp(1.8rem, 4vw, 2.55rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+    .subtitle { margin-bottom: 0; color: var(--muted); font-size: 1rem; }
+    .document-meta {
+      min-width: 9.5rem;
+      margin: 0;
+      padding-left: 1.25rem;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      text-align: right;
+    }
+    .document-meta strong { display: block; color: var(--blue-dark); font-size: 1rem; }
+
+    .lecture-goals {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem 1rem;
+      border: 1px solid #c4d8e8;
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+    }
+    .lecture-goals h2 {
+      margin-bottom: 0.7rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .goal {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.55rem;
+      align-items: start;
+      margin: 0;
+      color: #273039;
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+    .goal b {
+      display: grid;
+      width: 1.55rem;
+      height: 1.55rem;
+      place-items: center;
+      border: 1px solid #aac8df;
+      border-radius: 50%;
+      color: var(--blue-dark);
+      background: #fff;
+      font-size: 0.72rem;
+    }
+
+    .problem-module { margin-top: 1.15rem; }
+    .problem-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 0.85rem;
+    }
+    .problem-heading .kicker {
+      margin-bottom: 0.25rem;
+      color: var(--blue);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .problem-heading h2 {
+      margin-bottom: 0.25rem;
+      font-size: 1.45rem;
+      line-height: 1.15;
+      letter-spacing: -0.018em;
+    }
+    .problem-heading .lead { margin-bottom: 0; color: var(--muted); font-size: 0.9rem; }
+    .slide-map {
+      min-width: 10rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #b8d0e2;
+      background: var(--soft-blue);
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      text-align: right;
+    }
+    .slide-map a { display: block; font-weight: 800; }
+    .slide-map span { color: var(--muted); }
+
+    .content-block {
+      margin-top: 0.85rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--line);
+    }
+    .content-block > h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.55rem;
+      color: var(--blue-dark);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+    .content-block > h3::before {
+      width: 1.15rem;
+      height: 3px;
+      background: var(--blue);
+      content: "";
+    }
+    .content-block p:last-child { margin-bottom: 0; }
+
+    .description-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 0.65fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .problem-copy {
+      padding: 0.75rem 0.9rem;
+      border-left: 4px solid var(--blue);
+      background: var(--warm);
+      font-size: 0.9rem;
+    }
+    .problem-copy p { margin-bottom: 0.45rem; }
+    .data-line { color: var(--muted); }
+    .data-line code { color: var(--ink); font-weight: 650; }
+    .console {
+      overflow: hidden;
+      border: 1px solid #0d1720;
+      background: var(--console);
+      color: var(--console-text);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.42rem 0.7rem;
+      border-bottom: 1px solid #cfd7dd;
+      color: #34404a;
+      background: #e8edf1;
+      font-size: 0.72rem;
+      font-weight: 750;
+    }
+    .console .panel-head {
+      border-color: #344451;
+      color: #c9d6df;
+      background: #111921;
+    }
+    .console pre {
+      margin: 0;
+      padding: 0.72rem 0.8rem;
+      color: inherit;
+      font: 0.78rem/1.4 var(--mono);
+      white-space: pre-wrap;
+    }
+    .console .typed { color: #9bd3ad; font-weight: 700; }
+
+    .concept-overview {
+      display: grid;
+      grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+      gap: 0.9rem;
+      align-items: start;
+    }
+    .learning-outcome {
+      margin: 0;
+      padding: 0.75rem 0.85rem;
+      border-left: 4px solid var(--blue);
+      background: var(--soft-blue);
+      font-size: 0.87rem;
+    }
+    .learning-outcome strong {
+      display: block;
+      margin-bottom: 0.15rem;
+      color: var(--blue-dark);
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .concept-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.38rem 0.7rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .concept-links a {
+      display: flex;
+      gap: 0.45rem;
+      align-items: baseline;
+      min-height: 2rem;
+      padding: 0.38rem 0.5rem;
+      border: 1px solid #d0d8df;
+      color: #26323b;
+      background: #fff;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-decoration: none;
+    }
+    .concept-links a:hover,
+    .concept-links a:focus-visible { border-color: var(--blue); background: var(--soft-blue); }
+    .concept-links code { color: var(--blue-dark); font-size: 0.71rem; font-weight: 800; }
+
+    .section-note { margin-bottom: 0.5rem; color: var(--muted); font-size: 0.78rem; }
+    .code-workbench { overflow: hidden; border: 1px solid #adb7c0; background: var(--code); }
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.48rem 0.65rem;
+      border-bottom: 1px solid #c5ced5;
+      background: #eef1f3;
+    }
+    .code-switches { display: flex; gap: 0.3rem; }
+    .code-switch,
+    .copy-code {
+      min-height: 2rem;
+      padding: 0.35rem 0.65rem;
+      border: 1px solid #9eabb5;
+      border-radius: 3px;
+      color: #28343d;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+    .code-switch[aria-selected="true"] {
+      border-color: var(--blue-dark);
+      color: #fff;
+      background: var(--blue-dark);
+    }
+    .copy-code { margin-left: auto; color: var(--blue-dark); border-color: #8eb5d2; }
+    .code-switch:focus-visible,
+    .copy-code:focus-visible { outline: 3px solid rgba(23, 105, 170, 0.3); outline-offset: 2px; }
+    .code-version {
+      overflow-x: auto;
+      margin: 0;
+      padding: 0.9rem 1rem;
+      color: #172029;
+      background: var(--code);
+      font: 0.78rem/1.42 var(--mono);
+      tab-size: 3;
+      white-space: pre;
+    }
+    .code-version[hidden] { display: none; }
+    .copy-status {
+      min-height: 1.35rem;
+      margin: 0;
+      padding: 0.28rem 0.65rem;
+      border-top: 1px solid #d5dce2;
+      color: var(--success);
+      background: #fff;
+      font-size: 0.73rem;
+    }
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+.concept-note {
+  min-width: 0;
+  scroll-margin-top: 4.5rem;
+  padding: 1rem 1.125rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  overflow-wrap: anywhere;
+}
+.concept-note:target { outline: 3px solid rgba(23, 105, 170, 0.25); outline-offset: 2px; }
+.concept-note h4 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+  margin: 0 0 0.625rem;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+.concept-note h4 code {
+  flex-shrink: 0;
+  color: var(--blue-dark);
+  font-size: 0.75rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.concept-note p {
+  margin: 0;
+  color: #36414a;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.concept-note .ref-long { margin-top: 0.625rem; }
+.concept-note p code { color: var(--blue-dark); font-size: 0.92em; }
+.concept-note .common-mistakes {
+  margin-top: 0.875rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+.concept-note .common-mistakes strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--danger);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+    .wide-note { grid-column: 1 / -1; }
+
+    .trace-wrap { overflow-x: auto; margin-top: 0.55rem; }
+    .trace {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      line-height: 1.3;
+    }
+    .trace th,
+    .trace td { padding: 0.32rem 0.42rem; border: 1px solid #cfd7dd; text-align: left; }
+    .trace th { color: var(--blue-dark); background: var(--soft-blue); }
+    .trace .update { color: var(--success); font-weight: 750; }
+    .mistake {
+      margin-top: 0.55rem;
+      padding: 0.5rem 0.65rem;
+      border-left: 3px solid var(--danger);
+      color: #63312e;
+      background: #fbf1f0;
+      font-size: 0.76rem;
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.73rem;
+    }
+
+    @media (max-width: 760px) {
+      .screen-nav { align-items: flex-start; flex-wrap: wrap; gap: 0.5rem 1rem; }
+      .screen-nav strong { width: 100%; }
+      main { padding: 1rem 0.6rem 2rem; }
+      .page { min-height: 0; padding: 1.2rem 1rem; }
+      .course-header,
+      .problem-heading,
+      .description-grid,
+      .concept-overview { grid-template-columns: 1fr; }
+      .document-meta { padding: 0.65rem 0 0; border-top: 1px solid var(--line); border-left: 0; text-align: left; }
+      .problem-heading { align-items: start; }
+      .slide-map { text-align: left; }
+      .goal-grid,
+      .reference-grid { grid-template-columns: 1fr; }
+      .concept-links { grid-template-columns: 1fr; }
+      .wide-note { grid-column: auto; }
+      .code-toolbar { flex-wrap: wrap; }
+      .copy-code { margin-left: 0; }
+      .code-version { font-size: 0.7rem; }
+    }
+
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+      html, body { width: 210mm; margin: 0; background: #fff; }
+      body { font-size: 8pt; line-height: 1.28; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .skip-link,
+      .screen-nav,
+      .code-toolbar,
+      .copy-status { display: none !important; }
+      main { padding: 0; }
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 297mm;
+        max-height: 297mm;
+        margin: 0;
+        padding: 8mm 10mm 7mm;
+        overflow: hidden;
+        break-after: page;
+        page-break-after: always;
+        box-shadow: none;
+      }
+      .page:last-child { break-after: auto; page-break-after: auto; }
+      .course-header { gap: 5mm; padding-bottom: 2.3mm; border-bottom-width: 1mm; }
+      .course-header { grid-template-columns: minmax(0, 1fr) auto; }
+      .breadcrumb { gap: 1mm; margin-bottom: 1.2mm; font-size: 6.5pt; }
+      .breadcrumb span::after { margin-left: 1mm; }
+      h1 { margin-bottom: 0.8mm; font-size: 17pt; }
+      .subtitle { font-size: 7.8pt; }
+      .document-meta { min-width: 32mm; padding: 0 0 0 4mm; border-top: 0; border-left: 1px solid var(--line); font-size: 7pt; line-height: 1.35; text-align: right; }
+      .document-meta strong { font-size: 8pt; }
+      .lecture-goals { margin-top: 2.5mm; padding: 2.3mm 2.8mm; border-left-width: 1.2mm; }
+      .lecture-goals h2 { margin-bottom: 1.8mm; font-size: 8.5pt; }
+      .goal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.2mm; }
+      .goal { gap: 1.3mm; font-size: 6.8pt; line-height: 1.25; }
+      .goal b { width: 5mm; height: 5mm; font-size: 6pt; }
+      .problem-module { margin-top: 3mm; }
+      .page:not(.page-one) .problem-module { margin-top: 4mm; }
+      .problem-heading { grid-template-columns: minmax(0, 1fr) auto; gap: 4mm; align-items: end; margin-bottom: 2mm; }
+      .problem-heading .kicker { margin-bottom: 0.7mm; font-size: 6.3pt; }
+      .problem-heading h2 { margin-bottom: 0.7mm; font-size: 12pt; }
+      .problem-heading .lead { font-size: 7.2pt; }
+      .slide-map { min-width: 34mm; padding: 1.5mm 2mm; font-size: 6.5pt; text-align: right; }
+      .content-block { margin-top: 2mm; padding-top: 1.7mm; }
+      .content-block > h3 { gap: 1.5mm; margin-bottom: 1.4mm; font-size: 8.7pt; }
+      .content-block > h3::before { width: 4mm; height: 0.7mm; }
+      .description-grid { grid-template-columns: minmax(0, 1.3fr) minmax(42mm, 0.7fr); gap: 2.5mm; }
+      .problem-copy { padding: 1.8mm 2.2mm; border-left-width: 1mm; font-size: 7.1pt; }
+      .problem-copy p { margin-bottom: 1mm; }
+      .panel-head { padding: 1mm 1.6mm; font-size: 6.2pt; }
+      .console pre { padding: 1.7mm 2mm; font-size: 6.5pt; line-height: 1.3; }
+      .concept-overview { grid-template-columns: minmax(44mm, 0.8fr) minmax(0, 1.2fr); gap: 2.4mm; }
+      .learning-outcome { padding: 1.8mm 2.1mm; border-left-width: 1mm; font-size: 6.8pt; }
+      .learning-outcome strong { margin-bottom: 0.5mm; font-size: 6.1pt; }
+      .concept-links { gap: 1mm 1.5mm; }
+      .concept-links a { gap: 1.1mm; min-height: 0; padding: 1mm 1.2mm; font-size: 6.4pt; }
+      .concept-links code { font-size: 5.9pt; }
+      .section-note { margin-bottom: 1.2mm; font-size: 6.3pt; }
+      .code-version { padding: 2mm 2.4mm; font-size: 6.45pt; line-height: 1.23; }
+      #problem-2 .content-block { margin-top: 1.7mm; padding-top: 1.4mm; }
+      #problem-2 .code-version { padding: 1.5mm 2.2mm; font-size: 6.15pt; line-height: 1.15; }
+      #problem-2 .concept-note { padding: 1.2mm 1.5mm; }
+      #problem-2 .trace th,
+      #problem-2 .trace td { padding: 0.55mm 0.9mm; }
+      #problem-2 .mistake { margin-top: 0.7mm; padding: 0.8mm 1mm; }
+      .code-version[data-code-version="starter"] { display: none !important; }
+      .code-version[data-code-version="complete"] { display: block !important; }
+      .reference-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4mm; }
+      .concept-note { padding: 1.5mm 1.7mm; border-top-width: 0.7mm; }
+      .concept-note h4 { margin-bottom: 0.7mm; font-size: 6.8pt; }
+      .concept-note h4 code { margin-right: 0.7mm; font-size: 5.9pt; }
+      .concept-note p { font-size: 6.25pt; line-height: 1.28; }
+      .concept-note .teaching-line { margin-top: 0.7mm; }
+      .wide-note { grid-column: 1 / -1; }
+      .trace-wrap { margin-top: 1.2mm; }
+      .trace { font-size: 6pt; }
+      .trace th,
+      .trace td { padding: 0.8mm 1mm; }
+      .mistake { margin-top: 1.2mm; padding: 1.2mm 1.5mm; border-left-width: 0.8mm; font-size: 6.2pt; }
+      .page-footer { position: absolute; right: 10mm; bottom: 5mm; left: 10mm; margin: 0; padding-top: 1.5mm; font-size: 6.2pt; }
+    }
+  @media print {
+ .code-version, #problem-2 .code-version {font-size:8pt;line-height:1.25;padding:2mm 2.4mm}
+ .concept-note p {font-size:7.3pt;line-height:1.3}
+ .concept-note h4 {font-size:7.8pt}
+ .reference-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .problem-copy {font-size:8pt}.learning-outcome{font-size:7.5pt}.concept-links a{font-size:7pt}
+ .section-note{font-size:7pt}.wide-note{grid-column:1/-1}
+ }
+.problem-actions {display:flex;align-items:center;gap:1rem;margin-bottom:.7rem;}
+.copy-problem {padding:.45rem .8rem;border:1px solid var(--blue);color:var(--blue-dark);background:var(--soft-blue);font-weight:650;cursor:pointer;}
+.copy-problem:focus-visible {outline:3px solid var(--blue);outline-offset:3px;}
+.problem-copy-status {font-size:.8rem;color:var(--blue-dark);}
+.problem-copy ol {margin:.65rem 0 0;padding-left:1.25rem;}
+.problem-copy li {margin:0 0 .45rem;}
+@media print {
+ .problem-actions {display:none!important;}
+ .description-grid {grid-template-columns:minmax(0,1.8fr) minmax(38mm,.7fr);}
+ .problem-copy ol {margin:1mm 0 0;padding-left:3.8mm;}
+ .problem-copy li {margin-bottom:.8mm;}
+}
+@media print { #problem-3 .code-version {line-height:1.15;padding-top:1.5mm;padding-bottom:1.5mm;} }
+.concept-links code {white-space:nowrap;flex-shrink:0;}
+
+.token.keyword {color:#713f9b;font-weight:650;}
+.token.string {color:#226b42;}
+.token.comment {color:#596169;font-style:italic;}
+.token.number {color:#a13b35;}
+.token.type {color:#0d4d7f;}
+.syntax-key {display:flex;flex-wrap:wrap;gap:.75rem;font-size:.75rem;color:var(--muted);margin:0;padding:.5rem .9rem;border-top:1px solid var(--line);}
+@media print {.syntax-key{display:none}.concept-links{grid-template-columns:1fr 1fr}.code-version,#problem-2 .code-version,#problem-3 .code-version{font-size:8pt;line-height:1.2}.concept-note p{font-size:7.2pt;line-height:1.28}}
+@media print {.page{padding:6mm 8mm 6mm}.course-header{padding-bottom:1mm}.problem-module,.page:not(.page-one) .problem-module{margin-top:2mm}.problem-heading{margin-bottom:1mm}.content-block,#problem-2 .content-block{margin-top:1mm;padding-top:1mm}.content-block > h3{margin-bottom:.7mm}.problem-actions{display:none!important}.description-grid{gap:1mm}.problem-copy{padding:1mm 1.5mm}.concept-overview{gap:1mm}.learning-outcome{padding:1mm 1.5mm}.concept-links a{padding:.5mm 1mm}.section-note{margin-bottom:.5mm}.code-version,#problem-2 .code-version,#problem-3 .code-version{font-size:7pt;line-height:1.08;padding:1mm 1.5mm}.reference-grid{gap:.7mm}.concept-note,#problem-2 .concept-note{padding:.7mm 1mm}.concept-note h4{font-size:6.7pt;margin-bottom:.4mm}.concept-note p{font-size:6.1pt;line-height:1.15}.page-footer{bottom:3mm}}
+.student-prompt{display:grid;grid-template-columns:1.15fr 1fr;gap:16px}.student-prompt p{font-size:15px}.student-prompt pre{margin:0;padding:12px;background:var(--console);color:var(--console-text);font:12px/1.4 var(--mono);white-space:pre-wrap}.problem-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px}.problem-actions button,.code-toolbar button{padding:7px 10px;background:white;border:1px solid var(--blue);color:var(--blue-dark);cursor:pointer;font:inherit;font-size:13px}.code-version{font-size:12px;line-height:1.4}.concept-links{display:flex;flex-wrap:wrap;gap:6px}.concept-links li{list-style:none;font-size:13px}.learning-outcome{font-size:14px;padding:8px 10px}.concept-overview{display:block}.page-footer{position:static}.source-line{display:block;white-space:pre}.code-version code{display:block}.code-version .source-line{min-height:1.4em}.input-note{font-size:12px;color:var(--muted)}.goals-text{font-size:14px;margin:0}.token.keyword{color:#0d4d7f;font-weight:650}.token.string{color:#226b42}.token.number{color:#a13b35}.token.comment{color:#596169}
+@media(max-width:760px){.student-prompt{grid-template-columns:1fr}.page{padding:22px 16px}.course-header{display:block}.document-meta{display:none}.problem-heading{display:block}.slide-map{text-align:left;margin-top:8px}pre{max-width:100%;overflow:auto}.concept-note{overflow-wrap:anywhere}}
+@media print{.page{padding:8mm 10mm;overflow:visible;max-height:none;height:297mm}.course-header h1{font-size:17pt}.problem-actions,.code-toolbar,[role=status]{display:none!important}.student-prompt{grid-template-columns:1.25fr 1fr;gap:3mm}.student-prompt p{font-size:9pt;line-height:1.25;margin:0}.student-prompt pre{font-size:8.5pt;line-height:1.2;padding:2mm}.input-note{display:none}.goals-text{font-size:8.5pt;line-height:1.2}.lecture-goals{padding:2mm;margin-top:2mm}.problem-module{margin-top:2mm}.problem-heading{margin-bottom:1mm}.content-block{margin-top:1mm;padding-top:.5mm}.content-block h3{font-size:9pt;margin-bottom:1mm}.concept-overview{display:block}.learning-outcome{font-size:8.5pt;padding:1mm 2mm}.learning-outcome strong{display:inline;margin-right:2mm;font-size:8pt}.concept-links{margin-top:1mm;margin-bottom:0;gap:1mm 3mm}.concept-links li{font-size:8pt}.section-note{font-size:7.5pt;margin:1mm 0}.code-version,#problem-2 .code-version,#problem-3 .code-version{font-size:9pt;line-height:1.13;padding:1.5mm}.code-version code{column-count:2;column-gap:5mm;column-rule:1px solid #c8d0d7;white-space:normal}.code-version .source-line{min-height:0;white-space:pre-wrap;overflow-wrap:anywhere;break-inside:avoid;line-height:1.13}.reference-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm}.concept-note,#problem-2 .concept-note{padding:1mm 1.5mm;margin:0;border:0;border-top:1px solid var(--blue);break-inside:avoid}.concept-note h4{font-size:8pt;margin:0}.concept-note h4 code{font-size:7.5pt}.concept-note p{font-size:8pt;line-height:1.2}.page-footer{position:absolute;bottom:5mm;left:10mm;right:10mm;margin:0;padding-top:1mm;font-size:7.5pt}.practice-cue{font-size:8pt;margin:1.5mm 0 0}.panel-head{font-size:7.5pt}.print-trace{font-size:8pt;margin:1mm 0}.problem-heading h2{font-size:12pt}.ref-long{display:none}}
+@media (max-width: 760px) {
+  .concept-note { padding: 1rem; }
+  .concept-note h4 { flex-wrap: wrap; gap: 0.25rem 0.625rem; }
+}
+@media print {
+  .reference-grid { margin-top: 1mm; }
+  .concept-note h4 { gap: 1.5mm; margin-bottom: 1mm; }
+  .concept-note p { font-size: 8pt; line-height: 1.25; }
+  .concept-note .common-mistakes { margin-top: 1.5mm; padding-top: 1mm; }
+  .concept-note .common-mistakes strong { margin-bottom: 0.5mm; font-size: 7.5pt; }
+}
+.execution-trace {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+.execution-trace h4 {
+  margin: 0 0 0.875rem;
+  color: var(--blue-dark);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+.trace-steps {
+  margin: 0;
+  padding-left: 1.75rem;
+}
+.trace-steps li {
+  padding-left: 0.375rem;
+  margin-bottom: 1.125rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.trace-steps li::marker { color: var(--blue-dark); font-weight: 700; }
+.trace-steps li > strong { display: block; margin-bottom: 0.375rem; }
+.trace-steps p { margin: 0 0 0.5rem; }
+.execution-trace code { color: var(--blue-dark); font-size: 0.92em; overflow-wrap: anywhere; }
+.trace-caption { display: block; margin-top: 0.5rem; color: var(--muted); font-size: 0.75rem; font-weight: 650; }
+.trace-output {
+  margin: 0.25rem 0 0;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--line);
+  background: var(--code);
+  color: var(--ink);
+  font: 0.8125rem/1.5 var(--mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.execution-trace .trace-takeaway {
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+@media print {
+  .page { height: auto; min-height: 297mm; max-height: none; }
+  .page-footer { position: static; margin-top: 3mm; }
+  .execution-trace { margin-top: 3mm; padding-top: 2mm; }
+  .execution-trace h4 { font-size: 9pt; margin-bottom: 2mm; }
+  .trace-steps { padding-left: 5mm; }
+  .trace-steps li { break-inside: avoid; font-size: 8pt; line-height: 1.3; padding-left: 1mm; margin-bottom: 2mm; }
+  .trace-steps li > strong { margin-bottom: 1mm; }
+  .trace-steps p { margin-bottom: 1mm; }
+  .trace-caption { font-size: 7pt; margin-top: 1mm; }
+  .trace-output { font-size: 8pt; line-height: 1.3; margin-top: 0.5mm; padding: 1.5mm 2mm; }
+  .execution-trace .trace-takeaway { font-size: 8pt; line-height: 1.3; padding-top: 2mm; }
+}
+
+@media print { .execution-trace {margin-top:1.5mm;padding-top:1mm} .trace-steps {display:block; padding-left:5mm} .trace-steps li {margin:0 0 1mm;padding:0;break-inside:avoid} .trace-steps li::before {display:none} .trace-steps p {font-size:8pt;line-height:1.2;margin:0} .trace-steps strong {font-size:8pt} .execution-trace h4 {margin-bottom:1mm} .execution-trace .trace-takeaway {padding-top:1mm} .reference-grid{gap:1.5mm} .concept-note .ref-long {display:none} .concept-note p{margin-bottom:1mm} .code-version code{column-count:2} }
+@media print { .page{height:297mm;min-height:297mm;break-inside:avoid} .page-footer{position:absolute;bottom:5mm;margin:0} .trace-steps li > strong{display:inline;margin:0 .25em 0 0} .trace-steps li > p{display:inline} .concept-links a{font-size:8pt} }
+@media print { #problem-3 .code-version{line-height:1.05} #problem-3 .source-line{line-height:1.05} #problem-3 .concept-note p{line-height:1.1} #problem-3 .student-prompt pre{line-height:1.05} #problem-3 .execution-trace{margin-top:1mm} #problem-3 .trace-steps li{margin-bottom:.5mm} }
+</style>
+
+<link rel="stylesheet" href="problem-presentation.css"><style>@media print{.page{height:297mm;min-height:297mm;padding:8mm 10mm}.page-footer{position:absolute;bottom:5mm}.code-version,#problem-2 .code-version,#problem-3 .code-version{font-size:9pt;line-height:1.13}.code-version .source-line,#problem-3 .source-line{line-height:1.13}.concept-note p,#problem-3 .concept-note p{font-size:8pt;line-height:1.2}.practice-cue,.print-trace{font-size:8pt;line-height:1.2}.ref-long{display:none}.student-prompt pre,#problem-3 .student-prompt pre{font-size:8pt;line-height:1.15}.student-prompt p{font-size:8.5pt}.page-footer{font-size:7pt}.reference-grid{gap:1mm}.concept-note .common-mistakes{margin-top:1mm;padding-top:0}.concept-note h4{margin-bottom:.4mm}.content-block{margin-top:1.5mm}}</style><style>.print-mistake{display:none}@media print{.common-mistakes{display:none}.print-mistake{display:block}.concept-note p{margin-bottom:.5mm}.code-version .source-line{white-space:pre;overflow-wrap:normal}.concept-note h4{font-size:7.8pt}}</style><style>@media print{.code-version .source-line{white-space:pre-wrap;overflow-wrap:anywhere}#problem-3 .student-prompt pre{font-size:8pt;line-height:1.05}#problem-3 .code-version{line-height:1.08}#problem-3 .source-line{line-height:1.08}#problem-3 .concept-note p{line-height:1.1}#problem-3 .practice-cue{margin-top:1mm}}</style><style>@media print{.page{padding-top:6mm;padding-bottom:6mm}.page-footer{bottom:3mm}}</style><style>@media print {
+.reference-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:2mm}
+.code-toolbar,.panel-head,.section-note {display:none!important}
+.concept-note h4 {line-height:1.15}
+.concept-note p {margin-top:.5mm;line-height:1.15}
+.print-trace,.practice-cue {line-height:1.15;margin-top:1mm}
+.code-workbench {margin-top:1mm}
+.code-version,#problem-2 .code-version,#problem-3 .code-version {font-size:9pt;line-height:1.05}
+.code-version .source-line,#problem-3 .source-line {line-height:1.05}
+}</style></head><body><nav class="screen-nav"><strong>Lecture 17 · Instructor walkthroughs</strong><a href="../slides/index.html">Supporting slides</a><a href="concept-refresher.html">Concept refresher</a><a href="../student-problems.md">Student problems</a></nav><main><article class="page" id="problem-1"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 17</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">JavaFX events, validation, and images · Sections 10.5–10.7</p></div><p class="document-meta"><strong>75-minute session</strong>Wednesday, October 28, 2026<br>Page 1 of 3</p></header><section class="lecture-goals"><h2>What will students learn in this lecture?</h2><p class="goals-text">Respond to button actions, parse and validate input, recover through alerts, and cycle local images without changing booking state.</p></section><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 1 · 14 minutes</p><h2 data-problem-title>Problem 1: Calculate from typed seats</h2></div><div class="slide-map"><a href="../slides/index.html#slide-3">Supporting slides 3–6</a><span>IDE checkpoint: slide 6</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button data-copy-problem="1">Copy problem</button><button data-present-problem="1">Present problem</button><span data-problem-status role="status" aria-live="polite"></span></div><div class="student-prompt" data-student-prompt><div><p>Extend Monday’s final CampusBooking form. Allow the seat count to be edited and add a Calculate button. Each click must update the non-editable total using the current count at 10 SAR per seat. Keep the price row, spacing, and title. For this first version, assume whole-number inputs from 1 to 4.</p></div><pre aria-label="Input and expected output">Initial fields: seats 3, total 30, price 10
+Enter 4, click Calculate: total 40
+Enter 2, click Calculate: total 20</pre></div><pre hidden data-problem-payload>Problem 1: Calculate from typed seats
+
+Extend Monday’s final CampusBooking form. Allow the seat count to be edited and add a Calculate button. Each click must update the non-editable total using the current count at 10 SAR per seat. Keep the price row, spacing, and title. For this first version, assume whole-number inputs from 1 to 4.
+
+Initial fields: seats 3, total 30, price 10
+Enter 4, click Calculate: total 40
+Enter 2, click Calculate: total 20
+</pre></section><section class="content-block"><h3>What new concepts does it have?</h3><p class="learning-outcome"><strong>Students will learn</strong> Read current input and recalculate a result when a button fires an action.</p><ul class="concept-links"><li><a href="#p1-c1">P1-C1 · Reading editable text</a></li><li><a href="#p1-c2">P1-C2 · Button action handler</a></li><li><a href="#p1-c3">P1-C3 · Parsing an integer</a></li></ul></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Run this snapshot as <code>CampusBooking.java</code> with Liberica Full JDK 25. <a href="../docs/SETUP.md">Setup and file placement</a>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusBooking.java</span><span>Complete</span></div><div class="code-toolbar"><button data-copy-code>Copy complete code</button><span role="status" aria-live="polite"></span></div><pre class="code-version" data-code-version="complete"><code><span class="source-line"><span class="token keyword">import</span> javafx.event.*;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.control.*;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.application.Application;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.stage.Stage;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.Scene;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.layout.GridPane;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.geometry.Insets;
+</span><span class="source-line"><span class="token keyword">public</span> <span class="token keyword">class</span> CampusBooking <span class="token keyword">extends</span> Application {
+</span><span class="source-line">  <span class="token keyword">private</span> TextField input = <span class="token keyword">new</span> TextField(<span class="token string">&quot;3&quot;</span>);
+</span><span class="source-line">  <span class="token keyword">private</span> TextField output = <span class="token keyword">new</span> TextField(<span class="token string">&quot;30&quot;</span>);
+</span><span class="source-line">  @Override
+</span><span class="source-line">  <span class="token keyword">public</span> <span class="token keyword">void</span> start(Stage stage) {
+</span><span class="source-line">    TextField price = <span class="token keyword">new</span> TextField(<span class="token string">&quot;10&quot;</span>);
+</span><span class="source-line">    output.setEditable(<span class="token keyword">false</span>);
+</span><span class="source-line">    price.setEditable(<span class="token keyword">false</span>);
+</span><span class="source-line">    GridPane grid = <span class="token keyword">new</span> GridPane();
+</span><span class="source-line">    grid.setPadding(<span class="token keyword">new</span> Insets(<span class="token number">16</span>));
+</span><span class="source-line">    grid.setHgap(<span class="token number">12</span>);
+</span><span class="source-line">    grid.setVgap(<span class="token number">8</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Seats:&quot;</span>), <span class="token number">0</span>, <span class="token number">0</span>);
+</span><span class="source-line">    grid.add(input, <span class="token number">1</span>, <span class="token number">0</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Total (SAR):&quot;</span>), <span class="token number">0</span>, <span class="token number">1</span>);
+</span><span class="source-line">    grid.add(output, <span class="token number">1</span>, <span class="token number">1</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Price per seat (SAR):&quot;</span>), <span class="token number">0</span>, <span class="token number">2</span>);
+</span><span class="source-line">    grid.add(price, <span class="token number">1</span>, <span class="token number">2</span>);
+</span><span class="source-line">    Button calc = <span class="token keyword">new</span> Button(<span class="token string">&quot;Calculate&quot;</span>);
+</span><span class="source-line">    grid.add(calc, <span class="token number">1</span>, <span class="token number">3</span>);
+</span><span class="source-line">    <span class="token comment">// P1-C2: Handle each button action.</span>
+</span><span class="source-line">    calc.setOnAction(<span class="token keyword">new</span> EventHandler&lt;ActionEvent&gt;() {
+</span><span class="source-line">      @Override <span class="token keyword">public</span> <span class="token keyword">void</span> handle(ActionEvent event) {
+</span><span class="source-line">        updateTotal();
+</span><span class="source-line">      }
+</span><span class="source-line">    });
+</span><span class="source-line">    stage.setScene(<span class="token keyword">new</span> Scene(grid));
+</span><span class="source-line">    stage.setTitle(<span class="token string">&quot;Campus booking&quot;</span>);
+</span><span class="source-line">    stage.show();
+</span><span class="source-line">  }
+</span><span class="source-line">  <span class="token keyword">private</span> <span class="token keyword">void</span> updateTotal() {
+</span><span class="source-line">    <span class="token comment">// P1-C1: Read current text.</span>
+</span><span class="source-line">    String text = input.getText();
+</span><span class="source-line">    <span class="token comment">// P1-C3: Parse the seat count.</span>
+</span><span class="source-line">    <span class="token keyword">int</span> seats = Integer.parseInt(text);
+</span><span class="source-line">    output.setText(Integer.toString(seats * <span class="token number">10</span>));
+</span><span class="source-line">  }
+</span><span class="source-line">  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(String[] args) { launch(args); }
+</span><span class="source-line">}
+</span></code></pre></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p1-c1"><h4><code>P1-C1</code> Reading editable text</h4><p>Read the input inside the handler so each click uses the latest text.</p><p class="ref-long">Monday’s seats display becomes editable; the price and total fields remain output-only. The application waits for actions after start finishes. The same input field survives between clicks, while a local text variable is created for each handler execution.</p><p class="common-mistakes"><strong>Common mistakes:</strong> Do not calculate only in start and expect later edits to recalculate automatically.</p><p class="print-mistake"><strong>Common mistake:</strong> Do not calculate only in start and expect later edits to recalculate automatically.</p></article><article class="concept-note" id="p1-c2"><h4><code>P1-C2</code> Button action handler</h4><p>setOnAction registers the handler; handle runs later for each action.</p><p class="ref-long">The anonymous class creates an EventHandler object without declaring a separate class name. EventHandler&lt;ActionEvent&gt; means this handler accepts action events; handle is the required method. The outer }); closes the anonymous class, the method call, and its statement. Our examples use fields for shared controls and the updateTotal helper to keep the event template short.</p><p class="common-mistakes"><strong>Common mistakes:</strong> Do not confuse handler registration with handler execution.</p><p class="print-mistake"><strong>Common mistake:</strong> Do not confuse handler registration with handler execution.</p></article><article class="concept-note" id="p1-c3"><h4><code>P1-C3</code> Parsing an integer</h4><p>getText reads a String; parseInt performs the numeric conversion.</p><p class="ref-long">Problem 1 deliberately assumes integer inputs from 1 to 4; Problem 2 adds recovery. Empty text, nonnumeric text, and values outside the int range fail parsing. A parseable value such as 0 still needs a booking rule. trim removes surrounding whitespace when we introduce validation.</p><p class="common-mistakes"><strong>Common mistakes:</strong> Parsing successfully does not prove that a seat count is allowed.</p><p class="print-mistake"><strong>Common mistake:</strong> Parsing successfully does not prove that a seat count is allowed.</p></article></div><p class="print-trace"><strong>Trace:</strong> start builds the form and registers the handler, then returns. A click runs handle; updateTotal reads the current text, parses the count, multiplies by 10, and updates the result.</p><p class="practice-cue"><strong>Practice and answer:</strong> Try 1 then 3 with a click after each: totals 10 then 30. Typing without clicking leaves the previous total. Malformed input is outside this first version’s contract.</p></section></section><footer class="page-footer"><span>ICS 108 · Lecture 17 · Problem 1</span><span>Supporting slides 3–6 · Page 1 of 3</span></footer></article><article class="page" id="problem-2"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 17</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">JavaFX events, validation, and images · Sections 10.5–10.7</p></div><p class="document-meta"><strong>75-minute session</strong>Wednesday, October 28, 2026<br>Page 2 of 3</p></header><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 2 · 16 minutes</p><h2 data-problem-title>Problem 2: Reject invalid booking input</h2></div><div class="slide-map"><a href="../slides/index.html#slide-7">Supporting slides 7–10</a><span>IDE checkpoint: slide 10</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button data-copy-problem="2">Copy problem</button><button data-present-problem="2">Present problem</button><span data-problem-status role="status" aria-live="polite"></span></div><div class="student-prompt" data-student-prompt><div><p>Extend Problem 1 to accept only 1 to 4 seats and allow surrounding spaces. For non-integer text show an error dialog saying Enter a whole number. For an integer outside the range show Choose 1 to 4 seats. Leave the total blank after invalid input. After dismissal, let the user correct the input and calculate again.</p></div><pre aria-label="Input and expected output">Enter two, click: Enter a whole number.
+Enter 0, click: Choose 1 to 4 seats.
+Enter  2 , click: total 20
+Error dialog title: Invalid booking</pre></div><pre hidden data-problem-payload>Problem 2: Reject invalid booking input
+
+Extend Problem 1 to accept only 1 to 4 seats and allow surrounding spaces. For non-integer text show an error dialog saying Enter a whole number. For an integer outside the range show Choose 1 to 4 seats. Leave the total blank after invalid input. After dismissal, let the user correct the input and calculate again.
+
+Enter two, click: Enter a whole number.
+Enter 0, click: Choose 1 to 4 seats.
+Enter  2 , click: total 20
+Error dialog title: Invalid booking
+</pre></section><section class="content-block"><h3>What new concepts does it have?</h3><p class="learning-outcome"><strong>Students will learn</strong> Separate numeric format errors from range errors and allow correction after an alert.</p><ul class="concept-links"><li><a href="#p2-c1">P2-C1 · Validation order</a></li><li><a href="#p2-c2">P2-C2 · Error alerts</a></li><li><a href="#p2-c3">P2-C3 · Recovery inside an event</a></li></ul></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Run this snapshot as <code>CampusBooking.java</code> with Liberica Full JDK 25. <a href="../docs/SETUP.md">Setup and file placement</a>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusBooking.java</span><span>Complete</span></div><div class="code-toolbar"><button data-copy-code>Copy complete code</button><span role="status" aria-live="polite"></span></div><pre class="code-version" data-code-version="complete"><code><span class="source-line"><span class="token keyword">import</span> javafx.event.*;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.control.*;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.application.Application;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.stage.Stage;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.Scene;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.layout.GridPane;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.geometry.Insets;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.control.Alert.AlertType;
+</span><span class="source-line"><span class="token keyword">public</span> <span class="token keyword">class</span> CampusBooking <span class="token keyword">extends</span> Application {
+</span><span class="source-line">  <span class="token keyword">private</span> TextField input = <span class="token keyword">new</span> TextField(<span class="token string">&quot;3&quot;</span>);
+</span><span class="source-line">  <span class="token keyword">private</span> TextField output = <span class="token keyword">new</span> TextField(<span class="token string">&quot;30&quot;</span>);
+</span><span class="source-line">  @Override
+</span><span class="source-line">  <span class="token keyword">public</span> <span class="token keyword">void</span> start(Stage stage) {
+</span><span class="source-line">    TextField price = <span class="token keyword">new</span> TextField(<span class="token string">&quot;10&quot;</span>);
+</span><span class="source-line">    output.setEditable(<span class="token keyword">false</span>);
+</span><span class="source-line">    price.setEditable(<span class="token keyword">false</span>);
+</span><span class="source-line">    GridPane grid = <span class="token keyword">new</span> GridPane();
+</span><span class="source-line">    grid.setPadding(<span class="token keyword">new</span> Insets(<span class="token number">16</span>));
+</span><span class="source-line">    grid.setHgap(<span class="token number">12</span>);
+</span><span class="source-line">    grid.setVgap(<span class="token number">8</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Seats:&quot;</span>), <span class="token number">0</span>, <span class="token number">0</span>);
+</span><span class="source-line">    grid.add(input, <span class="token number">1</span>, <span class="token number">0</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Total (SAR):&quot;</span>), <span class="token number">0</span>, <span class="token number">1</span>);
+</span><span class="source-line">    grid.add(output, <span class="token number">1</span>, <span class="token number">1</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Price per seat (SAR):&quot;</span>), <span class="token number">0</span>, <span class="token number">2</span>);
+</span><span class="source-line">    grid.add(price, <span class="token number">1</span>, <span class="token number">2</span>);
+</span><span class="source-line">    Button calc = <span class="token keyword">new</span> Button(<span class="token string">&quot;Calculate&quot;</span>);
+</span><span class="source-line">    grid.add(calc, <span class="token number">1</span>, <span class="token number">3</span>);
+</span><span class="source-line">    calc.setOnAction(<span class="token keyword">new</span> EventHandler&lt;ActionEvent&gt;() {
+</span><span class="source-line">      @Override <span class="token keyword">public</span> <span class="token keyword">void</span> handle(ActionEvent event) {
+</span><span class="source-line">        updateTotal();
+</span><span class="source-line">      }
+</span><span class="source-line">    });
+</span><span class="source-line">    stage.setScene(<span class="token keyword">new</span> Scene(grid));
+</span><span class="source-line">    stage.setTitle(<span class="token string">&quot;Campus booking&quot;</span>);
+</span><span class="source-line">    stage.show();
+</span><span class="source-line">  }
+</span><span class="source-line">  <span class="token keyword">private</span> <span class="token keyword">void</span> updateTotal() {
+</span><span class="source-line">    output.clear();
+</span><span class="source-line">    <span class="token keyword">try</span> {
+</span><span class="source-line">      <span class="token comment">// P2-C1: Parse, then check 1 to 4.</span>
+</span><span class="source-line">      <span class="token keyword">int</span> seats = Integer.parseInt(input.getText().trim());
+</span><span class="source-line">      <span class="token keyword">if</span> (seats &lt; <span class="token number">1</span> || seats &gt; <span class="token number">4</span>) {
+</span><span class="source-line">        showError(<span class="token string">&quot;Choose 1 to 4 seats.&quot;</span>);
+</span><span class="source-line">        <span class="token keyword">return</span>;
+</span><span class="source-line">      }
+</span><span class="source-line">      output.setText(Integer.toString(seats * <span class="token number">10</span>));
+</span><span class="source-line">    } <span class="token keyword">catch</span> (NumberFormatException e) {
+</span><span class="source-line">      <span class="token comment">// P2-C3: Allow a later retry.</span>
+</span><span class="source-line">      showError(<span class="token string">&quot;Enter a whole number.&quot;</span>);
+</span><span class="source-line">    }
+</span><span class="source-line">  }
+</span><span class="source-line">  <span class="token keyword">private</span> <span class="token keyword">void</span> showError(String message) {
+</span><span class="source-line">    <span class="token comment">// P2-C2: Show error feedback.</span>
+</span><span class="source-line">    Alert alert = <span class="token keyword">new</span> Alert(AlertType.ERROR, message);
+</span><span class="source-line">    alert.setTitle(<span class="token string">&quot;Invalid booking&quot;</span>);
+</span><span class="source-line">    alert.setHeaderText(<span class="token keyword">null</span>);
+</span><span class="source-line">    alert.showAndWait();
+</span><span class="source-line">  }
+</span><span class="source-line">  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(String[] args) { launch(args); }
+</span><span class="source-line">}
+</span></code></pre></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p2-c1"><h4><code>P2-C1</code> Validation order</h4><p>Parse first, then check the booking range before updating the total.</p><p class="ref-long">Trim first, parse inside try, test the range, then calculate. Clearing the old total before validation prevents an old successful total from looking like the result of the invalid input. Return exits only this helper call; the application remains open for correction.</p><p class="common-mistakes"><strong>Common mistakes:</strong> Do not use an old total as the apparent result for invalid new input.</p><p class="print-mistake"><strong>Common mistake:</strong> Do not use an old total as the apparent result for invalid new input.</p></article><article class="concept-note" id="p2-c2"><h4><code>P2-C2</code> Error alerts</h4><p>Use AlertType.ERROR for invalid input and showAndWait to display it.</p><p class="ref-long">The showError helper sets the title and removes the default header so the student sees one clear message. ERROR, INFORMATION, WARNING, CONFIRMATION, and NONE communicate different purposes. A confirmation decision requires inspecting the returned button choice; that is outside these problems. showAndWait pauses this call until dismissal while JavaFX continues processing UI events.</p><p class="common-mistakes"><strong>Common mistakes:</strong> An alert is feedback; it does not itself prevent invalid calculations.</p><p class="print-mistake"><strong>Common mistake:</strong> An alert is feedback; it does not itself prevent invalid calculations.</p></article><article class="concept-note" id="p2-c3"><h4><code>P2-C3</code> Recovery inside an event</h4><p>Catch NumberFormatException and finish this action without closing the window.</p><p class="ref-long">The exception is caused by the current text, not by the button itself. Keep the protected operation inside try. The catch shows a specific message and leaves the result blank. Replacing the input and clicking again is the GUI equivalent of retrying the console input loop.</p><p class="common-mistakes"><strong>Common mistakes:</strong> Do not catch every Exception when only integer-format failure is expected.</p><p class="print-mistake"><strong>Common mistake:</strong> Do not catch every Exception when only integer-format failure is expected.</p></article></div><p class="print-trace"><strong>Trace:</strong> Clear the old result; trim and parse; reject an out-of-range value before multiplying; show the relevant alert; return to the same form. The next click starts a fresh attempt.</p><p class="practice-cue"><strong>Practice and answer:</strong> Test empty text, 3.5, and 2147483648: format alert. Test -1 and 5: range alert. Test 1 and 4: totals 10 and 40. Dismiss an error, enter 3, click: total 30.</p></section></section><footer class="page-footer"><span>ICS 108 · Lecture 17 · Problem 2</span><span>Supporting slides 7–10 · Page 2 of 3</span></footer></article><article class="page" id="problem-3"><header class="course-header"><div><nav class="breadcrumb" aria-label="Document location"><span>ICS 108</span><span>Lecture 17</span><strong>Instructor notes</strong></nav><h1>Problem-solving walkthroughs</h1><p class="subtitle">JavaFX events, validation, and images · Sections 10.5–10.7</p></div><p class="document-meta"><strong>75-minute session</strong>Wednesday, October 28, 2026<br>Page 3 of 3</p></header><section class="problem-module"><header class="problem-heading"><div><p class="kicker">Problem 3 · 16 minutes</p><h2 data-problem-title>Problem 3: Browse venue images</h2></div><div class="slide-map"><a href="../slides/index.html#slide-11">Supporting slides 11–14</a><span>IDE checkpoint: slide 14</span></div></header><section class="content-block"><h3>Problem description</h3><div class="problem-actions"><button data-copy-problem="3">Copy problem</button><button data-present-problem="3">Present problem</button><span data-problem-status role="status" aria-live="polite"></span></div><div class="student-prompt" data-student-prompt><div><p>Extend Problem 2 with the supplied venue-a.png and venue-b.png views below the form. Initially show venue A, 240 pixels wide without distortion. Clicking the image must alternate A, B, A repeatedly. Preserve all calculation and validation behavior; changing the view must not change the booking values.</p></div><pre aria-label="Input and expected output">Startup: venue A; seats 3; total 30
+Click image: venue B; total still 30
+Click image again: venue A; total still 30
+Enter 4, Calculate: total 40; view unchanged</pre></div><pre hidden data-problem-payload>Problem 3: Browse venue images
+
+Extend Problem 2 with the supplied venue-a.png and venue-b.png views below the form. Initially show venue A, 240 pixels wide without distortion. Clicking the image must alternate A, B, A repeatedly. Preserve all calculation and validation behavior; changing the view must not change the booking values.
+
+Startup: venue A; seats 3; total 30
+Click image: venue B; total still 30
+Click image again: venue A; total still 30
+Enter 4, Calculate: total 40; view unchanged
+</pre></section><section class="content-block"><h3>What new concepts does it have?</h3><p class="learning-outcome"><strong>Students will learn</strong> Display local image data, preserve its proportions, and cycle images in response to clicks.</p><ul class="concept-links"><li><a href="#p3-c1">P3-C1 · Image and ImageView</a></li><li><a href="#p3-c2">P3-C2 · Image display size</a></li><li><a href="#p3-c3">P3-C3 · Mouse clicks and persistent state</a></li></ul></section><section class="content-block"><h3>Complete code</h3><p class="section-note">Run this snapshot as <code>CampusBooking.java</code> with Liberica Full JDK 25. <a href="../docs/SETUP.md">Setup and file placement</a>.</p><div class="code-workbench" data-code-workbench><div class="panel-head"><span>CampusBooking.java</span><span>Complete</span></div><div class="code-toolbar"><button data-copy-code>Copy complete code</button><span role="status" aria-live="polite"></span></div><pre class="code-version" data-code-version="complete"><code><span class="source-line"><span class="token keyword">import</span> javafx.scene.image.*;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.event.*;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.control.*;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.application.Application;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.stage.Stage;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.Scene;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.layout.GridPane;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.geometry.Insets;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.control.Alert.AlertType;
+</span><span class="source-line"><span class="token keyword">import</span> javafx.scene.input.MouseEvent;
+</span><span class="source-line"><span class="token keyword">public</span> <span class="token keyword">class</span> CampusBooking <span class="token keyword">extends</span> Application {
+</span><span class="source-line">  <span class="token keyword">private</span> TextField input = <span class="token keyword">new</span> TextField(<span class="token string">&quot;3&quot;</span>);
+</span><span class="source-line">  <span class="token keyword">private</span> TextField output = <span class="token keyword">new</span> TextField(<span class="token string">&quot;30&quot;</span>);
+</span><span class="source-line">  <span class="token keyword">private</span> <span class="token keyword">int</span> index = <span class="token number">0</span>;
+</span><span class="source-line">  <span class="token keyword">private</span> Image[] images;
+</span><span class="source-line">  <span class="token keyword">private</span> ImageView view;
+</span><span class="source-line">  @Override
+</span><span class="source-line">  <span class="token keyword">public</span> <span class="token keyword">void</span> start(Stage stage) {
+</span><span class="source-line">    TextField price = <span class="token keyword">new</span> TextField(<span class="token string">&quot;10&quot;</span>);
+</span><span class="source-line">    output.setEditable(<span class="token keyword">false</span>);
+</span><span class="source-line">    price.setEditable(<span class="token keyword">false</span>);
+</span><span class="source-line">    GridPane grid = <span class="token keyword">new</span> GridPane();
+</span><span class="source-line">    grid.setPadding(<span class="token keyword">new</span> Insets(<span class="token number">16</span>));
+</span><span class="source-line">    grid.setHgap(<span class="token number">12</span>);
+</span><span class="source-line">    grid.setVgap(<span class="token number">8</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Seats:&quot;</span>), <span class="token number">0</span>, <span class="token number">0</span>);
+</span><span class="source-line">    grid.add(input, <span class="token number">1</span>, <span class="token number">0</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Total (SAR):&quot;</span>), <span class="token number">0</span>, <span class="token number">1</span>);
+</span><span class="source-line">    grid.add(output, <span class="token number">1</span>, <span class="token number">1</span>);
+</span><span class="source-line">    grid.add(<span class="token keyword">new</span> Label(<span class="token string">&quot;Price per seat (SAR):&quot;</span>), <span class="token number">0</span>, <span class="token number">2</span>);
+</span><span class="source-line">    grid.add(price, <span class="token number">1</span>, <span class="token number">2</span>);
+</span><span class="source-line">    Button calc = <span class="token keyword">new</span> Button(<span class="token string">&quot;Calculate&quot;</span>);
+</span><span class="source-line">    grid.add(calc, <span class="token number">1</span>, <span class="token number">3</span>);
+</span><span class="source-line">    calc.setOnAction(<span class="token keyword">new</span> EventHandler&lt;ActionEvent&gt;() {
+</span><span class="source-line">      @Override <span class="token keyword">public</span> <span class="token keyword">void</span> handle(ActionEvent event) {
+</span><span class="source-line">        updateTotal();
+</span><span class="source-line">      }
+</span><span class="source-line">    });
+</span><span class="source-line">    <span class="token comment">// P3-C1: Load and display images.</span>
+</span><span class="source-line">    images = <span class="token keyword">new</span> Image[] {
+</span><span class="source-line">      <span class="token keyword">new</span> Image(<span class="token string">&quot;file:venue-a.png&quot;</span>),
+</span><span class="source-line">      <span class="token keyword">new</span> Image(<span class="token string">&quot;file:venue-b.png&quot;</span>)
+</span><span class="source-line">    };
+</span><span class="source-line">    view = <span class="token keyword">new</span> ImageView(images[<span class="token number">0</span>]);
+</span><span class="source-line">    <span class="token comment">// P3-C2: Preserve proportions.</span>
+</span><span class="source-line">    view.setFitWidth(<span class="token number">240</span>);
+</span><span class="source-line">    view.setPreserveRatio(<span class="token keyword">true</span>);
+</span><span class="source-line">    grid.add(view, <span class="token number">1</span>, <span class="token number">4</span>);
+</span><span class="source-line">    <span class="token comment">// P3-C3: Remember the image index.</span>
+</span><span class="source-line">    view.setOnMouseClicked(<span class="token keyword">new</span> EventHandler&lt;MouseEvent&gt;() {
+</span><span class="source-line">      @Override <span class="token keyword">public</span> <span class="token keyword">void</span> handle(MouseEvent event) {
+</span><span class="source-line">        index = (index + <span class="token number">1</span>) % images.length;
+</span><span class="source-line">        view.setImage(images[index]);
+</span><span class="source-line">      }
+</span><span class="source-line">    });
+</span><span class="source-line">    stage.setScene(<span class="token keyword">new</span> Scene(grid));
+</span><span class="source-line">    stage.setTitle(<span class="token string">&quot;Campus booking&quot;</span>);
+</span><span class="source-line">    stage.show();
+</span><span class="source-line">  }
+</span><span class="source-line">  <span class="token keyword">private</span> <span class="token keyword">void</span> updateTotal() {
+</span><span class="source-line">    output.clear();
+</span><span class="source-line">    <span class="token keyword">try</span> {
+</span><span class="source-line">      <span class="token comment">// P2-C1: Parse, then check 1 to 4.</span>
+</span><span class="source-line">      <span class="token keyword">int</span> seats = Integer.parseInt(input.getText().trim());
+</span><span class="source-line">      <span class="token keyword">if</span> (seats &lt; <span class="token number">1</span> || seats &gt; <span class="token number">4</span>) {
+</span><span class="source-line">        showError(<span class="token string">&quot;Choose 1 to 4 seats.&quot;</span>);
+</span><span class="source-line">        <span class="token keyword">return</span>;
+</span><span class="source-line">      }
+</span><span class="source-line">      output.setText(Integer.toString(seats * <span class="token number">10</span>));
+</span><span class="source-line">    } <span class="token keyword">catch</span> (NumberFormatException e) {
+</span><span class="source-line">      <span class="token comment">// P2-C3: Allow a later retry.</span>
+</span><span class="source-line">      showError(<span class="token string">&quot;Enter a whole number.&quot;</span>);
+</span><span class="source-line">    }
+</span><span class="source-line">  }
+</span><span class="source-line">  <span class="token keyword">private</span> <span class="token keyword">void</span> showError(String message) {
+</span><span class="source-line">    <span class="token comment">// P2-C2: Show error feedback.</span>
+</span><span class="source-line">    Alert alert = <span class="token keyword">new</span> Alert(AlertType.ERROR, message);
+</span><span class="source-line">    alert.setTitle(<span class="token string">&quot;Invalid booking&quot;</span>);
+</span><span class="source-line">    alert.setHeaderText(<span class="token keyword">null</span>);
+</span><span class="source-line">    alert.showAndWait();
+</span><span class="source-line">  }
+</span><span class="source-line">  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> main(String[] args) { launch(args); }
+</span><span class="source-line">}
+</span></code></pre></div></section><section class="content-block"><h3>Elaborated concepts for instructor reference</h3><div class="reference-grid"><article class="concept-note" id="p3-c1"><h4><code>P3-C1</code> Image and ImageView</h4><p>Load an Image, assign it to an ImageView, and add the view to the grid.</p><p class="ref-long">The PDF’s ImageViewer task gives the behavior but omits its solution. This original extension loads two supplied PNG venue diagrams from the working directory. A relative file URL is not relative to the Java source. Check isError when diagnosing a blank image; a failed image load can be recorded on the Image rather than reported as an input exception.</p><p class="common-mistakes"><strong>Common mistakes:</strong> A missing image or wrong working directory can produce a blank view.</p><p class="print-mistake"><strong>Common mistake:</strong> A missing image or wrong working directory can produce a blank view.</p></article><article class="concept-note" id="p3-c2"><h4><code>P3-C2</code> Image display size</h4><p>Set fitWidth and preserveRatio on the view, not on the source image.</p><p class="ref-long">The view fits within the booking form without stretching the diagram. We set only fitWidth; JavaFX derives height from the original ratio. Display scaling does not resize or overwrite the PNG file.</p><p class="common-mistakes"><strong>Common mistakes:</strong> Do not confuse displayed dimensions with the image file’s dimensions.</p><p class="print-mistake"><strong>Common mistake:</strong> Do not confuse displayed dimensions with the image file’s dimensions.</p></article><article class="concept-note" id="p3-c3"><h4><code>P3-C3</code> Mouse clicks and persistent state</h4><p>Store the image index in a field and wrap it after the last image.</p><p class="ref-long">setOnMouseClicked registers an EventHandler&lt;MouseEvent&gt;; JavaFX passes a mouse event to handle. Our anonymous handler updates the field and then the ImageView. The initialized, nonempty image array is a prerequisite for modulo cycling. Changing the view leaves the booking input and result untouched. This is browsing venues, not confirming a reservation.</p><p class="common-mistakes"><strong>Common mistakes:</strong> Do not reset the index inside the handler or use modulo with an empty array.</p><p class="print-mistake"><strong>Common mistake:</strong> Do not reset the index inside the handler or use modulo with an empty array.</p></article></div><p class="print-trace"><strong>Trace:</strong> A click advances the stored index modulo 2 and changes the image. Calculation and validation still use the same fields.</p><p class="practice-cue"><strong>Practice and answer:</strong> Click five times: venue B. Calculate 2 seats: 20. Try bad text, dismiss the alert, then calculate 4 seats: 40. Missing images: restore both PNGs and the working directory.</p></section></section><footer class="page-footer"><span>ICS 108 · Lecture 17 · Problem 3</span><span>Supporting slides 11–14 · Page 3 of 3</span></footer></article></main><script>async function copyText(text){if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(text);return;}catch(e){}}const a=document.createElement('textarea');a.value=text;a.style.position='fixed';a.style.opacity='0';document.body.append(a);a.select();let ok=false;try{ok=document.execCommand('copy')}finally{a.remove()}if(!ok)throw Error('Copy failed')}
+document.querySelectorAll('[data-copy-code]').forEach(b=>b.addEventListener('click',async()=>{const w=b.closest('[data-code-workbench]'),s=w.querySelector('[role=status]');try{await copyText(w.querySelector('code').textContent);s.textContent='Code copied.'}catch(e){s.textContent='Copy failed. Select the code and copy it manually.'}b.focus()}));
+document.querySelectorAll('[data-copy-problem]').forEach(b=>b.addEventListener('click',async()=>{const p=b.closest('.page'),s=p.querySelector('[data-problem-status]');try{await copyText(p.querySelector('[data-problem-payload]').textContent);s.textContent='Problem copied.'}catch(e){s.textContent='Copy failed. Select the problem and copy it manually.'}b.focus()}));</script><script src="problem-presentation.js"></script></body></html>

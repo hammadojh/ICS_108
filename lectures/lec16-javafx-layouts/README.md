@@ -1,0 +1,18 @@
+# Lecture 16 · JavaFX windows and layouts
+
+Monday, October 26, 2026 · zyBooks 10.1–10.4 · 75-minute session.
+
+- [Supporting slides](slides/index.html)
+- [Instructor walkthroughs](instructor/walkthroughs.html): three cumulative problems, complete code, copy controls, and student presentation.
+- [Concept refresher](instructor/concept-refresher.html)
+- [Student-only problems](student-problems.md)
+- [Java examples and expected behavior](examples/README.md)
+- [IntelliJ setup](docs/SETUP.md)
+- [Source map and timing](docs/CONTENT_MAP.md)
+- [Validation](docs/VALIDATION.md)
+
+75 minutes: setup and recall 10; Problem 1 12; Problem 2 12; Problem 3 12; individual practice 20; exit check and recap 9.
+
+Open the HTML artifacts directly, or serve the course root with `python3 -m http.server 8078 --bind 127.0.0.1`. Java examples require Liberica Full JDK 25, following the supplied setup guide. Each problem is a separate snapshot; do not put all three CampusBooking classes in one source directory.
+
+The instructor explicitly selected JavaFX for this week despite different topic labels in the syllabus. This is prepared local material; publication is separate.

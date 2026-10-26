@@ -1,0 +1,1 @@
+Two original 480 × 240 PNG venue diagrams created for this lesson. Copy both to the working directory. They illustrate preview switching only; selecting an image does not reserve a venue or change the seat price.

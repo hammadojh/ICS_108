@@ -84,3 +84,10 @@ If the course website does not open on your network, use this local copy.
 ## Assigned readings
 
 Access the assigned zyBooks readings through your course’s zyBooks or LMS link. The textbook PDFs are not included in this repository.
+
+## Week of October 26 · JavaFX
+
+Instructor-confirmed split of the supplied Chapter 10: 10.1–10.4 Monday and 10.5–10.7 Wednesday. [Weekly teaching plan](authoring/WEEK_2026-10-26.md).
+
+- **Monday, October 26, 2026 — Lecture 16: JavaFX windows and layouts.** [Walkthroughs](lectures/lec16-javafx-layouts/instructor/walkthroughs.html) · [Supporting slides](lectures/lec16-javafx-layouts/slides/index.html) · [Concept refresher](lectures/lec16-javafx-layouts/instructor/concept-refresher.html) · [Setup](lectures/lec16-javafx-layouts/docs/SETUP.md).
+- **Wednesday, October 28, 2026 — Lecture 17: JavaFX events, validation, and images.** [Walkthroughs](lectures/lec17-javafx-events-images/instructor/walkthroughs.html) · [Supporting slides](lectures/lec17-javafx-events-images/slides/index.html) · [Concept refresher](lectures/lec17-javafx-events-images/instructor/concept-refresher.html) · [Setup](lectures/lec17-javafx-events-images/docs/SETUP.md).

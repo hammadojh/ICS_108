@@ -1,0 +1,374 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ICS 108 Lecture 17 - Concept refresher</title><link rel="icon" href="data:,"><style>
+    :root {
+      --ink: oklch(24% 0.018 250);
+      --ink-soft: oklch(43% 0.022 250);
+      --paper: oklch(98% 0.008 85);
+      --canvas: oklch(93% 0.012 245);
+      --line: oklch(82% 0.018 245);
+      --line-strong: oklch(66% 0.045 245);
+      --blue: oklch(51% 0.145 250);
+      --blue-dark: oklch(38% 0.11 250);
+      --blue-pale: oklch(95% 0.026 245);
+      --warm: oklch(95% 0.025 78);
+      --stage: oklch(18% 0.025 250);
+      --stage-soft: oklch(72% 0.035 245);
+      --code-bg: oklch(22% 0.025 250);
+      --code-ink: oklch(94% 0.012 245);
+      --focus: oklch(70% 0.15 245);
+      --measure: 68ch;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      max-width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scroll-padding-top: 1rem;
+      background: var(--canvas);
+    }
+    body {
+      max-width: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-kerning: normal;
+      text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3, p, ul, ol, table, pre { margin-top: 0; }
+    p, ul, ol { max-width: var(--measure); }
+    h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+    h1 {
+      max-width: 14ch;
+      margin-bottom: 1.5rem;
+      font-size: clamp(2.7rem, 8vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+    h2 {
+      margin-bottom: 0.75rem;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    h3 { margin-bottom: 0.5rem; font-size: 1.2rem; line-height: 1.25; }
+    a { color: var(--blue-dark); text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+    a:hover { text-decoration-thickness: 0.13em; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-variant-ligatures: none;
+    }
+    code {
+      padding: 0.08em 0.28em;
+      background: var(--blue-pale);
+      color: var(--blue-dark);
+      font-size: 0.92em;
+      overflow-wrap: anywhere;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    pre code { padding: 0; background: transparent; color: inherit; overflow-wrap: normal; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 30;
+      top: 0.5rem;
+      left: 0.5rem;
+      transform: translateY(-180%);
+      padding: 0.65rem 0.9rem;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .skip-link:focus { transform: none; }
+    .masthead {
+      padding: clamp(2rem, 7vw, 6rem) max(1.25rem, env(safe-area-inset-left)) clamp(3rem, 8vw, 6.5rem);
+      background: var(--stage);
+      color: var(--paper);
+    }
+    .masthead-inner { width: min(1180px, 100%); margin: 0 auto; }
+    .breadcrumb,
+    .eyebrow,
+    .concept-number,
+    .source-ref,
+    .reading-label,
+    .problem-tag {
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; color: var(--stage-soft); }
+    .breadcrumb a { color: inherit; }
+    .breadcrumb span + span::before { content: "/"; margin-right: 0.5rem; }
+    .eyebrow { margin-bottom: 0.75rem; color: oklch(80% 0.1 245); }
+    .chapter-abstract {
+      display: grid;
+      gap: 1rem;
+      max-width: 900px;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid oklch(39% 0.035 250);
+    }
+    .chapter-abstract .reading-label { color: oklch(80% 0.1 245); }
+    .chapter-abstract p {
+      margin-bottom: 0;
+      color: oklch(91% 0.012 245);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: clamp(1.18rem, 2.5vw, 1.55rem);
+      line-height: 1.5;
+    }
+    .reading-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+    .reading-controls button {
+      min-height: 44px;
+      padding: 0.65rem 1rem;
+      border: 1px solid oklch(52% 0.04 245);
+      border-radius: 0;
+      background: transparent;
+      color: var(--paper);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .reading-controls button:hover { background: oklch(26% 0.035 250); }
+    #readingStatus { color: var(--stage-soft); font-size: 0.86rem; }
+
+    .reading-layout {
+      display: grid;
+      grid-template-columns: minmax(14rem, 0.28fr) minmax(0, 0.72fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3rem 0 5rem;
+    }
+    .reading-map { position: sticky; top: 1rem; align-self: start; min-width: 0; }
+    .reading-map h2 {
+      margin-bottom: 1rem;
+      font: 800 0.72rem/1.2 "Avenir Next", Avenir, sans-serif;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .reading-map ol { display: grid; margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+    .reading-map a {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr);
+      min-height: 44px;
+      align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+    .reading-map a:hover { color: var(--blue-dark); }
+    .map-number { color: var(--blue); font: 700 0.76rem "SFMono-Regular", monospace; }
+    .map-links { display: grid; gap: 0.45rem; margin-top: 1.2rem; font-size: 0.86rem; }
+    .map-links a { display: block; min-height: 0; padding: 0.25rem 0; border-bottom: 0; }
+
+    .reading-main { min-width: 0; }
+    .reading-note { margin-bottom: 3rem; padding: 1.2rem 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .reading-note p:last-child { margin-bottom: 0; }
+    .mental-model { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0 4rem; }
+    .model-term { min-width: 0; padding-top: 0.8rem; border-top: 4px solid var(--blue); }
+    .model-term strong { display: block; margin-bottom: 0.3rem; }
+    .model-term span { display: block; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.45; }
+
+    .concept { margin-bottom: 0; padding: 3rem 0; border-top: 1px solid var(--line-strong); scroll-margin-top: 1rem; }
+    .concept:first-of-type { border-top-width: 3px; }
+    .concept-header { margin-bottom: 1.2rem; }
+    .concept-number { display: none; }
+    .source-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; margin-bottom: 0.4rem; color: var(--ink-soft); }
+    .source-ref a { color: inherit; }
+    .problem-tag { display: inline-flex; align-items: center; min-height: 1.7rem; padding: 0.2rem 0.55rem; background: var(--blue); color: white; }
+    .concept-abstract {
+      margin-bottom: 1rem;
+      color: var(--ink-soft);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 1.18rem;
+      line-height: 1.55;
+    }
+    .key-rule { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; margin: 1rem 0; padding: 1rem 1.5rem; background: var(--blue-pale); }
+    .key-rule strong { color: var(--blue-dark); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .key-rule p { margin-bottom: 0; font-weight: 650; }
+
+    details { max-width: 100%; margin-top: 0.75rem; border-top: 1px solid var(--line); background: var(--paper); }
+    summary {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      min-height: 56px;
+      align-items: center;
+      padding: 0.75rem 3.2rem 0.75rem 1rem;
+      color: var(--blue-dark);
+      font-weight: 750;
+      cursor: pointer;
+      list-style: none;
+      overflow-wrap: anywhere;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue);
+      font: 400 1.5rem "Avenir Next", Avenir, sans-serif;
+    }
+    details[open] summary::after { content: "−"; }
+    .details-body { min-width: 0; max-width: 100%; padding: 0.2rem 1rem 1.2rem; }
+    .details-body > *:last-child { margin-bottom: 0; }
+    .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .details-grid > div { min-width: 0; }
+    .details-grid h3 { margin-top: 0.5rem; }
+    .teaching-line { margin: 1rem 0 0; padding: 0.85rem 1rem; background: var(--warm); }
+    .teaching-line strong { color: var(--blue-dark); }
+    .teaching-line p { margin-bottom: 0; }
+    .compare-wrap { max-width: 100%; overflow-x: auto; }
+    .compare-table { width: 100%; min-width: 31rem; border-collapse: collapse; font-size: 0.88rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--blue-pale); color: var(--blue-dark); }
+    .trace-list { margin: 0; padding-left: 1.25rem; }
+    .trace-list li + li { margin-top: 0.45rem; }
+    .warning { padding: 0.85rem 1rem; background: var(--warm); color: var(--blue-dark); }
+    .concept-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 1rem; font-size: 0.86rem; }
+
+    .readiness, .source-notes { padding: 3rem 0; border-top: 3px solid var(--ink); }
+    .readiness ol { padding-left: 1.4rem; }
+    .readiness li + li { margin-top: 0.55rem; }
+    .readiness code { white-space: normal; }
+    .source-notes { border-top-width: 1px; }
+    .source-notes ul { padding-left: 1.2rem; }
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+      padding: 1.5rem max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom));
+      background: var(--stage);
+      color: var(--stage-soft);
+      font-size: 0.86rem;
+    }
+    .page-footer a { color: var(--paper); }
+
+    @media (max-width: 900px) {
+      .reading-layout { grid-template-columns: minmax(0, 1fr); }
+      .reading-map { position: static; }
+      .reading-map ol { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+      .mental-model { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .masthead { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+      .reading-layout { width: min(calc(100% - 1.5rem), 1180px); padding-top: 2rem; }
+      .reading-map ol, .mental-model, .details-grid { grid-template-columns: minmax(0, 1fr); }
+      .concept-header { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .key-rule { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; padding: 1rem; }
+      .reading-controls { align-items: stretch; }
+      .reading-controls button { flex: 1 1 9rem; }
+      pre { padding: 1rem; font-size: 0.76rem; }
+      .compare-wrap { overflow: visible; }
+      .compare-table,
+      .compare-table tbody,
+      .compare-table tr,
+      .compare-table td { display: block; width: 100%; min-width: 0; }
+      .compare-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .compare-table tr { margin-bottom: 0.8rem; border: 1px solid var(--line); background: var(--paper); }
+      .compare-table td {
+        display: grid;
+        grid-template-columns: minmax(7.5rem, 0.42fr) minmax(0, 0.58fr);
+        gap: 0.75rem;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .compare-table td:last-child { border-bottom: 0; }
+      .compare-table td::before {
+        content: attr(data-label);
+        color: var(--blue-dark);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .page-footer { display: block; }
+      .page-footer span { display: block; }
+      .page-footer span + span { margin-top: 0.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      html, body { overflow: visible; background: white; font-size: 10pt; }
+      .masthead { padding: 0 0 10mm; background: white; color: var(--ink); }
+      .masthead h1 { max-width: none; font-size: 34pt; }
+      .skip-link, .breadcrumb, .reading-controls, .reading-map, .concept-links, .page-footer { display: none !important; }
+      .chapter-abstract p { color: var(--ink); }
+      .reading-layout { display: block; width: auto; padding: 8mm 0 0; }
+      .mental-model { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5mm; }
+      .concept { margin-bottom: 10mm; break-before: page; }
+      details { break-inside: avoid; }
+      details:not([open]) > .details-body { display: block; }
+      summary::after { display: none; }
+      .compare-wrap { overflow: visible; }
+      .compare-table { min-width: 0; }
+      pre { overflow: visible; white-space: pre-wrap; word-break: break-word; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+.abstract,.mental-model-summary{max-width:70ch;font-size:1.15rem;line-height:1.55} .mental-model-summary{display:block;margin:1.5rem 0} .reading-controls a{color:var(--stage-soft)} .reading-map a{display:block;padding:.65rem 0} .concept-header{display:block} .concept-number{display:none} .reading{min-width:0} pre{overflow:auto;max-width:100%} .concept-extra{margin:30px 0} @media(max-width:760px){.layout{display:block} .concept-map{position:static}} @media print{.skip-link{display:none}}</style></head><body><header class="masthead"><div class="masthead-inner"><p class="eyebrow">ICS 108 · Lecture 17 · Instructor concept refresher</p><h1>JavaFX events, validation, and images</h1><p class="abstract">Extend Monday’s static booking form so the user can enter a seat count, calculate a total, recover from invalid input, and browse venue images. The interface is built once; handlers run later in response to actions. Input remains text until it is parsed and checked. Images are data displayed by an ImageView, and a field remembers the selected picture between clicks.</p><p class="mental-model-summary"><strong>Mental model:</strong> Build once → wait for an event → read current state → validate or change state → update the visible controls → wait again.</p><div class="reading-controls"><button id="openAll">Open all details</button><button id="closeAll">Close all details</button><a href="../slides/index.html">Supporting slides</a><a href="walkthroughs.html">IDE handout</a></div><p id="readingStatus" role="status" aria-live="polite"></p></div></header><div class="reading-layout"><nav class="reading-map" aria-label="Concept map"><h2>Concept map</h2><a href="#p1-c1">P1-C1 · Reading editable text</a><a href="#p1-c2">P1-C2 · Button action handler</a><a href="#p1-c3">P1-C3 · Parsing an integer</a><a href="#p2-c1">P2-C1 · Validation order</a><a href="#p2-c2">P2-C2 · Error alerts</a><a href="#p2-c3">P2-C3 · Recovery inside an event</a><a href="#p3-c1">P3-C1 · Image and ImageView</a><a href="#p3-c2">P3-C2 · Image display size</a><a href="#p3-c3">P3-C3 · Mouse clicks and persistent state</a><a href="#readiness">Readiness and practice</a><a href="#sources">Sources and scope</a></nav><main class="reading-main"><section class="concept" id="p1-c1"><header class="concept-header"><p class="source-tag">P1-C1 · 10.5 · pp. 14–18</p><h2>Reading editable text</h2></header><p class="concept-abstract">getText returns the current String stored in a TextField. Monday’s seats display becomes editable; the price and total fields remain output-only. The application waits for actions after start finishes. The same input field survives between clicks, while a local text variable is created for each handler execution.</p><p class="key-rule"><strong>Key rule:</strong> Read the input inside the handler so each click uses the latest text.</p><details id="p1-c1-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>String text = input.getText();</code></pre><p>Monday’s seats display becomes editable; the price and total fields remain output-only. The application waits for actions after start finishes. The same input field survives between clicks, while a local text variable is created for each handler execution.</p><p><strong>Common mistakes:</strong> Do not calculate only in start and expect later edits to recalculate automatically.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>String search = searchField.getText();</code></pre><p><strong>Outcome:</strong> Each call returns the current field contents; it does not convert text to a number.</p><p><strong>What stays the same:</strong> Read the input inside the handler so each click uses the latest text.</p></div></details><p><strong>Predict:</strong> If input is read once during start, does that String update when the user types?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. Read getText again when the action occurs. A previously stored String does not track the control.</p></div></details></section><section class="concept" id="p1-c2"><header class="concept-header"><p class="source-tag">P1-C2 · 10.5 · pp. 15–18</p><h2>Button action handler</h2></header><p class="concept-abstract">An action handler is code JavaFX calls when a control fires an action event. The anonymous class creates an EventHandler object without declaring a separate class name. EventHandler&lt;ActionEvent&gt; means this handler accepts action events; handle is the required method. The outer }); closes the anonymous class, the method call, and its statement. Our examples use fields for shared controls and the updateTotal helper to keep the event template short.</p><p class="key-rule"><strong>Key rule:</strong> setOnAction registers the handler; handle runs later for each action.</p><details id="p1-c2-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>calc.setOnAction(new EventHandler&lt;ActionEvent&gt;() {
+  @Override public void handle(ActionEvent event) {
+    updateTotal();
+  }
+});</code></pre><p>The anonymous class creates an EventHandler object without declaring a separate class name. EventHandler&lt;ActionEvent&gt; means this handler accepts action events; handle is the required method. The outer }); closes the anonymous class, the method call, and its statement. Our examples use fields for shared controls and the updateTotal helper to keep the event template short.</p><p><strong>Common mistakes:</strong> Do not confuse handler registration with handler execution.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>save.setOnAction(new EventHandler&lt;ActionEvent&gt;() {
+  @Override public void handle(ActionEvent event) {
+    status.setText(&quot;Saved&quot;);
+  }
+});</code></pre><p><strong>Outcome:</strong> Assuming the named controls/helpers exist, registering does not update the total or status. Firing the corresponding button does.</p><p><strong>What stays the same:</strong> setOnAction registers the handler; handle runs later for each action.</p></div></details><p><strong>Predict:</strong> Would calling updateTotal() before setOnAction make it run on every later click?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. That call runs immediately. Put the call inside handle to respond to each action.</p></div></details></section><section class="concept" id="p1-c3"><header class="concept-header"><p class="source-tag">P1-C3 · 10.5 · p. 16; NumberFormatException recap from Chapter 9</p><h2>Parsing an integer</h2></header><p class="concept-abstract">Integer.parseInt converts integer text into an int or throws NumberFormatException. Problem 1 deliberately assumes integer inputs from 1 to 4; Problem 2 adds recovery. Empty text, nonnumeric text, and values outside the int range fail parsing. A parseable value such as 0 still needs a booking rule. trim removes surrounding whitespace when we introduce validation.</p><p class="key-rule"><strong>Key rule:</strong> getText reads a String; parseInt performs the numeric conversion.</p><details id="p1-c3-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>int seats = Integer.parseInt(input.getText());
+output.setText(Integer.toString(seats * 10));</code></pre><p>Problem 1 deliberately assumes integer inputs from 1 to 4; Problem 2 adds recovery. Empty text, nonnumeric text, and values outside the int range fail parsing. A parseable value such as 0 still needs a booking rule. trim removes surrounding whitespace when we introduce validation.</p><p><strong>Common mistakes:</strong> Parsing successfully does not prove that a seat count is allowed.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>int minutes = Integer.parseInt(&quot;15&quot;);
+System.out.println(minutes + 5);</code></pre><p><strong>Outcome:</strong> The booking calculates from typed text; the other example prints 20.</p><p><strong>What stays the same:</strong> getText reads a String; parseInt performs the numeric conversion.</p></div></details><p><strong>Predict:</strong> What happens with Integer.parseInt(&quot;3.5&quot;)?</p><details><summary>Prediction answer</summary><div class="details-body"><p>It throws NumberFormatException. Integer parsing does not round a decimal.</p></div></details></section><section class="concept" id="p2-c1"><header class="concept-header"><p class="source-tag">P2-C1 · 10.5 · pp. 18–20; explicit parse recovery is a teaching addition</p><h2>Validation order</h2></header><p class="concept-abstract">Input validation checks both its text format and the permitted value range. Trim first, parse inside try, test the range, then calculate. Clearing the old total before validation prevents an old successful total from looking like the result of the invalid input. Return exits only this helper call; the application remains open for correction.</p><p class="key-rule"><strong>Key rule:</strong> Parse first, then check the booking range before updating the total.</p><details id="p2-c1-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>int seats = Integer.parseInt(input.getText().trim());
+if (seats &lt; 1 || seats &gt; 4) {
+  showError(&quot;Choose 1 to 4 seats.&quot;);
+  return;
+}</code></pre><p>Trim first, parse inside try, test the range, then calculate. Clearing the old total before validation prevents an old successful total from looking like the result of the invalid input. Return exits only this helper call; the application remains open for correction.</p><p><strong>Common mistakes:</strong> Do not use an old total as the apparent result for invalid new input.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>int mark = Integer.parseInt(&quot;105&quot;);
+if (mark &lt; 0 || mark &gt; 100) {
+  System.out.println(&quot;Invalid mark&quot;);
+}</code></pre><p><strong>Outcome:</strong> The first code requires the helper shown in Problem 2. The marks example prints Invalid mark even though parsing succeeded.</p><p><strong>What stays the same:</strong> Parse first, then check the booking range before updating the total.</p></div></details><p><strong>Predict:</strong> Does parsing &quot;0&quot; throw NumberFormatException?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. It produces 0. Our range check rejects that value afterward.</p></div></details></section><section class="concept" id="p2-c2"><header class="concept-header"><p class="source-tag">P2-C2 · 10.5 · pp. 19–22</p><h2>Error alerts</h2></header><p class="concept-abstract">An Alert is a dialog that reports information or asks for a response. The showError helper sets the title and removes the default header so the student sees one clear message. ERROR, INFORMATION, WARNING, CONFIRMATION, and NONE communicate different purposes. A confirmation decision requires inspecting the returned button choice; that is outside these problems. showAndWait pauses this call until dismissal while JavaFX continues processing UI events.</p><p class="key-rule"><strong>Key rule:</strong> Use AlertType.ERROR for invalid input and showAndWait to display it.</p><details id="p2-c2-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>Alert alert = new Alert(AlertType.ERROR, message);
+alert.showAndWait();</code></pre><p>The showError helper sets the title and removes the default header so the student sees one clear message. ERROR, INFORMATION, WARNING, CONFIRMATION, and NONE communicate different purposes. A confirmation decision requires inspecting the returned button choice; that is outside these problems. showAndWait pauses this call until dismissal while JavaFX continues processing UI events.</p><p><strong>Common mistakes:</strong> An alert is feedback; it does not itself prevent invalid calculations.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>Alert alert = new Alert(AlertType.INFORMATION, &quot;Saved&quot;);
+alert.showAndWait();</code></pre><p><strong>Outcome:</strong> The first dialog shows the supplied error message. The second displays Saved as information; each waits for dismissal before its caller continues.</p><p><strong>What stays the same:</strong> Use AlertType.ERROR for invalid input and showAndWait to display it.</p></div></details><p><strong>Predict:</strong> Does constructing an Alert display it?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. Call show or showAndWait. Our program uses showAndWait inside the event handler.</p></div></details></section><section class="concept" id="p2-c3"><header class="concept-header"><p class="source-tag">P2-C3 · 10.5 validation context + Chapter 9 exception recap</p><h2>Recovery inside an event</h2></header><p class="concept-abstract">Catching an input exception inside a handler allows a later corrected action. The exception is caused by the current text, not by the button itself. Keep the protected operation inside try. The catch shows a specific message and leaves the result blank. Replacing the input and clicking again is the GUI equivalent of retrying the console input loop.</p><p class="key-rule"><strong>Key rule:</strong> Catch NumberFormatException and finish this action without closing the window.</p><details id="p2-c3-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>try {
+  int seats = Integer.parseInt(text);
+} catch (NumberFormatException e) {
+  showError(&quot;Enter a whole number.&quot;);
+}</code></pre><p>The exception is caused by the current text, not by the button itself. Keep the protected operation inside try. The catch shows a specific message and leaves the result blank. Replacing the input and clicking again is the GUI equivalent of retrying the console input loop.</p><p><strong>Common mistakes:</strong> Do not catch every Exception when only integer-format failure is expected.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>try {
+  int mark = Integer.parseInt(&quot;absent&quot;);
+} catch (NumberFormatException e) {
+  System.out.println(&quot;No numeric mark&quot;);
+}</code></pre><p><strong>Outcome:</strong> The booking fragment uses the text and helper from the worked program. The marks fragment prints No numeric mark.</p><p><strong>What stays the same:</strong> Catch NumberFormatException and finish this action without closing the window.</p></div></details><p><strong>Predict:</strong> After an error dialog is dismissed, must the application restart to accept 2?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. The next click calls the handler again, reads the corrected text, and displays 20.</p></div></details></section><section class="concept" id="p3-c1"><header class="concept-header"><p class="source-tag">P3-C1 · 10.7 · pp. 26–28; implementation from JavaFX Image/ImageView API</p><h2>Image and ImageView</h2></header><p class="concept-abstract">Image holds image data; ImageView is the node that displays that data. The PDF’s ImageViewer task gives the behavior but omits its solution. This original extension loads two supplied PNG venue diagrams from the working directory. A relative file URL is not relative to the Java source. Check isError when diagnosing a blank image; a failed image load can be recorded on the Image rather than reported as an input exception.</p><p class="key-rule"><strong>Key rule:</strong> Load an Image, assign it to an ImageView, and add the view to the grid.</p><details id="p3-c1-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>Image image = new Image(&quot;file:venue-a.png&quot;);
+ImageView view = new ImageView(image);</code></pre><p>The PDF’s ImageViewer task gives the behavior but omits its solution. This original extension loads two supplied PNG venue diagrams from the working directory. A relative file URL is not relative to the Java source. Check isError when diagnosing a blank image; a failed image load can be recorded on the Image rather than reported as an input exception.</p><p><strong>Common mistakes:</strong> A missing image or wrong working directory can produce a blank view.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>Image logo = new Image(&quot;file:club-logo.png&quot;);
+ImageView badge = new ImageView(logo);</code></pre><p><strong>Outcome:</strong> With the named files in the working directory, each view can display the loaded picture when attached to the scene.</p><p><strong>What stays the same:</strong> Load an Image, assign it to an ImageView, and add the view to the grid.</p></div></details><p><strong>Predict:</strong> Does creating an Image alone put a picture in the window?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. Image is data, not a scene node. Add an ImageView to the displayed layout.</p></div></details></section><section class="concept" id="p3-c2"><header class="concept-header"><p class="source-tag">P3-C2 · 10.7 teaching implementation · ImageView API</p><h2>Image display size</h2></header><p class="concept-abstract">ImageView can fit an image to a target width while preserving its aspect ratio. The view fits within the booking form without stretching the diagram. We set only fitWidth; JavaFX derives height from the original ratio. Display scaling does not resize or overwrite the PNG file.</p><p class="key-rule"><strong>Key rule:</strong> Set fitWidth and preserveRatio on the view, not on the source image.</p><details id="p3-c2-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>view.setFitWidth(240);
+view.setPreserveRatio(true);</code></pre><p>The view fits within the booking form without stretching the diagram. We set only fitWidth; JavaFX derives height from the original ratio. Display scaling does not resize or overwrite the PNG file.</p><p><strong>Common mistakes:</strong> Do not confuse displayed dimensions with the image file’s dimensions.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>badge.setFitWidth(120);
+badge.setPreserveRatio(true);</code></pre><p><strong>Outcome:</strong> For a 480 × 240 image, the displayed sizes are 240 × 120 and 120 × 60 respectively.</p><p><strong>What stays the same:</strong> Set fitWidth and preserveRatio on the view, not on the source image.</p></div></details><p><strong>Predict:</strong> What happens to a 480 × 240 image at fitWidth 300 with ratio preservation?</p><details><summary>Prediction answer</summary><div class="details-body"><p>It displays at 300 × 150. The original data remains 480 × 240.</p></div></details></section><section class="concept" id="p3-c3"><header class="concept-header"><p class="source-tag">P3-C3 · 10.7 · pp. 26–28; original implementation using prior arrays and remainder</p><h2>Mouse clicks and persistent state</h2></header><p class="concept-abstract">A mouse handler can update a field that remembers which image is selected. setOnMouseClicked registers an EventHandler&lt;MouseEvent&gt;; JavaFX passes a mouse event to handle. Our anonymous handler updates the field and then the ImageView. The initialized, nonempty image array is a prerequisite for modulo cycling. Changing the view leaves the booking input and result untouched. This is browsing venues, not confirming a reservation.</p><p class="key-rule"><strong>Key rule:</strong> Store the image index in a field and wrap it after the last image.</p><details id="p3-c3-worked"><summary>Worked example and common mistakes</summary><div class="details-body"><pre><code>index = (index + 1) % images.length;
+view.setImage(images[index]);</code></pre><p>setOnMouseClicked registers an EventHandler&lt;MouseEvent&gt;; JavaFX passes a mouse event to handle. Our anonymous handler updates the field and then the ImageView. The initialized, nonempty image array is a prerequisite for modulo cycling. Changing the view leaves the booking input and result untouched. This is browsing venues, not confirming a reservation.</p><p><strong>Common mistakes:</strong> Do not reset the index inside the handler or use modulo with an empty array.</p></div></details><details><summary>Another context and its result</summary><div class="details-body"><pre><code>int index = 2;
+index = (index + 1) % 3;
+System.out.println(index);</code></pre><p><strong>Outcome:</strong> With two images, clicks cycle 0 → 1 → 0. The three-item example prints 0.</p><p><strong>What stays the same:</strong> Store the image index in a field and wrap it after the last image.</p></div></details><p><strong>Predict:</strong> If index is declared as 0 inside handle on every click, will the images keep alternating?</p><details><summary>Prediction answer</summary><div class="details-body"><p>No. It resets each time. A field retains the index between handler calls.</p></div></details></section><section class="concept-extra"><h2>Source corrections and boundaries</h2><p>The PDF says a handler cannot access local variables in start. More precisely, an anonymous class may capture local variables that are final or effectively final. Reassigning the local reference breaks that condition; modifying the referenced control does not. Our examples use fields to keep shared state explicit. No lambda syntax is required.</p><p>The source’s wage example checks the numeric range but does not catch malformed text. Problem 2 deliberately adds NumberFormatException recovery. A nonnegative wage can include zero; the source message saying positive is narrower than its condition. Our booking rule is explicitly 1–4 inclusive.</p><p>The venue preview uses local, supplied images and assumes successful loading. A blank preview is a resource-path issue, not a seat-input error. Mouse clicking is the required 10.7 behavior; a keyboard-operable Next button is optional accessibility practice. Collections, bindings, FXML, background tasks, and deployment are deferred.</p></section><section class="concept-extra" id="readiness"><h2>Readiness and practice</h2><p>75 minutes: recall 5; Problem 1 14; Problem 2 16; Problem 3 16; individual practice 18; exit check 6.</p><details><summary>Problem 1: reproduce, change, explain</summary><div class="details-body"><p>start builds the form and registers the handler, then returns. A click runs handle; updateTotal reads the current text, parses the count, multiplies by 10, and updates the result.</p><p>Try 1 then 3 with a click after each: totals 10 then 30. Typing without clicking leaves the previous total. Malformed input is outside this first version’s contract.</p></div></details><details><summary>Problem 2: reproduce, change, explain</summary><div class="details-body"><p>Clear the old result; trim and parse; reject an out-of-range value before multiplying; show the relevant alert; return to the same form. The next click starts a fresh attempt.</p><p>Test empty text, 3.5, and 2147483648: format alert. Test -1 and 5: range alert. Test 1 and 4: totals 10 and 40. Dismiss an error, enter 3, click: total 30.</p></div></details><details><summary>Problem 3: reproduce, change, explain</summary><div class="details-body"><p>Load the two images; display index 0; a click advances the stored index modulo 2; setImage changes the displayed data. The calculation handler and validation remain independent.</p><p>Click five times: venue B. Calculate 2 seats: 20, same view. Enter bad text: error alert and blank total; dismiss, correct to 4: 40. Wrong image paths produce a blank view; restore the supplied files and working directory.</p></div></details></section><section class="concept-extra" id="sources"><h2>Sources and scope</h2><p>Supplied zyBooks Chapter 10, 28-page export dated October 25, 2026. Chapter 10 in this export is JavaFX, although the syllabus labels Chapter 10 Generics. The instructor explicitly assigned 10.1–10.4 to Monday, October 26, and 10.5–10.7 to Wednesday, October 28. Package numbers 16 and 17 are local lecture identifiers, not the original syllabus session numbers.</p><p>Sections 10.2, 10.4, and 10.6 are code-lab pages; their interactive source is absent from the export. Section 10.7 supplies only the image-clicking task, so the venue viewer is an original implementation. Read publisher activities through authorized course access.</p><p>Setup follows the supplied IntelliJ IDEA Setup document: Java project, IntelliJ build system, Liberica Full JDK 25. Images and problems in this package are original.</p><p><a href="https://openjfx.io/javadoc/25/javafx.graphics/javafx/application/Application.html">Application API</a> · <a href="https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/image/Image.html">Image API</a> · <a href="https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/image/ImageView.html">ImageView API</a> · <a href="https://docs.oracle.com/javase/specs/jls/se17/html/jls-8.html#jls-8.1.3">Java local-variable capture rule</a></p><p><a href="../docs/CONTENT_MAP.md">Content map and timing</a> · <a href="../docs/SETUP.md">Setup</a> · <a href="../examples/README.md">Run cases</a></p></section></main></div><script>const details=[...document.querySelectorAll('details')],status=document.getElementById('readingStatus');function report(){status.textContent=`${details.filter(d=>d.open).length} of ${details.length} details open; all concept summaries remain visible.`}document.getElementById('openAll').onclick=()=>{details.forEach(d=>d.open=true);report()};document.getElementById('closeAll').onclick=()=>{details.forEach(d=>d.open=false);report()};details.forEach(d=>d.addEventListener('toggle',report));function openHash(){if(!location.hash)return;let t;try{t=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(e){return}if(!t)return;if(t.tagName==='DETAILS')t.open=true;else if(t.closest('details'))t.closest('details').open=true;t.scrollIntoView()}window.addEventListener('hashchange',openHash);let saved;window.addEventListener('beforeprint',()=>{saved=details.map(d=>d.open);details.forEach(d=>d.open=true)});window.addEventListener('afterprint',()=>{details.forEach((d,i)=>d.open=saved?.[i]??false);report()});openHash();report();</script></body></html>
